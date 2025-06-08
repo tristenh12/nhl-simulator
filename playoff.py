@@ -1,7 +1,5 @@
 # playoff.py (append or replace your existing code)
 
-import ttkbootstrap as ttk
-import tkinter as tk
 from sim_engine import simulate_game, get_division
 import streamlit as st
 
