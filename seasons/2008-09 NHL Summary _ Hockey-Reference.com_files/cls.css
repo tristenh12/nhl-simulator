@@ -1,0 +1,78 @@
+body {
+	--fsAddBuffer: 0px;
+}
+[id='div-gpt-ad-728x90-ATF'],
+[id='div-gpt-ad-300x250-ATF'],
+[id='div-gpt-ad-728x90-GeneralHeader'],
+[id='div-gpt-ad-728x90-BTF-1'],
+[id='div-gpt-ad-300x250-Mobile-1'],
+[id='hockey-reference_320x50_Mid'],
+[id='hockey-reference_table_mobile_mrec'],
+[id='div-gpt-ad-728x90-BTF-1-3'],
+[id='div-gpt-ad-728x90-BTF-1-1'],
+[id='div-gpt-ad-728x90-BTF-1-2'] {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	min-height: calc(var(--height) + var(--fsAddBuffer));
+	height: calc(var(--height) + var(--fsAddBuffer));
+	width: 100%;
+}
+[id='div-gpt-ad-300x250-Mobile-1'] {
+		--height: 250px;
+}
+[id='div-gpt-ad-728x90-BTF-1'] {
+		--height: 250px;
+}
+[id='div-gpt-ad-728x90-BTF-1-1'] {
+		--height: 250px;
+}
+[id='div-gpt-ad-728x90-BTF-1-2'] {
+		--height: 250px;
+}
+[id='div-gpt-ad-728x90-BTF-1-3'] {
+		--height: 250px;
+}
+[id='div-gpt-ad-728x90-GeneralHeader'] {
+		--height: 250px;
+}
+[id='hockey-reference_320x50_Mid'] {
+		--height: 50px;
+}
+[id='hockey-reference_table_mobile_mrec'] {
+		--height: 250px;
+}
+@media only screen and (min-width: 735px) {
+	[id='div-gpt-ad-300x250-ATF'] {
+		--height: 280px;
+	}
+}
+@media only screen and (min-width: 768px) {
+	[id='div-gpt-ad-728x90-BTF-1'] {
+		--height: 250px;
+	}
+	[id='div-gpt-ad-728x90-BTF-1-1'] {
+		--height: 250px;
+	}
+	[id='div-gpt-ad-728x90-BTF-1-2'] {
+		--height: 250px;
+	}
+	[id='div-gpt-ad-728x90-BTF-1-3'] {
+		--height: 250px;
+	}
+	[id='div-gpt-ad-728x90-GeneralHeader'] {
+		--height: 90px;
+	}
+	[id='hockey-reference_320x50_Mid'] {
+		display: none; 
+	}
+	[id='hockey-reference_table_mobile_mrec'] {
+		display: none; 
+	}
+}
+@media only screen and (min-width: 799px) {
+	[id='div-gpt-ad-728x90-ATF'] {
+		--height: 90px;
+	}
+}

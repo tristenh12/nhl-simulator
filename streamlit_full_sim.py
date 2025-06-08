@@ -3,6 +3,7 @@
 import streamlit as st
 import pandas as pd
 import random
+import os
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
@@ -45,8 +46,14 @@ def run_full_sim():
     # A) LOAD MASTER CSV + INITIALIZE 32 SLOTS
     # ─────────────────────────────────────────────────────────────────────
     @st.cache_data
-    def load_season_df(path="C:/Users/Tristan/Documents/nhl_sim/data/teams_alignment_complete.csv"):
-        return pd.read_csv(path)
+    def load_season_df():
+        # Find the CSV in the repo’s data/ folder, next to this script
+        here = os.path.dirname(__file__)
+        csv_path = os.path.join(here, "data", "teams_alignment_complete.csv")
+        if not os.path.exists(csv_path):
+            st.error(f"⚠️ Data file not found at {csv_path}")
+            st.stop()
+        return pd.read_csv(csv_path)
 
     season_df = load_season_df()
     all_teams = sorted(season_df["Team"].unique())

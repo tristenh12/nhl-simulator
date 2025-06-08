@@ -4,6 +4,7 @@ import pandas as pd
 import time
 import re
 from free_sim import simulate_one_game, simulate_best_of_7
+import os
 
 # Compile period header pattern at module level for reuse
 period_pattern = re.compile(r"=== (\d+)(?:st|nd|rd) Period ===")
@@ -24,8 +25,14 @@ def run_free_sim():
     # (B) Load data + build sidebar selectors
     # ─────────────────────────────────────────────────────────────────
     @st.cache_data
-    def load_season_df(path="data/teams_alignment_complete.csv"):
-        return pd.read_csv(path)
+    def load_season_df():
+        # Find the CSV in the repo’s data/ folder, next to this script
+        here = os.path.dirname(__file__)
+        csv_path = os.path.join(here, "data", "teams_alignment_complete.csv")
+        if not os.path.exists(csv_path):
+            st.error(f"⚠️ Data file not found at {csv_path}")
+            st.stop()
+        return pd.read_csv(csv_path)
 
     season_df = load_season_df()
     teams = sorted(season_df["Team"].unique())
