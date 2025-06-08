@@ -1,0 +1,1163 @@
+Season,Team,Abbreviation,Win%,Rating,Division,Conference
+2023-24,Florida Panthers,FLA,0.61,84.4,Atlantic,Eastern
+2023-24,Boston Bruins,BOS,0.598,83.9,Atlantic,Eastern
+2023-24,Toronto Maple Leafs,TOR,0.543,81.7,Atlantic,Eastern
+2023-24,Tampa Bay Lightning,TBL,0.549,82,Atlantic,Eastern
+2023-24,Detroit Red Wings,DET,0.47,78.8,Atlantic,Eastern
+2023-24,Buffalo Sabres,BUF,0.476,79,Atlantic,Eastern
+2023-24,Ottawa Senators,OTT,0.402,76.1,Atlantic,Eastern
+2023-24,Montreal Canadiens,MTL,0.402,76.1,Atlantic,Eastern
+2023-24,Dallas Stars,DAL,0.616,84.6,Central,Western
+2023-24,Winnipeg Jets,WPG,0.634,85.4,Central,Western
+2023-24,Colorado Avalanche,COL,0.604,84.2,Central,Western
+2023-24,Nashville Predators,NSH,0.549,82,Central,Western
+2023-24,St. Louis Blues,STL,0.488,79.5,Central,Western
+2023-24,Minnesota Wild,MIN,0.494,79.8,Central,Western
+2023-24,Chicago Blackhawks,CHI,0.28,71.2,Central,Western
+2023-24,New York Rangers,NYR,0.622,84.9,Metropolitan,Eastern
+2023-24,Carolina Hurricanes,CAR,0.628,85.1,Metropolitan,Eastern
+2023-24,New York Islanders,NYI,0.512,80.5,Metropolitan,Eastern
+2023-24,Washington Capitals,WSH,0.506,80.2,Metropolitan,Eastern
+2023-24,Pittsburgh Penguins,PIT,0.5,80,Metropolitan,Eastern
+2023-24,Philadelphia Flyers,PHI,0.482,79.3,Metropolitan,Eastern
+2023-24,New Jersey Devils,NJD,0.463,78.5,Metropolitan,Eastern
+2023-24,Columbus Blue Jackets,CBJ,0.366,74.6,Metropolitan,Eastern
+2023-24,Arizona Coyotes,ARI,0.421,76.8,Pacific,Western
+2023-24,Vancouver Canucks,VAN,0.628,85.1,Pacific,Western
+2023-24,Edmonton Oilers,EDM,0.573,82.9,Pacific,Western
+2023-24,Los Angeles Kings,LAK,0.561,82.4,Pacific,Western
+2023-24,Vegas Golden Knights,VGK,0.53,81.2,Pacific,Western
+2023-24,Calgary Flames,CGY,0.457,78.3,Pacific,Western
+2023-24,Seattle Kraken,SEA,0.457,78.3,Pacific,Western
+2023-24,Anaheim Ducks,ANA,0.323,72.9,Pacific,Western
+2023-24,San Jose Sharks,SJS,0.256,70.2,Pacific,Western
+2022-23,Boston Bruins,BOS,0.756,90.2,Atlantic,Eastern
+2022-23,Toronto Maple Leafs,TOR,0.628,85.1,Atlantic,Eastern
+2022-23,Tampa Bay Lightning,TBL,0.549,82,Atlantic,Eastern
+2022-23,Florida Panthers,FLA,0.524,81,Atlantic,Eastern
+2022-23,Buffalo Sabres,BUF,0.482,79.3,Atlantic,Eastern
+2022-23,Ottawa Senators,OTT,0.476,79,Atlantic,Eastern
+2022-23,Detroit Red Wings,DET,0.445,77.8,Atlantic,Eastern
+2022-23,Montreal Canadiens,MTL,0.354,74.2,Atlantic,Eastern
+2022-23,Colorado Avalanche,COL,0.573,82.9,Central,Western
+2022-23,Dallas Stars,DAL,0.61,84.4,Central,Western
+2022-23,Minnesota Wild,MIN,0.555,82.2,Central,Western
+2022-23,Winnipeg Jets,WPG,0.518,80.7,Central,Western
+2022-23,Nashville Predators,NSH,0.482,79.3,Central,Western
+2022-23,St. Louis Blues,STL,0.433,77.3,Central,Western
+2022-23,Chicago Blackhawks,CHI,0.311,72.4,Central,Western
+2022-23,Carolina Hurricanes,CAR,0.61,84.4,Metropolitan,Eastern
+2022-23,New Jersey Devils,NJD,0.604,84.2,Metropolitan,Eastern
+2022-23,New York Rangers,NYR,0.591,83.6,Metropolitan,Eastern
+2022-23,New York Islanders,NYI,0.53,81.2,Metropolitan,Eastern
+2022-23,Pittsburgh Penguins,PIT,0.5,80,Metropolitan,Eastern
+2022-23,Washington Capitals,WSH,0.439,77.6,Metropolitan,Eastern
+2022-23,Philadelphia Flyers,PHI,0.427,77.1,Metropolitan,Eastern
+2022-23,Columbus Blue Jackets,CBJ,0.299,72,Metropolitan,Eastern
+2022-23,Arizona Coyotes,ARI,0.378,75.1,Pacific,Western
+2022-23,Edmonton Oilers,EDM,0.634,85.4,Pacific,Western
+2022-23,Los Angeles Kings,LAK,0.573,82.9,Pacific,Western
+2022-23,Calgary Flames,CGY,0.524,81,Pacific,Western
+2022-23,Vancouver Canucks,VAN,0.421,76.8,Pacific,Western
+2022-23,San Jose Sharks,SJS,0.329,73.2,Pacific,Western
+2022-23,Anaheim Ducks,ANA,0.293,71.7,Pacific,Western
+2022-23,Vegas Golden Knights,VGK,0.598,83.9,Pacific,Unknown
+2022-23,Seattle Kraken,SEA,0.555,82.2,Pacific,Unknown
+2021-22,Florida Panthers,FLA,0.646,85.8,Atlantic,Eastern
+2021-22,Toronto Maple Leafs,TOR,0.646,85.8,Atlantic,Eastern
+2021-22,Tampa Bay Lightning,TBL,0.598,83.9,Atlantic,Eastern
+2021-22,Boston Bruins,BOS,0.585,83.4,Atlantic,Eastern
+2021-22,Buffalo Sabres,BUF,0.415,76.6,Atlantic,Eastern
+2021-22,Detroit Red Wings,DET,0.384,75.4,Atlantic,Eastern
+2021-22,Ottawa Senators,OTT,0.402,76.1,Atlantic,Eastern
+2021-22,Montreal Canadiens,MTL,0.299,72,Atlantic,Eastern
+2021-22,Colorado Avalanche,COL,0.665,86.6,Central,Western
+2021-22,Minnesota Wild,MIN,0.591,83.6,Central,Western
+2021-22,St. Louis Blues,STL,0.628,85.1,Central,Western
+2021-22,Dallas Stars,DAL,0.506,80.2,Central,Western
+2021-22,Nashville Predators,NSH,0.53,81.2,Central,Western
+2021-22,Winnipeg Jets,WPG,0.5,80,Central,Western
+2021-22,Chicago Blackhawks,CHI,0.341,73.6,Central,Western
+2021-22,Carolina Hurricanes,CAR,0.665,86.6,Metropolitan,Eastern
+2021-22,New York Rangers,NYR,0.622,84.9,Metropolitan,Eastern
+2021-22,Pittsburgh Penguins,PIT,0.573,82.9,Metropolitan,Eastern
+2021-22,Washington Capitals,WSH,0.555,82.2,Metropolitan,Eastern
+2021-22,New York Islanders,NYI,0.494,79.8,Metropolitan,Eastern
+2021-22,Columbus Blue Jackets,CBJ,0.427,77.1,Metropolitan,Eastern
+2021-22,New Jersey Devils,NJD,0.335,73.4,Metropolitan,Eastern
+2021-22,Philadelphia Flyers,PHI,0.341,73.6,Metropolitan,Eastern
+2021-22,Arizona Coyotes,ARI,0.305,72.2,Pacific,Western
+2021-22,Calgary Flames,CGY,0.64,85.6,Pacific,Western
+2021-22,Edmonton Oilers,EDM,0.567,82.7,Pacific,Western
+2021-22,Los Angeles Kings,LAK,0.549,82,Pacific,Western
+2021-22,Vancouver Canucks,VAN,0.512,80.5,Pacific,Western
+2021-22,San Jose Sharks,SJS,0.409,76.4,Pacific,Western
+2021-22,Anaheim Ducks,ANA,0.409,76.4,Pacific,Western
+2021-22,Vegas Golden Knights,VGK,0.518,80.7,Pacific,Unknown
+2021-22,Seattle Kraken,SEA,0.341,73.6,Pacific,Unknown
+2020-21,Carolina Hurricanes,CAR,0.634,85.4,Central,Eastern
+2020-21,Florida Panthers,FLA,0.607,84.3,Central,Eastern
+2020-21,Tampa Bay Lightning,TBL,0.607,84.3,Central,Eastern
+2020-21,Nashville Predators,NSH,0.482,79.3,Central,Western
+2020-21,Dallas Stars,DAL,0.482,79.3,Central,Western
+2020-21,Chicago Blackhawks,CHI,0.411,76.4,Central,Western
+2020-21,Detroit Red Wings,DET,0.402,76.1,Central,Eastern
+2020-21,Columbus Blue Jackets,CBJ,0.375,75,Central,Eastern
+2020-21,Pittsburgh Penguins,PIT,0.616,84.6,East,Eastern
+2020-21,Washington Capitals,WSH,0.625,85,East,Eastern
+2020-21,Boston Bruins,BOS,0.58,83.2,East,Eastern
+2020-21,New York Islanders,NYI,0.562,82.5,East,Eastern
+2020-21,New York Rangers,NYR,0.509,80.4,East,Eastern
+2020-21,Philadelphia Flyers,PHI,0.446,77.8,East,Eastern
+2020-21,New Jersey Devils,NJD,0.366,74.6,East,Eastern
+2020-21,Buffalo Sabres,BUF,0.295,71.8,East,Eastern
+2020-21,Toronto Maple Leafs,TOR,0.634,85.4,North,North
+2020-21,Edmonton Oilers,EDM,0.607,84.3,North,North
+2020-21,Winnipeg Jets,WPG,0.509,80.4,North,North
+2020-21,Montreal Canadiens,MTL,0.491,79.6,North,North
+2020-21,Calgary Flames,CGY,0.455,78.2,North,North
+2020-21,Ottawa Senators,OTT,0.411,76.4,North,North
+2020-21,Vancouver Canucks,VAN,0.393,75.7,North,North
+2020-21,Colorado Avalanche,COL,0.696,87.8,West Division,Western
+2020-21,Vegas Golden Knights,VGK,0.643,85.7,West Division,Western
+2020-21,Minnesota Wild,MIN,0.598,83.9,West Division,Western
+2020-21,St. Louis Blues,STL,0.491,79.6,West Division,Western
+2020-21,Arizona Coyotes,ARI,0.438,77.5,West Division,Western
+2020-21,Los Angeles Kings,LAK,0.42,76.8,West Division,Western
+2020-21,San Jose Sharks,SJS,0.384,75.4,West Division,Western
+2020-21,Anaheim Ducks,ANA,0.33,73.2,West Division,Western
+2019-20,Boston Bruins,BOS,0.671,86.8,Atlantic,Eastern
+2019-20,Tampa Bay Lightning,TBL,0.6,84,Atlantic,Eastern
+2019-20,Toronto Maple Leafs,TOR,0.521,80.8,Atlantic,Eastern
+2019-20,Florida Panthers,FLA,0.529,81.2,Atlantic,Eastern
+2019-20,Montreal Canadiens,MTL,0.415,76.6,Atlantic,Eastern
+2019-20,Buffalo Sabres,BUF,0.435,77.4,Atlantic,Eastern
+2019-20,Ottawa Senators,OTT,0.387,75.5,Atlantic,Eastern
+2019-20,Detroit Red Wings,DET,0.246,69.8,Atlantic,Eastern
+2019-20,St. Louis Blues,STL,0.599,84,Central,Western
+2019-20,Colorado Avalanche,COL,0.621,84.8,Central,Western
+2019-20,Dallas Stars,DAL,0.514,80.6,Central,Western
+2019-20,Winnipeg Jets,WPG,0.514,80.6,Central,Western
+2019-20,Nashville Predators,NSH,0.514,80.6,Central,Western
+2019-20,Minnesota Wild,MIN,0.522,80.9,Central,Western
+2019-20,Chicago Blackhawks,CHI,0.45,78,Central,Western
+2019-20,Washington Capitals,WSH,0.58,83.2,Metropolitan,Eastern
+2019-20,Philadelphia Flyers,PHI,0.572,82.9,Metropolitan,Eastern
+2019-20,Pittsburgh Penguins,PIT,0.543,81.7,Metropolitan,Eastern
+2019-20,Carolina Hurricanes,CAR,0.515,80.6,Metropolitan,Eastern
+2019-20,Columbus Blue Jackets,CBJ,0.521,80.8,Metropolitan,Eastern
+2019-20,New York Islanders,NYI,0.507,80.3,Metropolitan,Eastern
+2019-20,New York Rangers,NYR,0.521,80.8,Metropolitan,Eastern
+2019-20,New Jersey Devils,NJD,0.449,78,Metropolitan,Eastern
+2019-20,Edmonton Oilers,EDM,0.542,81.7,Pacific,Western
+2019-20,Calgary Flames,CGY,0.486,79.4,Pacific,Western
+2019-20,Vancouver Canucks,VAN,0.5,80,Pacific,Western
+2019-20,Arizona Coyotes,ARI,0.479,79.2,Pacific,Western
+2019-20,Anaheim Ducks,ANA,0.408,76.3,Pacific,Western
+2019-20,Los Angeles Kings,LAK,0.4,76,Pacific,Western
+2019-20,San Jose Sharks,SJS,0.4,76,Pacific,Western
+2019-20,Vegas Golden Knights,VGK,0.542,81.7,Pacific,Unknown
+2018-19,Tampa Bay Lightning,TBL,0.701,88,Atlantic,Eastern
+2018-19,Boston Bruins,BOS,0.585,83.4,Atlantic,Eastern
+2018-19,Toronto Maple Leafs,TOR,0.573,82.9,Atlantic,Eastern
+2018-19,Montreal Canadiens,MTL,0.543,81.7,Atlantic,Eastern
+2018-19,Florida Panthers,FLA,0.463,78.5,Atlantic,Eastern
+2018-19,Buffalo Sabres,BUF,0.39,75.6,Atlantic,Eastern
+2018-19,Detroit Red Wings,DET,0.378,75.1,Atlantic,Eastern
+2018-19,Ottawa Senators,OTT,0.354,74.2,Atlantic,Eastern
+2018-19,Nashville Predators,NSH,0.555,82.2,Central,Western
+2018-19,Winnipeg Jets,WPG,0.549,82,Central,Western
+2018-19,St. Louis Blues,STL,0.549,82,Central,Western
+2018-19,Dallas Stars,DAL,0.524,81,Central,Western
+2018-19,Colorado Avalanche,COL,0.518,80.7,Central,Western
+2018-19,Chicago Blackhawks,CHI,0.439,77.6,Central,Western
+2018-19,Minnesota Wild,MIN,0.482,79.3,Central,Western
+2018-19,Washington Capitals,WSH,0.579,83.2,Metropolitan,Eastern
+2018-19,New York Islanders,NYI,0.561,82.4,Metropolitan,Eastern
+2018-19,Pittsburgh Penguins,PIT,0.567,82.7,Metropolitan,Eastern
+2018-19,Carolina Hurricanes,CAR,0.561,82.4,Metropolitan,Eastern
+2018-19,Columbus Blue Jackets,CBJ,0.537,81.5,Metropolitan,Eastern
+2018-19,Philadelphia Flyers,PHI,0.445,77.8,Metropolitan,Eastern
+2018-19,New York Rangers,NYR,0.421,76.8,Metropolitan,Eastern
+2018-19,New Jersey Devils,NJD,0.396,75.8,Metropolitan,Eastern
+2018-19,Calgary Flames,CGY,0.622,84.9,Pacific,Western
+2018-19,San Jose Sharks,SJS,0.567,82.7,Pacific,Western
+2018-19,Arizona Coyotes,ARI,0.47,78.8,Pacific,Western
+2018-19,Vancouver Canucks,VAN,0.415,76.6,Pacific,Western
+2018-19,Anaheim Ducks,ANA,0.439,77.6,Pacific,Western
+2018-19,Edmonton Oilers,EDM,0.415,76.6,Pacific,Western
+2018-19,Los Angeles Kings,LAK,0.378,75.1,Pacific,Western
+2018-19,Vegas Golden Knights,VGK,0.524,81,Pacific,Unknown
+2017-18,Tampa Bay Lightning,TBL,0.616,84.6,Atlantic,Eastern
+2017-18,Boston Bruins,BOS,0.628,85.1,Atlantic,Eastern
+2017-18,Toronto Maple Leafs,TOR,0.567,82.7,Atlantic,Eastern
+2017-18,Florida Panthers,FLA,0.549,82,Atlantic,Eastern
+2017-18,Detroit Red Wings,DET,0.396,75.8,Atlantic,Eastern
+2017-18,Montreal Canadiens,MTL,0.402,76.1,Atlantic,Eastern
+2017-18,Ottawa Senators,OTT,0.348,73.9,Atlantic,Eastern
+2017-18,Buffalo Sabres,BUF,0.341,73.6,Atlantic,Eastern
+2017-18,Nashville Predators,NSH,0.646,85.8,Central,Western
+2017-18,Winnipeg Jets,WPG,0.64,85.6,Central,Western
+2017-18,Minnesota Wild,MIN,0.573,82.9,Central,Western
+2017-18,Colorado Avalanche,COL,0.53,81.2,Central,Western
+2017-18,St. Louis Blues,STL,0.506,80.2,Central,Western
+2017-18,Dallas Stars,DAL,0.506,80.2,Central,Western
+2017-18,Chicago Blackhawks,CHI,0.421,76.8,Central,Western
+2017-18,Washington Capitals,WSH,0.573,82.9,Metropolitan,Eastern
+2017-18,Pittsburgh Penguins,PIT,0.524,81,Metropolitan,Eastern
+2017-18,Philadelphia Flyers,PHI,0.53,81.2,Metropolitan,Eastern
+2017-18,Columbus Blue Jackets,CBJ,0.5,80,Metropolitan,Eastern
+2017-18,New Jersey Devils,NJD,0.524,81,Metropolitan,Eastern
+2017-18,Carolina Hurricanes,CAR,0.47,78.8,Metropolitan,Eastern
+2017-18,New York Islanders,NYI,0.427,77.1,Metropolitan,Eastern
+2017-18,New York Rangers,NYR,0.409,76.4,Metropolitan,Eastern
+2017-18,Anaheim Ducks,ANA,0.561,82.4,Pacific,Western
+2017-18,San Jose Sharks,SJS,0.549,82,Pacific,Western
+2017-18,Los Angeles Kings,LAK,0.53,81.2,Pacific,Western
+2017-18,Calgary Flames,CGY,0.457,78.3,Pacific,Western
+2017-18,Edmonton Oilers,EDM,0.402,76.1,Pacific,Western
+2017-18,Vancouver Canucks,VAN,0.409,76.4,Pacific,Western
+2017-18,Arizona Coyotes,ARI,0.372,74.9,Pacific,Western
+2017-18,Vegas Golden Knights,VGK,0.591,83.6,Pacific,Unknown
+2016-17,Montreal Canadiens,MTL,0.543,81.7,Atlantic,Eastern
+2016-17,Ottawa Senators,OTT,0.537,81.5,Atlantic,Eastern
+2016-17,Boston Bruins,BOS,0.543,81.7,Atlantic,Eastern
+2016-17,Toronto Maple Leafs,TOR,0.537,81.5,Atlantic,Eastern
+2016-17,Tampa Bay Lightning,TBL,0.512,80.5,Atlantic,Eastern
+2016-17,Florida Panthers,FLA,0.421,76.8,Atlantic,Eastern
+2016-17,Detroit Red Wings,DET,0.384,75.4,Atlantic,Eastern
+2016-17,Buffalo Sabres,BUF,0.427,77.1,Atlantic,Eastern
+2016-17,Chicago Blackhawks,CHI,0.585,83.4,Central,Western
+2016-17,Minnesota Wild,MIN,0.604,84.2,Central,Western
+2016-17,St. Louis Blues,STL,0.555,82.2,Central,Western
+2016-17,Nashville Predators,NSH,0.537,81.5,Central,Western
+2016-17,Winnipeg Jets,WPG,0.488,79.5,Central,Western
+2016-17,Dallas Stars,DAL,0.445,77.8,Central,Western
+2016-17,Colorado Avalanche,COL,0.244,69.8,Central,Western
+2016-17,Washington Capitals,WSH,0.659,86.4,Metropolitan,Eastern
+2016-17,Pittsburgh Penguins,PIT,0.616,84.6,Metropolitan,Eastern
+2016-17,Columbus Blue Jackets,CBJ,0.591,83.6,Metropolitan,Eastern
+2016-17,New York Rangers,NYR,0.573,82.9,Metropolitan,Eastern
+2016-17,New York Islanders,NYI,0.524,81,Metropolitan,Eastern
+2016-17,Philadelphia Flyers,PHI,0.451,78,Metropolitan,Eastern
+2016-17,Carolina Hurricanes,CAR,0.482,79.3,Metropolitan,Eastern
+2016-17,New Jersey Devils,NJD,0.366,74.6,Metropolitan,Eastern
+2016-17,Anaheim Ducks,ANA,0.604,84.2,Pacific,Western
+2016-17,Edmonton Oilers,EDM,0.567,82.7,Pacific,Western
+2016-17,San Jose Sharks,SJS,0.555,82.2,Pacific,Western
+2016-17,Calgary Flames,CGY,0.494,79.8,Pacific,Western
+2016-17,Los Angeles Kings,LAK,0.439,77.6,Pacific,Western
+2016-17,Arizona Coyotes,ARI,0.366,74.6,Pacific,Western
+2016-17,Vancouver Canucks,VAN,0.354,74.2,Pacific,Western
+2015-16,Florida Panthers,FLA,0.579,83.2,Atlantic,Eastern
+2015-16,Tampa Bay Lightning,TBL,0.53,81.2,Atlantic,Eastern
+2015-16,Detroit Red Wings,DET,0.5,80,Atlantic,Eastern
+2015-16,Boston Bruins,BOS,0.512,80.5,Atlantic,Eastern
+2015-16,Ottawa Senators,OTT,0.445,77.8,Atlantic,Eastern
+2015-16,Montreal Canadiens,MTL,0.451,78,Atlantic,Eastern
+2015-16,Buffalo Sabres,BUF,0.457,78.3,Atlantic,Eastern
+2015-16,Toronto Maple Leafs,TOR,0.366,74.6,Atlantic,Eastern
+2015-16,Dallas Stars,DAL,0.616,84.6,Central,Western
+2015-16,St. Louis Blues,STL,0.573,82.9,Central,Western
+2015-16,Chicago Blackhawks,CHI,0.561,82.4,Central,Western
+2015-16,Nashville Predators,NSH,0.549,82,Central,Western
+2015-16,Minnesota Wild,MIN,0.506,80.2,Central,Western
+2015-16,Colorado Avalanche,COL,0.463,78.5,Central,Western
+2015-16,Winnipeg Jets,WPG,0.439,77.6,Central,Western
+2015-16,Washington Capitals,WSH,0.665,86.6,Metropolitan,Eastern
+2015-16,Pittsburgh Penguins,PIT,0.573,82.9,Metropolitan,Eastern
+2015-16,New York Rangers,NYR,0.573,82.9,Metropolitan,Eastern
+2015-16,New York Islanders,NYI,0.543,81.7,Metropolitan,Eastern
+2015-16,Philadelphia Flyers,PHI,0.506,80.2,Metropolitan,Eastern
+2015-16,Carolina Hurricanes,CAR,0.463,78.5,Metropolitan,Eastern
+2015-16,New Jersey Devils,NJD,0.445,77.8,Metropolitan,Eastern
+2015-16,Columbus Blue Jackets,CBJ,0.415,76.6,Metropolitan,Eastern
+2015-16,Anaheim Ducks,ANA,0.585,83.4,Pacific,Western
+2015-16,Los Angeles Kings,LAK,0.537,81.5,Pacific,Western
+2015-16,San Jose Sharks,SJS,0.543,81.7,Pacific,Western
+2015-16,Arizona Coyotes,ARI,0.439,77.6,Pacific,Western
+2015-16,Calgary Flames,CGY,0.402,76.1,Pacific,Western
+2015-16,Vancouver Canucks,VAN,0.402,76.1,Pacific,Western
+2015-16,Edmonton Oilers,EDM,0.36,74.4,Pacific,Western
+2014-15,Montreal Canadiens,MTL,0.591,83.6,Atlantic,Eastern
+2014-15,Tampa Bay Lightning,TBL,0.616,84.6,Atlantic,Eastern
+2014-15,Detroit Red Wings,DET,0.543,81.7,Atlantic,Eastern
+2014-15,Ottawa Senators,OTT,0.524,81,Atlantic,Eastern
+2014-15,Boston Bruins,BOS,0.506,80.2,Atlantic,Eastern
+2014-15,Florida Panthers,FLA,0.5,80,Atlantic,Eastern
+2014-15,Toronto Maple Leafs,TOR,0.366,74.6,Atlantic,Eastern
+2014-15,Buffalo Sabres,BUF,0.274,71,Atlantic,Eastern
+2014-15,St. Louis Blues,STL,0.579,83.2,Central,Western
+2014-15,Nashville Predators,NSH,0.549,82,Central,Western
+2014-15,Chicago Blackhawks,CHI,0.549,82,Central,Western
+2014-15,Minnesota Wild,MIN,0.561,82.4,Central,Western
+2014-15,Winnipeg Jets,WPG,0.537,81.5,Central,Western
+2014-15,Dallas Stars,DAL,0.512,80.5,Central,Western
+2014-15,Colorado Avalanche,COL,0.476,79,Central,Western
+2014-15,New York Rangers,NYR,0.628,85.1,Metropolitan,Eastern
+2014-15,Washington Capitals,WSH,0.555,82.2,Metropolitan,Eastern
+2014-15,New York Islanders,NYI,0.537,81.5,Metropolitan,Eastern
+2014-15,Pittsburgh Penguins,PIT,0.537,81.5,Metropolitan,Eastern
+2014-15,Columbus Blue Jackets,CBJ,0.457,78.3,Metropolitan,Eastern
+2014-15,Philadelphia Flyers,PHI,0.463,78.5,Metropolitan,Eastern
+2014-15,New Jersey Devils,NJD,0.439,77.6,Metropolitan,Eastern
+2014-15,Carolina Hurricanes,CAR,0.396,75.8,Metropolitan,Eastern
+2014-15,Anaheim Ducks,ANA,0.567,82.7,Pacific,Western
+2014-15,Vancouver Canucks,VAN,0.543,81.7,Pacific,Western
+2014-15,Calgary Flames,CGY,0.512,80.5,Pacific,Western
+2014-15,Los Angeles Kings,LAK,0.561,82.4,Pacific,Western
+2014-15,San Jose Sharks,SJS,0.506,80.2,Pacific,Western
+2014-15,Edmonton Oilers,EDM,0.335,73.4,Pacific,Western
+2014-15,Arizona Coyotes,ARI,0.28,71.2,Pacific,Western
+2013-14,Boston Bruins,BOS,0.671,86.8,Atlantic,Eastern
+2013-14,Tampa Bay Lightning,TBL,0.53,81.2,Atlantic,Eastern
+2013-14,Montreal Canadiens,MTL,0.53,81.2,Atlantic,Eastern
+2013-14,Detroit Red Wings,DET,0.512,80.5,Atlantic,Eastern
+2013-14,Ottawa Senators,OTT,0.476,79,Atlantic,Eastern
+2013-14,Toronto Maple Leafs,TOR,0.427,77.1,Atlantic,Eastern
+2013-14,Florida Panthers,FLA,0.354,74.2,Atlantic,Eastern
+2013-14,Buffalo Sabres,BUF,0.256,70.2,Atlantic,Eastern
+2013-14,Colorado Avalanche,COL,0.591,83.6,Central,Western
+2013-14,St. Louis Blues,STL,0.604,84.2,Central,Western
+2013-14,Chicago Blackhawks,CHI,0.61,84.4,Central,Western
+2013-14,Minnesota Wild,MIN,0.53,81.2,Central,Western
+2013-14,Dallas Stars,DAL,0.518,80.7,Central,Western
+2013-14,Nashville Predators,NSH,0.506,80.2,Central,Western
+2013-14,Winnipeg Jets,WPG,0.433,77.3,Central,Western
+2013-14,Pittsburgh Penguins,PIT,0.598,83.9,Metropolitan,Eastern
+2013-14,New York Rangers,NYR,0.549,82,Metropolitan,Eastern
+2013-14,Philadelphia Flyers,PHI,0.53,81.2,Metropolitan,Eastern
+2013-14,Columbus Blue Jackets,CBJ,0.518,80.7,Metropolitan,Eastern
+2013-14,Washington Capitals,WSH,0.463,78.5,Metropolitan,Eastern
+2013-14,New Jersey Devils,NJD,0.482,79.3,Metropolitan,Eastern
+2013-14,Carolina Hurricanes,CAR,0.47,78.8,Metropolitan,Eastern
+2013-14,New York Islanders,NYI,0.402,76.1,Metropolitan,Eastern
+2013-14,Anaheim Ducks,ANA,0.646,85.8,Pacific,Western
+2013-14,San Jose Sharks,SJS,0.591,83.6,Pacific,Western
+2013-14,Los Angeles Kings,LAK,0.537,81.5,Pacific,Western
+2013-14,Vancouver Canucks,VAN,0.439,77.6,Pacific,Western
+2013-14,Calgary Flames,CGY,0.384,75.4,Pacific,Western
+2013-14,Edmonton Oilers,EDM,0.354,74.2,Pacific,Western
+2013-14,Phoenix Coyotes,PHX,0.488,79.5,Pacific,Unknown
+2012-13,Pittsburgh Penguins,PIT,0.698,87.9,Atlantic,Eastern
+2012-13,New York Rangers,NYR,0.5,80,Atlantic,Eastern
+2012-13,New York Islanders,NYI,0.51,80.4,Atlantic,Eastern
+2012-13,Philadelphia Flyers,PHI,0.479,79.2,Atlantic,Eastern
+2012-13,New Jersey Devils,NJD,0.469,78.8,Atlantic,Eastern
+2012-13,Chicago Blackhawks,CHI,0.688,87.5,Central,Western
+2012-13,St. Louis Blues,STL,0.531,81.2,Central,Western
+2012-13,Detroit Red Wings,DET,0.542,81.7,Central,Western
+2012-13,Columbus Blue Jackets,CBJ,0.469,78.8,Central,Western
+2012-13,Nashville Predators,NSH,0.375,75,Central,Western
+2012-13,Montreal Canadiens,MTL,0.604,84.2,Northeast,Eastern
+2012-13,Boston Bruins,BOS,0.594,83.8,Northeast,Eastern
+2012-13,Toronto Maple Leafs,TOR,0.573,82.9,Northeast,Eastern
+2012-13,Ottawa Senators,OTT,0.521,80.8,Northeast,Eastern
+2012-13,Buffalo Sabres,BUF,0.417,76.7,Northeast,Eastern
+2012-13,Vancouver Canucks,VAN,0.552,82.1,Northwest,Western
+2012-13,Minnesota Wild,MIN,0.5,80,Northwest,Western
+2012-13,Edmonton Oilers,EDM,0.427,77.1,Northwest,Western
+2012-13,Calgary Flames,CGY,0.417,76.7,Northwest,Western
+2012-13,Colorado Avalanche,COL,0.354,74.2,Northwest,Western
+2012-13,Anaheim Ducks,ANA,0.615,84.6,Pacific,Western
+2012-13,Los Angeles Kings,LAK,0.583,83.3,Pacific,Western
+2012-13,San Jose Sharks,SJS,0.51,80.4,Pacific,Western
+2012-13,Phoenix Coyotes,PHX,0.479,79.2,Pacific,Western
+2012-13,Dallas Stars,DAL,0.458,78.3,Pacific,Western
+2012-13,Washington Capitals,WSH,0.521,80.8,Southeast,Eastern
+2012-13,Winnipeg Jets,WPG,0.469,78.8,Southeast,Eastern
+2012-13,Carolina Hurricanes,CAR,0.417,76.7,Southeast,Eastern
+2012-13,Tampa Bay Lightning,TBL,0.396,75.8,Southeast,Eastern
+2012-13,Florida Panthers,FLA,0.333,73.3,Southeast,Eastern
+1999-00,Philadelphia Flyers,PHI,0.622,84.9,Atlantic,Eastern
+1999-00,New Jersey Devils,NJD,0.598,83.9,Atlantic,Eastern
+1999-00,Pittsburgh Penguins,PIT,0.5,80,Atlantic,Eastern
+1999-00,New York Rangers,NYR,0.427,77.1,Atlantic,Eastern
+1999-00,New York Islanders,NYI,0.348,73.9,Atlantic,Eastern
+1999-00,Florida Panthers,FLA,0.561,82.4,Atlantic,Eastern
+1999-00,St. Louis Blues,STL,0.689,87.6,Central,Western
+1999-00,Detroit Red Wings,DET,0.646,85.8,Central,Western
+1999-00,Chicago Blackhawks,CHI,0.463,78.5,Central,Western
+1999-00,Nashville Predators,NSH,0.384,75.4,Central,Western
+1999-00,Toronto Maple Leafs,TOR,0.591,83.6,Northeast,Eastern
+1999-00,Ottawa Senators,OTT,0.567,82.7,Northeast,Eastern
+1999-00,Buffalo Sabres,BUF,0.494,79.8,Northeast,Eastern
+1999-00,Montreal Canadiens,MTL,0.482,79.3,Northeast,Eastern
+1999-00,Boston Bruins,BOS,0.409,76.4,Northeast,Eastern
+1999-00,Colorado Avalanche,COL,0.579,83.2,Pacific,Western
+1999-00,Edmonton Oilers,EDM,0.488,79.5,Pacific,Western
+1999-00,Vancouver Canucks,VAN,0.457,78.3,Pacific,Western
+1999-00,Calgary Flames,CGY,0.439,77.6,Pacific,Western
+1999-00,Dallas Stars,DAL,0.585,83.4,Pacific,Western
+1999-00,Los Angeles Kings,LAK,0.549,82,Pacific,Western
+1999-00,Phoenix Coyotes,PHX,0.524,81,Pacific,Western
+1999-00,San Jose Sharks,SJS,0.488,79.5,Pacific,Western
+1999-00,Washington Capitals,WSH,0.61,84.4,Southeast,Unknown
+1999-00,Carolina Hurricanes,CAR,0.512,80.5,Southeast,Unknown
+1999-00,Tampa Bay Lightning,TBL,0.287,71.5,Southeast,Unknown
+1999-00,Atlanta Thrashers,ATL,0.213,68.5,Southeast,Unknown
+1999-00,Mighty Ducks of Anaheim,MIG,0.488,79.5,Pacific,Unknown
+1998-99,New Jersey Devils,NJD,-0.02,59.2,Atlantic,Eastern
+1998-99,Philadelphia Flyers,PHI,0,60,Atlantic,Eastern
+1998-99,Pittsburgh Penguins,PIT,0,60,Atlantic,Eastern
+1998-99,New York Rangers,NYR,0.04,61.6,Atlantic,Eastern
+1998-99,New York Islanders,NYI,0.06,62.4,Atlantic,Eastern
+1998-99,Florida Panthers,FLA,0.01,60.4,Atlantic,Eastern
+1998-99,Detroit Red Wings,DET,-0.06,57.6,Central,Western
+1998-99,St. Louis Blues,STL,-0.05,58,Central,Western
+1998-99,Chicago Blackhawks,CHI,0.01,60.4,Central,Western
+1998-99,Nashville Predators,NSH,0.02,60.8,Central,Western
+1998-99,Ottawa Senators,OTT,0,60,Northeast,Eastern
+1998-99,Toronto Maple Leafs,TOR,0.01,60.4,Northeast,Eastern
+1998-99,Boston Bruins,BOS,0,60,Northeast,Eastern
+1998-99,Buffalo Sabres,BUF,0.02,60.8,Northeast,Eastern
+1998-99,Montreal Canadiens,MTL,0.05,62,Northeast,Eastern
+1998-99,Colorado Avalanche,COL,-0.08,56.8,Pacific,Western
+1998-99,Edmonton Oilers,EDM,-0.03,58.8,Pacific,Western
+1998-99,Calgary Flames,CGY,-0.02,59.2,Pacific,Western
+1998-99,Vancouver Canucks,VAN,0.04,61.6,Pacific,Western
+1998-99,Dallas Stars,DAL,-0.07,57.2,Pacific,Western
+1998-99,Phoenix Coyotes,PHX,-0.02,59.2,Pacific,Western
+1998-99,San Jose Sharks,SJS,-0.02,59.2,Pacific,Western
+1998-99,Los Angeles Kings,LAK,0.03,61.2,Pacific,Western
+1998-99,Carolina Hurricanes,CAR,0,60,Southeast,Unknown
+1998-99,Washington Capitals,WSH,0.01,60.4,Southeast,Unknown
+1998-99,Tampa Bay Lightning,TBL,0.09,63.6,Southeast,Unknown
+1998-99,Mighty Ducks of Anaheim,MIG,-0.01,59.6,Pacific,Unknown
+1997-98,New Jersey Devils,NJD,-0.06,57.6,Atlantic,Eastern
+1997-98,Philadelphia Flyers,PHI,-0.07,57.2,Atlantic,Eastern
+1997-98,New York Islanders,NYI,0,60,Atlantic,Eastern
+1997-98,New York Rangers,NYR,0,60,Atlantic,Eastern
+1997-98,Florida Panthers,FLA,0.03,61.2,Atlantic,Eastern
+1997-98,Pittsburgh Penguins,PIT,-0.01,59.6,Atlantic,Eastern
+1997-98,Dallas Stars,DAL,-0.03,58.8,Central,Western
+1997-98,Detroit Red Wings,DET,-0.02,59.2,Central,Western
+1997-98,St. Louis Blues,STL,0,60,Central,Western
+1997-98,Phoenix Coyotes,PHX,0.04,61.6,Central,Western
+1997-98,Chicago Blackhawks,CHI,0.03,61.2,Central,Western
+1997-98,Boston Bruins,BOS,0,60,Northeast,Eastern
+1997-98,Buffalo Sabres,BUF,0,60,Northeast,Eastern
+1997-98,Montreal Canadiens,MTL,0,60,Northeast,Eastern
+1997-98,Ottawa Senators,OTT,0.02,60.8,Northeast,Eastern
+1997-98,Toronto Maple Leafs,TOR,0.07,62.8,Northeast,Eastern
+1997-98,Colorado Avalanche,COL,-0.05,58,Pacific,Western
+1997-98,Los Angeles Kings,LAK,-0.03,58.8,Pacific,Western
+1997-98,Edmonton Oilers,EDM,-0.02,59.2,Pacific,Western
+1997-98,San Jose Sharks,SJS,-0.03,58.8,Pacific,Western
+1997-98,Calgary Flames,CGY,0.01,60.4,Pacific,Western
+1997-98,Vancouver Canucks,VAN,0.02,60.8,Pacific,Western
+1997-98,Washington Capitals,WSH,-0.04,58.4,Atlantic,Unknown
+1997-98,Tampa Bay Lightning,TBL,0.07,62.8,Atlantic,Unknown
+1997-98,Carolina Hurricanes,CAR,0.04,61.6,North East,Unknown
+1997-98,Mighty Ducks of Anaheim,MIG,0.02,60.8,Pacific,Unknown
+1996-97,New Jersey Devils,NJD,-0.03,58.8,Atlantic,Eastern
+1996-97,Philadelphia Flyers,PHI,-0.03,58.8,Atlantic,Eastern
+1996-97,Florida Panthers,FLA,0,60,Atlantic,Eastern
+1996-97,New York Rangers,NYR,0.01,60.4,Atlantic,Eastern
+1996-97,New York Islanders,NYI,0.02,60.8,Atlantic,Eastern
+1996-97,Pittsburgh Penguins,PIT,-0.02,59.2,Atlantic,Eastern
+1996-97,Dallas Stars,DAL,-0.02,59.2,Central,Western
+1996-97,Detroit Red Wings,DET,-0.03,58.8,Central,Western
+1996-97,Phoenix Coyotes,PHX,0.02,60.8,Central,Western
+1996-97,St. Louis Blues,STL,0.01,60.4,Central,Western
+1996-97,Chicago Blackhawks,CHI,0.02,60.8,Central,Western
+1996-97,Buffalo Sabres,BUF,-0.04,58.4,Northeast,Eastern
+1996-97,Ottawa Senators,OTT,-0.02,59.2,Northeast,Eastern
+1996-97,Montreal Canadiens,MTL,-0.01,59.6,Northeast,Eastern
+1996-97,Hartford Whalers,HFD,0,60,Northeast,Eastern
+1996-97,Boston Bruins,BOS,0.02,60.8,Northeast,Eastern
+1996-97,Toronto Maple Leafs,TOR,0.05,62,Northeast,Eastern
+1996-97,Colorado Avalanche,COL,-0.07,57.2,Pacific,Western
+1996-97,Edmonton Oilers,EDM,-0.03,58.8,Pacific,Western
+1996-97,Vancouver Canucks,VAN,-0.01,59.6,Pacific,Western
+1996-97,Calgary Flames,CGY,0.02,60.8,Pacific,Western
+1996-97,Los Angeles Kings,LAK,0.04,61.6,Pacific,Western
+1996-97,San Jose Sharks,SJS,0.03,61.2,Pacific,Western
+1996-97,Washington Capitals,WSH,0.04,61.6,Atlantic,Unknown
+1996-97,Tampa Bay Lightning,TBL,0.04,61.6,Atlantic,Unknown
+1996-97,Mighty Ducks of Anaheim,MIG,-0.03,58.8,Pacific,Unknown
+1995-96,Philadelphia Flyers,PHI,-0.03,58.8,Atlantic,Eastern
+1995-96,New York Rangers,NYR,0,60,Atlantic,Eastern
+1995-96,Florida Panthers,FLA,0.02,60.8,Atlantic,Eastern
+1995-96,New Jersey Devils,NJD,0.04,61.6,Atlantic,Eastern
+1995-96,New York Islanders,NYI,0.11,64.4,Atlantic,Eastern
+1995-96,Pittsburgh Penguins,PIT,-0.05,58,Atlantic,Eastern
+1995-96,Detroit Red Wings,DET,-0.11,55.6,Central,Western
+1995-96,Chicago Blackhawks,CHI,-0.04,58.4,Central,Western
+1995-96,Toronto Maple Leafs,TOR,0,60,Central,Western
+1995-96,St. Louis Blues,STL,0,60,Central,Western
+1995-96,Winnipeg Jets,WPG,0.02,60.8,Central,Western
+1995-96,Dallas Stars,DAL,0.05,62,Central,Western
+1995-96,Boston Bruins,BOS,0.01,60.4,Northeast,Eastern
+1995-96,Montreal Canadiens,MTL,-0.01,59.6,Northeast,Eastern
+1995-96,Hartford Whalers,HFD,0.05,62,Northeast,Eastern
+1995-96,Buffalo Sabres,BUF,0.03,61.2,Northeast,Eastern
+1995-96,Ottawa Senators,OTT,0.1,64,Northeast,Eastern
+1995-96,Calgary Flames,CGY,-0.05,58,Pacific,Western
+1995-96,Vancouver Canucks,VAN,-0.05,58,Pacific,Western
+1995-96,Edmonton Oilers,EDM,0,60,Pacific,Western
+1995-96,Los Angeles Kings,LAK,-0.03,58.8,Pacific,Western
+1995-96,San Jose Sharks,SJS,0.03,61.2,Pacific,Western
+1995-96,Washington Capitals,WSH,0.02,60.8,Atlantic,Unknown
+1995-96,Tampa Bay Lightning,TBL,0.05,62,Atlantic,Unknown
+1995-96,Colorado Avalanche,COL,-0.12,55.2,Pacific,Unknown
+1995-96,Mighty Ducks of Anaheim,MIG,-0.03,58.8,Pacific,Unknown
+1994-95,Philadelphia Flyers,PHI,-0.01,59.6,Atlantic,Eastern
+1994-95,New Jersey Devils,NJD,-0.01,59.6,Atlantic,Eastern
+1994-95,New York Rangers,NYR,-0.01,59.6,Atlantic,Eastern
+1994-95,Florida Panthers,FLA,-0.01,59.6,Atlantic,Eastern
+1994-95,New York Islanders,NYI,0.04,61.6,Atlantic,Eastern
+1994-95,Pittsburgh Penguins,PIT,-0.04,58.4,Atlantic,Eastern
+1994-95,Detroit Red Wings,DET,-0.08,56.8,Central,Western
+1994-95,St. Louis Blues,STL,-0.06,57.6,Central,Western
+1994-95,Chicago Blackhawks,CHI,-0.05,58,Central,Western
+1994-95,Toronto Maple Leafs,TOR,0.04,61.6,Central,Western
+1994-95,Dallas Stars,DAL,0.05,62,Central,Western
+1994-95,Winnipeg Jets,WPG,0.08,63.2,Central,Western
+1994-95,Quebec Nordiques,QUE,-0.06,57.6,Northeast,Eastern
+1994-95,Boston Bruins,BOS,-0.02,59.2,Northeast,Eastern
+1994-95,Buffalo Sabres,BUF,-0.03,58.8,Northeast,Eastern
+1994-95,Hartford Whalers,HFD,0.02,60.8,Northeast,Eastern
+1994-95,Montreal Canadiens,MTL,0.06,62.4,Northeast,Eastern
+1994-95,Ottawa Senators,OTT,0.07,62.8,Northeast,Eastern
+1994-95,Calgary Flames,CGY,-0.09,56.4,Pacific,Western
+1994-95,Vancouver Canucks,VAN,-0.04,58.4,Pacific,Western
+1994-95,San Jose Sharks,SJS,0.01,60.4,Pacific,Western
+1994-95,Los Angeles Kings,LAK,0.02,60.8,Pacific,Western
+1994-95,Edmonton Oilers,EDM,0.06,62.4,Pacific,Western
+1994-95,Washington Capitals,WSH,-0.01,59.6,Atlantic,Unknown
+1994-95,Tampa Bay Lightning,TBL,0.01,60.4,Atlantic,Unknown
+1994-95,Mighty Ducks of Anaheim,MIG,0.05,62,Pacific,Unknown
+1993-94,Boston Bruins,BOS,-0.03,58.8,Adams,Wales
+1993-94,Montreal Canadiens,MTL,-0.03,58.8,Adams,Wales
+1993-94,Buffalo Sabres,BUF,-0.04,58.4,Adams,Wales
+1993-94,Hartford Whalers,HFD,0.04,61.6,Adams,Wales
+1993-94,Ottawa Senators,OTT,0.12,64.8,Adams,Wales
+1993-94,Washington Capitals,WSH,0.03,61.2,Atlantic,Unknown
+1993-94,Florida Panthers,FLA,0.02,60.8,Atlantic,Unknown
+1993-94,Tampa Bay Lightning,TBL,0.06,62.4,Atlantic,Unknown
+1993-94,Dallas Stars,DAL,-0.05,58,Central,Western
+1993-94,Detroit Red Wings,DET,-0.08,56.8,Norris,Campbell
+1993-94,Toronto Maple Leafs,TOR,-0.03,58.8,Norris,Campbell
+1993-94,St. Louis Blues,STL,0,60,Norris,Campbell
+1993-94,Chicago Blackhawks,CHI,-0.02,59.2,Norris,Campbell
+1993-94,Quebec Nordiques,QUE,0.02,60.8,Northeast,Eastern
+1993-94,New York Rangers,NYR,0,60,Patrick,Wales
+1993-94,New Jersey Devils,NJD,-0.02,59.2,Patrick,Wales
+1993-94,New York Islanders,NYI,0.03,61.2,Patrick,Wales
+1993-94,Philadelphia Flyers,PHI,0.05,62,Patrick,Wales
+1993-94,Pittsburgh Penguins,PIT,0,60,Patrick,Wales
+1993-94,Winnipeg Jets,WPG,0.05,62,Smythe,Campbell
+1993-94,Calgary Flames,CGY,-0.07,57.2,Smythe,Campbell
+1993-94,Vancouver Canucks,VAN,-0.03,58.8,Smythe,Campbell
+1993-94,San Jose Sharks,SJS,-0.02,59.2,Smythe,Campbell
+1993-94,Los Angeles Kings,LAK,-0.01,59.6,Smythe,Campbell
+1993-94,Edmonton Oilers,EDM,0,60,Smythe,Campbell
+1993-94,Mighty Ducks of Anaheim,MIG,-0.01,59.6,Pacific,Unknown
+1992-93,Boston Bruins,BOS,-0.03,58.8,Adams,Wales
+1992-93,Montreal Canadiens,MTL,-0.06,57.6,Adams,Wales
+1992-93,Buffalo Sabres,BUF,-0.04,58.4,Adams,Wales
+1992-93,Hartford Whalers,HFD,0.08,63.2,Adams,Wales
+1992-93,Ottawa Senators,OTT,0.2,68,Adams,Wales
+1992-93,Chicago Blackhawks,CHI,-0.01,59.6,Norris,Campbell
+1992-93,Detroit Red Wings,DET,-0.07,57.2,Norris,Campbell
+1992-93,Toronto Maple Leafs,TOR,-0.09,56.4,Norris,Campbell
+1992-93,St. Louis Blues,STL,0.01,60.4,Norris,Campbell
+1992-93,Minnesota North Stars,MNS,0.04,61.6,Norris,Campbell
+1992-93,Pittsburgh Penguins,PIT,0.05,62,Patrick,Wales
+1992-93,New York Islanders,NYI,0.11,64.4,Patrick,Wales
+1992-93,New Jersey Devils,NJD,0.15,66,Patrick,Wales
+1992-93,Philadelphia Flyers,PHI,0.2,68,Patrick,Wales
+1992-93,New York Rangers,NYR,0.15,66,Patrick,Wales
+1992-93,Vancouver Canucks,VAN,-0.21,51.6,Smythe,Campbell
+1992-93,Calgary Flames,CGY,-0.22,51.2,Smythe,Campbell
+1992-93,Los Angeles Kings,LAK,-0.1,56,Smythe,Campbell
+1992-93,Winnipeg Jets,WPG,-0.23,50.8,Smythe,Campbell
+1992-93,Edmonton Oilers,EDM,-0.06,57.6,Smythe,Campbell
+1992-93,San Jose Sharks,SJS,0.05,62,Smythe,Campbell
+1992-93,Tampa Bay Lightning,TBL,0.08,63.2,Norris,Unknown
+1992-93,Quebec Nordiques,QUE,-0.11,55.6,Adams,Unknown
+1992-93,Washington Capitals,WSH,0.11,64.4,Patrick,Unknown
+1991-92,Montreal Canadiens,MTL,-0.12,55.2,Adams,Wales
+1991-92,Boston Bruins,BOS,-0.03,58.8,Adams,Wales
+1991-92,Buffalo Sabres,BUF,-0.03,58.8,Adams,Wales
+1991-92,Hartford Whalers,HFD,0,60,Adams,Wales
+1991-92,Quebec Nordiques,QUE,0.03,61.2,Adams,Wales
+1991-92,Detroit Red Wings,DET,-0.06,57.6,Norris,Campbell
+1991-92,Chicago Blackhawks,CHI,-0.04,58.4,Norris,Campbell
+1991-92,St. Louis Blues,STL,-0.01,59.6,Norris,Campbell
+1991-92,Minnesota North Stars,MNS,0.04,61.6,Norris,Campbell
+1991-92,Toronto Maple Leafs,TOR,0.07,62.8,Norris,Campbell
+1991-92,New York Rangers,NYR,0.08,63.2,Patrick,Wales
+1991-92,Washington Capitals,WSH,0.09,63.6,Patrick,Wales
+1991-92,Pittsburgh Penguins,PIT,0.08,63.2,Patrick,Wales
+1991-92,New York Islanders,NYI,0.14,65.6,Patrick,Wales
+1991-92,Philadelphia Flyers,PHI,0.13,65.2,Patrick,Wales
+1991-92,Vancouver Canucks,VAN,-0.13,54.8,Smythe,Campbell
+1991-92,Los Angeles Kings,LAK,-0.08,56.8,Smythe,Campbell
+1991-92,Edmonton Oilers,EDM,-0.1,56,Smythe,Campbell
+1991-92,Winnipeg Jets,WPG,-0.11,55.6,Smythe,Campbell
+1991-92,Calgary Flames,CGY,-0.08,56.8,Smythe,Campbell
+1991-92,San Jose Sharks,SJS,0.03,61.2,Smythe,Unknown
+1991-92,New Jersey Devils,NJD,0.1,64,Patrick,Unknown
+1990-91,Boston Bruins,BOS,-0.12,55.2,Adams,Wales
+1990-91,Montreal Canadiens,MTL,-0.1,56,Adams,Wales
+1990-91,Buffalo Sabres,BUF,-0.09,56.4,Adams,Wales
+1990-91,Hartford Whalers,HFD,-0.03,58.8,Adams,Wales
+1990-91,Quebec Nordiques,QUE,0.06,62.4,Adams,Wales
+1990-91,Chicago Blackhawks,CHI,-0.06,57.6,Norris,Campbell
+1990-91,St. Louis Blues,STL,-0.05,58,Norris,Campbell
+1990-91,Detroit Red Wings,DET,0.05,62,Norris,Campbell
+1990-91,Minnesota North Stars,MNS,0.03,61.2,Norris,Campbell
+1990-91,Toronto Maple Leafs,TOR,0.11,64.4,Norris,Campbell
+1990-91,Pittsburgh Penguins,PIT,-0.04,58.4,Patrick,Wales
+1990-91,New York Rangers,NYR,-0.04,58.4,Patrick,Wales
+1990-91,Washington Capitals,WSH,0,60,Patrick,Wales
+1990-91,Philadelphia Flyers,PHI,0.01,60.4,Patrick,Wales
+1990-91,New York Islanders,NYI,0.06,62.4,Patrick,Wales
+1990-91,Los Angeles Kings,LAK,-0.04,58.4,Smythe,Campbell
+1990-91,Calgary Flames,CGY,-0.03,58.8,Smythe,Campbell
+1990-91,Edmonton Oilers,EDM,0.06,62.4,Smythe,Campbell
+1990-91,Vancouver Canucks,VAN,0.14,65.6,Smythe,Campbell
+1990-91,Winnipeg Jets,WPG,0.09,63.6,Smythe,Campbell
+1990-91,New Jersey Devils,NJD,-0.01,59.6,Patrick,Unknown
+1989-90,Boston Bruins,BOS,-0.08,56.8,Adams,Wales
+1989-90,Buffalo Sabres,BUF,-0.05,58,Adams,Wales
+1989-90,Montreal Canadiens,MTL,-0.07,57.2,Adams,Wales
+1989-90,Hartford Whalers,HFD,-0.02,59.2,Adams,Wales
+1989-90,Quebec Nordiques,QUE,0.18,67.2,Adams,Wales
+1989-90,Chicago Blackhawks,CHI,-0.05,58,Norris,Campbell
+1989-90,St. Louis Blues,STL,-0.04,58.4,Norris,Campbell
+1989-90,Toronto Maple Leafs,TOR,0,60,Norris,Campbell
+1989-90,Minnesota North Stars,MNS,-0.02,59.2,Norris,Campbell
+1989-90,Detroit Red Wings,DET,0.02,60.8,Norris,Campbell
+1989-90,New York Rangers,NYR,-0.03,58.8,Patrick,Wales
+1989-90,Washington Capitals,WSH,-0.03,58.8,Patrick,Wales
+1989-90,New York Islanders,NYI,-0.01,59.6,Patrick,Wales
+1989-90,Pittsburgh Penguins,PIT,0.02,60.8,Patrick,Wales
+1989-90,Philadelphia Flyers,PHI,-0.01,59.6,Patrick,Wales
+1989-90,Calgary Flames,CGY,-0.04,58.4,Smythe,Campbell
+1989-90,Edmonton Oilers,EDM,0.02,60.8,Smythe,Campbell
+1989-90,Winnipeg Jets,WPG,0.05,62,Smythe,Campbell
+1989-90,Los Angeles Kings,LAK,0.06,62.4,Smythe,Campbell
+1989-90,Vancouver Canucks,VAN,0.13,65.2,Smythe,Campbell
+1989-90,New Jersey Devils,NJD,-0.03,58.8,Patrick,Unknown
+1988-89,Montreal Canadiens,MTL,-0.06,57.6,Adams,Wales
+1988-89,Boston Bruins,BOS,0.02,60.8,Adams,Wales
+1988-89,Buffalo Sabres,BUF,0.06,62.4,Adams,Wales
+1988-89,Hartford Whalers,HFD,0.04,61.6,Adams,Wales
+1988-89,Quebec Nordiques,QUE,0.14,65.6,Adams,Wales
+1988-89,Detroit Red Wings,DET,-0.14,54.4,Norris,Campbell
+1988-89,St. Louis Blues,STL,-0.13,54.8,Norris,Campbell
+1988-89,Minnesota North Stars,MNS,-0.12,55.2,Norris,Campbell
+1988-89,Chicago Blackhawks,CHI,-0.1,56,Norris,Campbell
+1988-89,Toronto Maple Leafs,TOR,-0.05,58,Norris,Campbell
+1988-89,Washington Capitals,WSH,-0.07,57.2,Patrick,Wales
+1988-89,Pittsburgh Penguins,PIT,-0.02,59.2,Patrick,Wales
+1988-89,New York Rangers,NYR,-0.03,58.8,Patrick,Wales
+1988-89,Philadelphia Flyers,PHI,-0.05,58,Patrick,Wales
+1988-89,New York Islanders,NYI,0.04,61.6,Patrick,Wales
+1988-89,Calgary Flames,CGY,-0.03,58.8,Smythe,Campbell
+1988-89,Los Angeles Kings,LAK,0.07,62.8,Smythe,Campbell
+1988-89,Edmonton Oilers,EDM,0.1,64,Smythe,Campbell
+1988-89,Vancouver Canucks,VAN,0.12,64.8,Smythe,Campbell
+1988-89,Winnipeg Jets,WPG,0.18,67.2,Smythe,Campbell
+1988-89,New Jersey Devils,NJD,0.02,60.8,Patrick,Unknown
+1987-88,Montreal Canadiens,MTL,-0.04,58.4,Adams,Wales
+1987-88,Boston Bruins,BOS,-0.03,58.8,Adams,Wales
+1987-88,Buffalo Sabres,BUF,0.06,62.4,Adams,Wales
+1987-88,Hartford Whalers,HFD,0.05,62,Adams,Wales
+1987-88,Quebec Nordiques,QUE,0.07,62.8,Adams,Wales
+1987-88,Detroit Red Wings,DET,-0.23,50.8,Norris,Campbell
+1987-88,St. Louis Blues,STL,-0.15,54,Norris,Campbell
+1987-88,Chicago Blackhawks,CHI,-0.12,55.2,Norris,Campbell
+1987-88,Toronto Maple Leafs,TOR,-0.09,56.4,Norris,Campbell
+1987-88,Minnesota North Stars,MNS,-0.05,58,Norris,Campbell
+1987-88,New York Islanders,NYI,0.03,61.2,Patrick,Wales
+1987-88,Washington Capitals,WSH,0.04,61.6,Patrick,Wales
+1987-88,Philadelphia Flyers,PHI,0.07,62.8,Patrick,Wales
+1987-88,New York Rangers,NYR,0.05,62,Patrick,Wales
+1987-88,Pittsburgh Penguins,PIT,0.06,62.4,Patrick,Wales
+1987-88,Calgary Flames,CGY,-0.05,58,Smythe,Campbell
+1987-88,Edmonton Oilers,EDM,-0.03,58.8,Smythe,Campbell
+1987-88,Winnipeg Jets,WPG,0.08,63.2,Smythe,Campbell
+1987-88,Los Angeles Kings,LAK,0.1,64,Smythe,Campbell
+1987-88,Vancouver Canucks,VAN,0.11,64.4,Smythe,Campbell
+1987-88,New Jersey Devils,NJD,0.07,62.8,Patrick,Unknown
+1986-87,Hartford Whalers,HFD,0.02,60.8,Adams,Wales
+1986-87,Montreal Canadiens,MTL,0,60,Adams,Wales
+1986-87,Boston Bruins,BOS,0.01,60.4,Adams,Wales
+1986-87,Quebec Nordiques,QUE,0.05,62,Adams,Wales
+1986-87,Buffalo Sabres,BUF,0.07,62.8,Adams,Wales
+1986-87,St. Louis Blues,STL,-0.07,57.2,Norris,Campbell
+1986-87,Detroit Red Wings,DET,-0.07,57.2,Norris,Campbell
+1986-87,Chicago Blackhawks,CHI,-0.07,57.2,Norris,Campbell
+1986-87,Toronto Maple Leafs,TOR,-0.05,58,Norris,Campbell
+1986-87,Minnesota North Stars,MNS,-0.07,57.2,Norris,Campbell
+1986-87,Philadelphia Flyers,PHI,-0.08,56.8,Patrick,Wales
+1986-87,Washington Capitals,WSH,-0.02,59.2,Patrick,Wales
+1986-87,New York Islanders,NYI,-0.01,59.6,Patrick,Wales
+1986-87,New York Rangers,NYR,0.01,60.4,Patrick,Wales
+1986-87,Pittsburgh Penguins,PIT,-0.02,59.2,Patrick,Wales
+1986-87,Edmonton Oilers,EDM,-0.04,58.4,Smythe,Campbell
+1986-87,Calgary Flames,CGY,0.03,61.2,Smythe,Campbell
+1986-87,Winnipeg Jets,WPG,0.05,62,Smythe,Campbell
+1986-87,Los Angeles Kings,LAK,0.09,63.6,Smythe,Campbell
+1986-87,Vancouver Canucks,VAN,0.1,64,Smythe,Campbell
+1986-87,New Jersey Devils,NJD,0.07,62.8,Patrick,Unknown
+1985-86,Quebec Nordiques,QUE,0.09,63.6,Adams,Wales
+1985-86,Montreal Canadiens,MTL,0.08,63.2,Adams,Wales
+1985-86,Boston Bruins,BOS,0.11,64.4,Adams,Wales
+1985-86,Hartford Whalers,HFD,0.1,64,Adams,Wales
+1985-86,Buffalo Sabres,BUF,0.13,65.2,Adams,Wales
+1985-86,Chicago Black Hawks,CHI,-0.17,53.2,Norris,Campbell
+1985-86,Minnesota North Stars,MNS,-0.2,52,Norris,Campbell
+1985-86,St. Louis Blues,STL,-0.18,52.8,Norris,Campbell
+1985-86,Toronto Maple Leafs,TOR,-0.09,56.4,Norris,Campbell
+1985-86,Detroit Red Wings,DET,0,60,Norris,Campbell
+1985-86,Philadelphia Flyers,PHI,-0.01,59.6,Patrick,Wales
+1985-86,Washington Capitals,WSH,0.04,61.6,Patrick,Wales
+1985-86,New York Islanders,NYI,0.04,61.6,Patrick,Wales
+1985-86,New York Rangers,NYR,0.08,63.2,Patrick,Wales
+1985-86,Pittsburgh Penguins,PIT,0.08,63.2,Patrick,Wales
+1985-86,Edmonton Oilers,EDM,-0.2,52,Smythe,Campbell
+1985-86,Calgary Flames,CGY,-0.12,55.2,Smythe,Campbell
+1985-86,Winnipeg Jets,WPG,0.02,60.8,Smythe,Campbell
+1985-86,Vancouver Canucks,VAN,-0.01,59.6,Smythe,Campbell
+1985-86,Los Angeles Kings,LAK,0.05,62,Smythe,Campbell
+1985-86,New Jersey Devils,NJD,0.16,66.4,Patrick,Unknown
+1984-85,Montreal Canadiens,MTL,0.05,62,Adams,Wales
+1984-85,Quebec Nordiques,QUE,0.05,62,Adams,Wales
+1984-85,Buffalo Sabres,BUF,0.04,61.6,Adams,Wales
+1984-85,Boston Bruins,BOS,0.09,63.6,Adams,Wales
+1984-85,Hartford Whalers,HFD,0.16,66.4,Adams,Wales
+1984-85,St. Louis Blues,STL,-0.18,52.8,Norris,Campbell
+1984-85,Chicago Black Hawks,CHI,-0.18,52.8,Norris,Campbell
+1984-85,Detroit Red Wings,DET,-0.11,55.6,Norris,Campbell
+1984-85,Minnesota North Stars,MNS,-0.1,56,Norris,Campbell
+1984-85,Toronto Maple Leafs,TOR,-0.04,58.4,Norris,Campbell
+1984-85,Philadelphia Flyers,PHI,-0.12,55.2,Patrick,Wales
+1984-85,Washington Capitals,WSH,-0.1,56,Patrick,Wales
+1984-85,New York Islanders,NYI,-0.05,58,Patrick,Wales
+1984-85,New York Rangers,NYR,0.04,61.6,Patrick,Wales
+1984-85,Pittsburgh Penguins,PIT,0.1,64,Patrick,Wales
+1984-85,Edmonton Oilers,EDM,-0.04,58.4,Smythe,Campbell
+1984-85,Winnipeg Jets,WPG,0.05,62,Smythe,Campbell
+1984-85,Calgary Flames,CGY,0.01,60.4,Smythe,Campbell
+1984-85,Los Angeles Kings,LAK,0.06,62.4,Smythe,Campbell
+1984-85,Vancouver Canucks,VAN,0.21,68.4,Smythe,Campbell
+1984-85,New Jersey Devils,NJD,0.07,62.8,Patrick,Unknown
+1983-84,Boston Bruins,BOS,0.07,62.8,Adams,Wales
+1983-84,Buffalo Sabres,BUF,0.09,63.6,Adams,Wales
+1983-84,Quebec Nordiques,QUE,0.06,62.4,Adams,Wales
+1983-84,Montreal Canadiens,MTL,0.17,66.8,Adams,Wales
+1983-84,Hartford Whalers,HFD,0.19,67.6,Adams,Wales
+1983-84,Minnesota North Stars,MNS,-0.15,54,Norris,Campbell
+1983-84,St. Louis Blues,STL,-0.12,55.2,Norris,Campbell
+1983-84,Detroit Red Wings,DET,-0.12,55.2,Norris,Campbell
+1983-84,Chicago Black Hawks,CHI,-0.11,55.6,Norris,Campbell
+1983-84,Toronto Maple Leafs,TOR,-0.05,58,Norris,Campbell
+1983-84,New York Islanders,NYI,-0.1,56,Patrick,Wales
+1983-84,Washington Capitals,WSH,-0.09,56.4,Patrick,Wales
+1983-84,Philadelphia Flyers,PHI,-0.07,57.2,Patrick,Wales
+1983-84,New York Rangers,NYR,-0.02,59.2,Patrick,Wales
+1983-84,Pittsburgh Penguins,PIT,0.13,65.2,Patrick,Wales
+1983-84,Edmonton Oilers,EDM,-0.15,54,Smythe,Campbell
+1983-84,Calgary Flames,CGY,0.01,60.4,Smythe,Campbell
+1983-84,Vancouver Canucks,VAN,0.03,61.2,Smythe,Campbell
+1983-84,Winnipeg Jets,WPG,0.04,61.6,Smythe,Campbell
+1983-84,Los Angeles Kings,LAK,0.08,63.2,Smythe,Campbell
+1983-84,New Jersey Devils,NJD,0.11,64.4,Patrick,Unknown
+1982-83,Boston Bruins,BOS,-0.06,57.6,Adams,Wales
+1982-83,Montreal Canadiens,MTL,-0.02,59.2,Adams,Wales
+1982-83,Buffalo Sabres,BUF,0.02,60.8,Adams,Wales
+1982-83,Quebec Nordiques,QUE,0.05,62,Adams,Wales
+1982-83,Hartford Whalers,HFD,0.22,68.8,Adams,Wales
+1982-83,Chicago Black Hawks,CHI,-0.12,55.2,Norris,Campbell
+1982-83,Minnesota North Stars,MNS,-0.08,56.8,Norris,Campbell
+1982-83,Toronto Maple Leafs,TOR,0,60,Norris,Campbell
+1982-83,St. Louis Blues,STL,-0.01,59.6,Norris,Campbell
+1982-83,Detroit Red Wings,DET,0.05,62,Norris,Campbell
+1982-83,Philadelphia Flyers,PHI,-0.12,55.2,Patrick,Wales
+1982-83,New York Islanders,NYI,-0.11,55.6,Patrick,Wales
+1982-83,Washington Capitals,WSH,-0.05,58,Patrick,Wales
+1982-83,New York Rangers,NYR,-0.05,58,Patrick,Wales
+1982-83,Pittsburgh Penguins,PIT,0.11,64.4,Patrick,Wales
+1982-83,Edmonton Oilers,EDM,-0.1,56,Smythe,Campbell
+1982-83,Calgary Flames,CGY,0.02,60.8,Smythe,Campbell
+1982-83,Vancouver Canucks,VAN,0.03,61.2,Smythe,Campbell
+1982-83,Winnipeg Jets,WPG,0.05,62,Smythe,Campbell
+1982-83,Los Angeles Kings,LAK,0.09,63.6,Smythe,Campbell
+1982-83,New Jersey Devils,NJD,0.08,63.2,Patrick,Unknown
+1981-82,Montreal Canadiens,MTL,-0.04,58.4,Adams,Wales
+1981-82,Boston Bruins,BOS,0.08,63.2,Adams,Wales
+1981-82,Buffalo Sabres,BUF,0.08,63.2,Adams,Wales
+1981-82,Quebec Nordiques,QUE,0.11,64.4,Adams,Wales
+1981-82,Hartford Whalers,HFD,0.22,68.8,Adams,Wales
+1981-82,Minnesota North Stars,MNS,-0.19,52.4,Norris,Campbell
+1981-82,St. Louis Blues,STL,-0.1,56,Norris,Campbell
+1981-82,Chicago Black Hawks,CHI,-0.1,56,Norris,Campbell
+1981-82,Toronto Maple Leafs,TOR,-0.05,58,Norris,Campbell
+1981-82,Detroit Red Wings,DET,-0.05,58,Norris,Campbell
+1981-82,New York Islanders,NYI,-0.05,58,Patrick,Wales
+1981-82,New York Rangers,NYR,0.09,63.6,Patrick,Wales
+1981-82,Philadelphia Flyers,PHI,0.09,63.6,Patrick,Wales
+1981-82,Pittsburgh Penguins,PIT,0.13,65.2,Patrick,Wales
+1981-82,Washington Capitals,WSH,0.12,64.8,Patrick,Wales
+1981-82,Winnipeg Jets,WPG,-0.12,55.2,Smythe,Campbell
+1981-82,Edmonton Oilers,EDM,-0.19,52.4,Smythe,Campbell
+1981-82,Vancouver Canucks,VAN,-0.06,57.6,Smythe,Campbell
+1981-82,Calgary Flames,CGY,-0.04,58.4,Smythe,Campbell
+1981-82,Los Angeles Kings,LAK,0.01,60.4,Smythe,Campbell
+1981-82,Colorado Rockies,CLR,0.08,63.2,Smythe,Campbell
+1980-81,Buffalo Sabres,BUF,-0.05,58,Adams,Wales
+1980-81,Boston Bruins,BOS,-0.03,58.8,Adams,Wales
+1980-81,Minnesota North Stars,MNS,-0.02,59.2,Adams,Wales
+1980-81,Quebec Nordiques,QUE,0,60,Adams,Wales
+1980-81,Toronto Maple Leafs,TOR,0.03,61.2,Adams,Wales
+1980-81,Montreal Canadiens,MTL,-0.06,57.6,Norris,Wales
+1980-81,Los Angeles Kings,LAK,-0.03,58.8,Norris,Wales
+1980-81,Pittsburgh Penguins,PIT,0.03,61.2,Norris,Wales
+1980-81,Hartford Whalers,HFD,0.05,62,Norris,Wales
+1980-81,Detroit Red Wings,DET,0.05,62,Norris,Wales
+1980-81,New York Islanders,NYI,-0.06,57.6,Patrick,Wales
+1980-81,Philadelphia Flyers,PHI,-0.04,58.4,Patrick,Wales
+1980-81,Calgary Flames,CGY,-0.02,59.2,Patrick,Wales
+1980-81,New York Rangers,NYR,0,60,Patrick,Wales
+1980-81,Washington Capitals,WSH,0.02,60.8,Patrick,Wales
+1980-81,St. Louis Blues,STL,-0.04,58.4,Smythe,Campbell
+1980-81,Chicago Black Hawks,CHI,0.01,60.4,Smythe,Campbell
+1980-81,Vancouver Canucks,VAN,0.01,60.4,Smythe,Campbell
+1980-81,Edmonton Oilers,EDM,0,60,Smythe,Campbell
+1980-81,Colorado Rockies,CLR,0.05,62,Smythe,Campbell
+1980-81,Winnipeg Jets,WPG,0.09,63.6,Smythe,Campbell
+2011-12,New York Rangers,NYR,0.591,83.6,Atlantic,Eastern
+2011-12,Pittsburgh Penguins,PIT,0.591,83.6,Atlantic,Eastern
+2011-12,Philadelphia Flyers,PHI,0.567,82.7,Atlantic,Eastern
+2011-12,New Jersey Devils,NJD,0.524,81,Atlantic,Eastern
+2011-12,New York Islanders,NYI,0.421,76.8,Atlantic,Eastern
+2011-12,St. Louis Blues,STL,0.622,84.9,Central,Western
+2011-12,Nashville Predators,NSH,0.585,83.4,Central,Western
+2011-12,Detroit Red Wings,DET,0.549,82,Central,Western
+2011-12,Chicago Blackhawks,CHI,0.549,82,Central,Western
+2011-12,Columbus Blue Jackets,CBJ,0.36,74.4,Central,Western
+2011-12,Boston Bruins,BOS,0.555,82.2,Northeast,Eastern
+2011-12,Ottawa Senators,OTT,0.494,79.8,Northeast,Eastern
+2011-12,Buffalo Sabres,BUF,0.47,78.8,Northeast,Eastern
+2011-12,Toronto Maple Leafs,TOR,0.433,77.3,Northeast,Eastern
+2011-12,Montreal Canadiens,MTL,0.433,77.3,Northeast,Eastern
+2011-12,Vancouver Canucks,VAN,0.585,83.4,Northwest,Western
+2011-12,Calgary Flames,CGY,0.518,80.7,Northwest,Western
+2011-12,Colorado Avalanche,COL,0.439,77.6,Northwest,Western
+2011-12,Minnesota Wild,MIN,0.415,76.6,Northwest,Western
+2011-12,Edmonton Oilers,EDM,0.409,76.4,Northwest,Western
+2011-12,Phoenix Coyotes,PHX,0.537,81.5,Pacific,Western
+2011-12,San Jose Sharks,SJS,0.512,80.5,Pacific,Western
+2011-12,Los Angeles Kings,LAK,0.524,81,Pacific,Western
+2011-12,Dallas Stars,DAL,0.476,79,Pacific,Western
+2011-12,Anaheim Ducks,ANA,0.457,78.3,Pacific,Western
+2011-12,Florida Panthers,FLA,0.53,81.2,Southeast,Eastern
+2011-12,Washington Capitals,WSH,0.494,79.8,Southeast,Eastern
+2011-12,Tampa Bay Lightning,TBL,0.433,77.3,Southeast,Eastern
+2011-12,Winnipeg Jets,WPG,0.451,78,Southeast,Eastern
+2011-12,Carolina Hurricanes,CAR,0.476,79,Southeast,Eastern
+2010-11,Philadelphia Flyers,PHI,0.61,84.4,Atlantic,Eastern
+2010-11,Pittsburgh Penguins,PIT,0.555,82.2,Atlantic,Eastern
+2010-11,New York Rangers,NYR,0.494,79.8,Atlantic,Eastern
+2010-11,New Jersey Devils,NJD,0.433,77.3,Atlantic,Eastern
+2010-11,New York Islanders,NYI,0.378,75.1,Atlantic,Eastern
+2010-11,Detroit Red Wings,DET,0.555,82.2,Central,Western
+2010-11,Nashville Predators,NSH,0.555,82.2,Central,Western
+2010-11,Chicago Blackhawks,CHI,0.53,81.2,Central,Western
+2010-11,St. Louis Blues,STL,0.488,79.5,Central,Western
+2010-11,Columbus Blue Jackets,CBJ,0.433,77.3,Central,Western
+2010-11,Boston Bruins,BOS,0.61,84.4,Northeast,Eastern
+2010-11,Montreal Canadiens,MTL,0.537,81.5,Northeast,Eastern
+2010-11,Buffalo Sabres,BUF,0.494,79.8,Northeast,Eastern
+2010-11,Toronto Maple Leafs,TOR,0.476,79,Northeast,Eastern
+2010-11,Ottawa Senators,OTT,0.427,77.1,Northeast,Eastern
+2010-11,Vancouver Canucks,VAN,0.665,86.6,Northwest,Western
+2010-11,Calgary Flames,CGY,0.506,80.2,Northwest,Western
+2010-11,Minnesota Wild,MIN,0.476,79,Northwest,Western
+2010-11,Colorado Avalanche,COL,0.341,73.6,Northwest,Western
+2010-11,Edmonton Oilers,EDM,0.354,74.2,Northwest,Western
+2010-11,San Jose Sharks,SJS,0.579,83.2,Pacific,Western
+2010-11,Anaheim Ducks,ANA,0.524,81,Pacific,Western
+2010-11,Phoenix Coyotes,PHX,0.561,82.4,Pacific,Western
+2010-11,Los Angeles Kings,LAK,0.53,81.2,Pacific,Western
+2010-11,Dallas Stars,DAL,0.518,80.7,Pacific,Western
+2010-11,Washington Capitals,WSH,0.567,82.7,Southeast,Eastern
+2010-11,Tampa Bay Lightning,TBL,0.543,81.7,Southeast,Eastern
+2010-11,Carolina Hurricanes,CAR,0.488,79.5,Southeast,Eastern
+2010-11,Atlanta Thrashers,ATL,0.396,75.8,Southeast,Eastern
+2010-11,Florida Panthers,FLA,0.378,75.1,Southeast,Eastern
+2009-10,New Jersey Devils,NJD,0.579,83.2,Atlantic,Eastern
+2009-10,Pittsburgh Penguins,PIT,0.53,81.2,Atlantic,Eastern
+2009-10,Philadelphia Flyers,PHI,0.5,80,Atlantic,Eastern
+2009-10,New York Rangers,NYR,0.506,80.2,Atlantic,Eastern
+2009-10,New York Islanders,NYI,0.396,75.8,Atlantic,Eastern
+2009-10,Chicago Blackhawks,CHI,0.591,83.6,Central,Western
+2009-10,Detroit Red Wings,DET,0.555,82.2,Central,Western
+2009-10,Nashville Predators,NSH,0.524,81,Central,Western
+2009-10,St. Louis Blues,STL,0.488,79.5,Central,Western
+2009-10,Columbus Blue Jackets,CBJ,0.451,78,Central,Western
+2009-10,Buffalo Sabres,BUF,0.549,82,Northeast,Eastern
+2009-10,Ottawa Senators,OTT,0.512,80.5,Northeast,Eastern
+2009-10,Boston Bruins,BOS,0.47,78.8,Northeast,Eastern
+2009-10,Montreal Canadiens,MTL,0.445,77.8,Northeast,Eastern
+2009-10,Toronto Maple Leafs,TOR,0.396,75.8,Northeast,Eastern
+2009-10,Vancouver Canucks,VAN,0.579,83.2,Northwest,Western
+2009-10,Colorado Avalanche,COL,0.524,81,Northwest,Western
+2009-10,Calgary Flames,CGY,0.518,80.7,Northwest,Western
+2009-10,Minnesota Wild,MIN,0.451,78,Northwest,Western
+2009-10,Edmonton Oilers,EDM,0.323,72.9,Northwest,Western
+2009-10,San Jose Sharks,SJS,0.64,85.6,Pacific,Western
+2009-10,Phoenix Coyotes,PHX,0.537,81.5,Pacific,Western
+2009-10,Los Angeles Kings,LAK,0.53,81.2,Pacific,Western
+2009-10,Anaheim Ducks,ANA,0.494,79.8,Pacific,Western
+2009-10,Dallas Stars,DAL,0.482,79.3,Pacific,Western
+2009-10,Washington Capitals,WSH,0.671,86.8,Southeast,Eastern
+2009-10,Atlanta Thrashers,ATL,0.47,78.8,Southeast,Eastern
+2009-10,Carolina Hurricanes,CAR,0.433,77.3,Southeast,Eastern
+2009-10,Tampa Bay Lightning,TBL,0.433,77.3,Southeast,Eastern
+2009-10,Florida Panthers,FLA,0.421,76.8,Southeast,Eastern
+2008-09,New Jersey Devils,NJD,0.555,82.2,Atlantic,Eastern
+2008-09,Pittsburgh Penguins,PIT,0.53,81.2,Atlantic,Eastern
+2008-09,Philadelphia Flyers,PHI,0.543,81.7,Atlantic,Eastern
+2008-09,New York Rangers,NYR,0.5,80,Atlantic,Eastern
+2008-09,New York Islanders,NYI,0.335,73.4,Atlantic,Eastern
+2008-09,Detroit Red Wings,DET,0.628,85.1,Central,Western
+2008-09,Chicago Blackhawks,CHI,0.573,82.9,Central,Western
+2008-09,St. Louis Blues,STL,0.5,80,Central,Western
+2008-09,Columbus Blue Jackets,CBJ,0.494,79.8,Central,Western
+2008-09,Nashville Predators,NSH,0.463,78.5,Central,Western
+2008-09,Boston Bruins,BOS,0.665,86.6,Northeast,Eastern
+2008-09,Montreal Canadiens,MTL,0.5,80,Northeast,Eastern
+2008-09,Buffalo Sabres,BUF,0.494,79.8,Northeast,Eastern
+2008-09,Ottawa Senators,OTT,0.463,78.5,Northeast,Eastern
+2008-09,Toronto Maple Leafs,TOR,0.433,77.3,Northeast,Eastern
+2008-09,Vancouver Canucks,VAN,0.561,82.4,Northwest,Western
+2008-09,Calgary Flames,CGY,0.561,82.4,Northwest,Western
+2008-09,Minnesota Wild,MIN,0.494,79.8,Northwest,Western
+2008-09,Edmonton Oilers,EDM,0.476,79,Northwest,Western
+2008-09,Colorado Avalanche,COL,0.348,73.9,Northwest,Western
+2008-09,San Jose Sharks,SJS,0.652,86.1,Pacific,Western
+2008-09,Anaheim Ducks,ANA,0.482,79.3,Pacific,Western
+2008-09,Dallas Stars,DAL,0.439,77.6,Pacific,Western
+2008-09,Phoenix Coyotes,PHX,0.457,78.3,Pacific,Western
+2008-09,Los Angeles Kings,LAK,0.433,77.3,Pacific,Western
+2008-09,Washington Capitals,WSH,0.598,83.9,Southeast,Eastern
+2008-09,Carolina Hurricanes,CAR,0.53,81.2,Southeast,Eastern
+2008-09,Florida Panthers,FLA,0.524,81,Southeast,Eastern
+2008-09,Atlanta Thrashers,ATL,0.396,75.8,Southeast,Eastern
+2008-09,Tampa Bay Lightning,TBL,0.372,74.9,Southeast,Eastern
+2007-08,Pittsburgh Penguins,PIT,0.573,82.9,Atlantic,Eastern
+2007-08,New Jersey Devils,NJD,0.512,80.5,Atlantic,Eastern
+2007-08,New York Rangers,NYR,0.518,80.7,Atlantic,Eastern
+2007-08,Philadelphia Flyers,PHI,0.543,81.7,Atlantic,Eastern
+2007-08,New York Islanders,NYI,0.421,76.8,Atlantic,Eastern
+2007-08,Detroit Red Wings,DET,0.659,86.4,Central,Western
+2007-08,Nashville Predators,NSH,0.506,80.2,Central,Western
+2007-08,Chicago Blackhawks,CHI,0.482,79.3,Central,Western
+2007-08,Columbus Blue Jackets,CBJ,0.457,78.3,Central,Western
+2007-08,St. Louis Blues,STL,0.457,78.3,Central,Western
+2007-08,Montreal Canadiens,MTL,0.573,82.9,Northeast,Eastern
+2007-08,Ottawa Senators,OTT,0.537,81.5,Northeast,Eastern
+2007-08,Boston Bruins,BOS,0.518,80.7,Northeast,Eastern
+2007-08,Buffalo Sabres,BUF,0.494,79.8,Northeast,Eastern
+2007-08,Toronto Maple Leafs,TOR,0.457,78.3,Northeast,Eastern
+2007-08,Minnesota Wild,MIN,0.543,81.7,Northwest,Western
+2007-08,Colorado Avalanche,COL,0.512,80.5,Northwest,Western
+2007-08,Calgary Flames,CGY,0.537,81.5,Northwest,Western
+2007-08,Edmonton Oilers,EDM,0.421,76.8,Northwest,Western
+2007-08,Vancouver Canucks,VAN,0.476,79,Northwest,Western
+2007-08,San Jose Sharks,SJS,0.604,84.2,Pacific,Western
+2007-08,Anaheim Ducks,ANA,0.549,82,Pacific,Western
+2007-08,Dallas Stars,DAL,0.543,81.7,Pacific,Western
+2007-08,Phoenix Coyotes,PHX,0.451,78,Pacific,Western
+2007-08,Los Angeles Kings,LAK,0.39,75.6,Pacific,Western
+2007-08,Washington Capitals,WSH,0.506,80.2,Southeast,Eastern
+2007-08,Carolina Hurricanes,CAR,0.518,80.7,Southeast,Eastern
+2007-08,Florida Panthers,FLA,0.463,78.5,Southeast,Eastern
+2007-08,Atlanta Thrashers,ATL,0.372,74.9,Southeast,Eastern
+2007-08,Tampa Bay Lightning,TBL,0.409,76.4,Southeast,Eastern
+2006-07,New Jersey Devils,NJD,0.573,82.9,Atlantic,Eastern
+2006-07,Pittsburgh Penguins,PIT,0.543,81.7,Atlantic,Eastern
+2006-07,New York Rangers,NYR,0.5,80,Atlantic,Eastern
+2006-07,New York Islanders,NYI,0.5,80,Atlantic,Eastern
+2006-07,Philadelphia Flyers,PHI,0.317,72.7,Atlantic,Eastern
+2006-07,Detroit Red Wings,DET,0.659,86.4,Central,Western
+2006-07,Nashville Predators,NSH,0.616,84.6,Central,Western
+2006-07,St. Louis Blues,STL,0.433,77.3,Central,Western
+2006-07,Columbus Blue Jackets,CBJ,0.39,75.6,Central,Western
+2006-07,Chicago Blackhawks,CHI,0.378,75.1,Central,Western
+2006-07,Buffalo Sabres,BUF,0.598,83.9,Northeast,Eastern
+2006-07,Ottawa Senators,OTT,0.616,84.6,Northeast,Eastern
+2006-07,Toronto Maple Leafs,TOR,0.506,80.2,Northeast,Eastern
+2006-07,Montreal Canadiens,MTL,0.5,80,Northeast,Eastern
+2006-07,Boston Bruins,BOS,0.384,75.4,Northeast,Eastern
+2006-07,Vancouver Canucks,VAN,0.537,81.5,Northwest,Western
+2006-07,Minnesota Wild,MIN,0.53,81.2,Northwest,Western
+2006-07,Calgary Flames,CGY,0.555,82.2,Northwest,Western
+2006-07,Colorado Avalanche,COL,0.53,81.2,Northwest,Western
+2006-07,Edmonton Oilers,EDM,0.409,76.4,Northwest,Western
+2006-07,Anaheim Ducks,ANA,0.616,84.6,Pacific,Western
+2006-07,San Jose Sharks,SJS,0.634,85.4,Pacific,Western
+2006-07,Dallas Stars,DAL,0.561,82.4,Pacific,Western
+2006-07,Los Angeles Kings,LAK,0.378,75.1,Pacific,Western
+2006-07,Phoenix Coyotes,PHX,0.366,74.6,Pacific,Western
+2006-07,Atlanta Thrashers,ATL,0.506,80.2,Southeast,Eastern
+2006-07,Tampa Bay Lightning,TBL,0.476,79,Southeast,Eastern
+2006-07,Carolina Hurricanes,CAR,0.5,80,Southeast,Eastern
+2006-07,Florida Panthers,FLA,0.494,79.8,Southeast,Eastern
+2006-07,Washington Capitals,WSH,0.396,75.8,Southeast,Eastern
+2005-06,New Jersey Devils,NJD,0.537,81.5,Atlantic,Eastern
+2005-06,Philadelphia Flyers,PHI,0.549,82,Atlantic,Eastern
+2005-06,New York Rangers,NYR,0.543,81.7,Atlantic,Eastern
+2005-06,New York Islanders,NYI,0.402,76.1,Atlantic,Eastern
+2005-06,Pittsburgh Penguins,PIT,0.323,72.9,Atlantic,Eastern
+2005-06,Detroit Red Wings,DET,0.713,88.5,Central,Western
+2005-06,Nashville Predators,NSH,0.591,83.6,Central,Western
+2005-06,Columbus Blue Jackets,CBJ,0.366,74.6,Central,Western
+2005-06,Chicago Blackhawks,CHI,0.341,73.6,Central,Western
+2005-06,St. Louis Blues,STL,0.305,72.2,Central,Western
+2005-06,Ottawa Senators,OTT,0.665,86.6,Northeast,Eastern
+2005-06,Buffalo Sabres,BUF,0.604,84.2,Northeast,Eastern
+2005-06,Montreal Canadiens,MTL,0.512,80.5,Northeast,Eastern
+2005-06,Toronto Maple Leafs,TOR,0.488,79.5,Northeast,Eastern
+2005-06,Boston Bruins,BOS,0.415,76.6,Northeast,Eastern
+2005-06,Calgary Flames,CGY,0.604,84.2,Northwest,Western
+2005-06,Colorado Avalanche,COL,0.543,81.7,Northwest,Western
+2005-06,Edmonton Oilers,EDM,0.5,80,Northwest,Western
+2005-06,Vancouver Canucks,VAN,0.512,80.5,Northwest,Western
+2005-06,Minnesota Wild,MIN,0.476,79,Northwest,Western
+2005-06,Dallas Stars,DAL,0.591,83.6,Pacific,Western
+2005-06,San Jose Sharks,SJS,0.543,81.7,Pacific,Western
+2005-06,Los Angeles Kings,LAK,0.482,79.3,Pacific,Western
+2005-06,Phoenix Coyotes,PHX,0.433,77.3,Pacific,Western
+2005-06,Carolina Hurricanes,CAR,0.61,84.4,Southeast,Eastern
+2005-06,Tampa Bay Lightning,TBL,0.488,79.5,Southeast,Eastern
+2005-06,Atlanta Thrashers,ATL,0.488,79.5,Southeast,Eastern
+2005-06,Florida Panthers,FLA,0.445,77.8,Southeast,Eastern
+2005-06,Washington Capitals,WSH,0.372,74.9,Southeast,Eastern
+2005-06,Mighty Ducks of Anaheim,MIG,0.561,82.4,Pacific,Unknown
+2003-04,Philadelphia Flyers,PHI,0.579,83.2,Atlantic,Eastern
+2003-04,New Jersey Devils,NJD,0.598,83.9,Atlantic,Eastern
+2003-04,New York Islanders,NYI,0.53,81.2,Atlantic,Eastern
+2003-04,New York Rangers,NYR,0.372,74.9,Atlantic,Eastern
+2003-04,Pittsburgh Penguins,PIT,0.329,73.2,Atlantic,Eastern
+2003-04,Detroit Red Wings,DET,0.652,86.1,Central,Western
+2003-04,St. Louis Blues,STL,0.543,81.7,Central,Western
+2003-04,Nashville Predators,NSH,0.53,81.2,Central,Western
+2003-04,Columbus Blue Jackets,CBJ,0.354,74.2,Central,Western
+2003-04,Chicago Blackhawks,CHI,0.311,72.4,Central,Western
+2003-04,Boston Bruins,BOS,0.591,83.6,Northeast,Eastern
+2003-04,Toronto Maple Leafs,TOR,0.61,84.4,Northeast,Eastern
+2003-04,Ottawa Senators,OTT,0.585,83.4,Northeast,Eastern
+2003-04,Montreal Canadiens,MTL,0.543,81.7,Northeast,Eastern
+2003-04,Buffalo Sabres,BUF,0.494,79.8,Northeast,Eastern
+2003-04,Vancouver Canucks,VAN,0.585,83.4,Northwest,Western
+2003-04,Colorado Avalanche,COL,0.567,82.7,Northwest,Western
+2003-04,Calgary Flames,CGY,0.555,82.2,Northwest,Western
+2003-04,Edmonton Oilers,EDM,0.512,80.5,Northwest,Western
+2003-04,Minnesota Wild,MIN,0.488,79.5,Northwest,Western
+2003-04,San Jose Sharks,SJS,0.598,83.9,Pacific,Western
+2003-04,Dallas Stars,DAL,0.579,83.2,Pacific,Western
+2003-04,Los Angeles Kings,LAK,0.439,77.6,Pacific,Western
+2003-04,Phoenix Coyotes,PHX,0.378,75.1,Pacific,Western
+2003-04,Tampa Bay Lightning,TBL,0.61,84.4,Southeast,Eastern
+2003-04,Atlanta Thrashers,ATL,0.451,78,Southeast,Eastern
+2003-04,Carolina Hurricanes,CAR,0.427,77.1,Southeast,Eastern
+2003-04,Florida Panthers,FLA,0.433,77.3,Southeast,Eastern
+2003-04,Washington Capitals,WSH,0.341,73.6,Southeast,Eastern
+2003-04,Mighty Ducks of Anaheim,MIG,0.415,76.6,Pacific,Unknown
+2002-03,New Jersey Devils,NJD,0.622,84.9,Atlantic,Eastern
+2002-03,Philadelphia Flyers,PHI,0.628,85.1,Atlantic,Eastern
+2002-03,New York Islanders,NYI,0.494,79.8,Atlantic,Eastern
+2002-03,New York Rangers,NYR,0.451,78,Atlantic,Eastern
+2002-03,Pittsburgh Penguins,PIT,0.366,74.6,Atlantic,Eastern
+2002-03,Detroit Red Wings,DET,0.646,85.8,Central,Western
+2002-03,St. Louis Blues,STL,0.567,82.7,Central,Western
+2002-03,Chicago Blackhawks,CHI,0.445,77.8,Central,Western
+2002-03,Nashville Predators,NSH,0.409,76.4,Central,Western
+2002-03,Columbus Blue Jackets,CBJ,0.402,76.1,Central,Western
+2002-03,Ottawa Senators,OTT,0.683,87.3,Northeast,Eastern
+2002-03,Toronto Maple Leafs,TOR,0.579,83.2,Northeast,Eastern
+2002-03,Boston Bruins,BOS,0.506,80.2,Northeast,Eastern
+2002-03,Montreal Canadiens,MTL,0.415,76.6,Northeast,Eastern
+2002-03,Buffalo Sabres,BUF,0.39,75.6,Northeast,Eastern
+2002-03,Colorado Avalanche,COL,0.591,83.6,Northwest,Western
+2002-03,Vancouver Canucks,VAN,0.628,85.1,Northwest,Western
+2002-03,Minnesota Wild,MIN,0.573,82.9,Northwest,Western
+2002-03,Edmonton Oilers,EDM,0.506,80.2,Northwest,Western
+2002-03,Calgary Flames,CGY,0.433,77.3,Northwest,Western
+2002-03,Dallas Stars,DAL,0.652,86.1,Pacific,Western
+2002-03,Los Angeles Kings,LAK,0.439,77.6,Pacific,Western
+2002-03,Phoenix Coyotes,PHX,0.445,77.8,Pacific,Western
+2002-03,San Jose Sharks,SJS,0.396,75.8,Pacific,Western
+2002-03,Tampa Bay Lightning,TBL,0.537,81.5,Southeast,Eastern
+2002-03,Washington Capitals,WSH,0.524,81,Southeast,Eastern
+2002-03,Atlanta Thrashers,ATL,0.421,76.8,Southeast,Eastern
+2002-03,Florida Panthers,FLA,0.372,74.9,Southeast,Eastern
+2002-03,Carolina Hurricanes,CAR,0.335,73.4,Southeast,Eastern
+2002-03,Mighty Ducks of Anaheim,MIG,0.543,81.7,Pacific,Unknown
+2001-02,Philadelphia Flyers,PHI,0.573,82.9,Atlantic,Eastern
+2001-02,New York Islanders,NYI,0.561,82.4,Atlantic,Eastern
+2001-02,New Jersey Devils,NJD,0.555,82.2,Atlantic,Eastern
+2001-02,New York Rangers,NYR,0.463,78.5,Atlantic,Eastern
+2001-02,Pittsburgh Penguins,PIT,0.39,75.6,Atlantic,Eastern
+2001-02,Detroit Red Wings,DET,0.683,87.3,Central,Western
+2001-02,St. Louis Blues,STL,0.573,82.9,Central,Western
+2001-02,Chicago Blackhawks,CHI,0.579,83.2,Central,Western
+2001-02,Nashville Predators,NSH,0.421,76.8,Central,Western
+2001-02,Columbus Blue Jackets,CBJ,0.317,72.7,Central,Western
+2001-02,Boston Bruins,BOS,0.561,82.4,Northeast,Eastern
+2001-02,Toronto Maple Leafs,TOR,0.585,83.4,Northeast,Eastern
+2001-02,Ottawa Senators,OTT,0.53,81.2,Northeast,Eastern
+2001-02,Montreal Canadiens,MTL,0.512,80.5,Northeast,Eastern
+2001-02,Buffalo Sabres,BUF,0.494,79.8,Northeast,Eastern
+2001-02,Colorado Avalanche,COL,0.598,83.9,Northwest,Western
+2001-02,Vancouver Canucks,VAN,0.555,82.2,Northwest,Western
+2001-02,Edmonton Oilers,EDM,0.537,81.5,Northwest,Western
+2001-02,Calgary Flames,CGY,0.463,78.5,Northwest,Western
+2001-02,Minnesota Wild,MIN,0.39,75.6,Northwest,Western
+2001-02,San Jose Sharks,SJS,0.585,83.4,Pacific,Western
+2001-02,Phoenix Coyotes,PHX,0.543,81.7,Pacific,Western
+2001-02,Los Angeles Kings,LAK,0.555,82.2,Pacific,Western
+2001-02,Dallas Stars,DAL,0.518,80.7,Pacific,Western
+2001-02,Carolina Hurricanes,CAR,0.524,81,Southeast,Eastern
+2001-02,Washington Capitals,WSH,0.506,80.2,Southeast,Eastern
+2001-02,Tampa Bay Lightning,TBL,0.396,75.8,Southeast,Eastern
+2001-02,Florida Panthers,FLA,0.329,73.2,Southeast,Eastern
+2001-02,Atlanta Thrashers,ATL,0.299,72,Southeast,Eastern
+2001-02,Mighty Ducks of Anaheim,MIG,0.402,76.1,Pacific,Unknown
+2000-01,New Jersey Devils,NJD,0.659,86.4,Atlantic,Eastern
+2000-01,Philadelphia Flyers,PHI,0.591,83.6,Atlantic,Eastern
+2000-01,Pittsburgh Penguins,PIT,0.567,82.7,Atlantic,Eastern
+2000-01,New York Rangers,NYR,0.433,77.3,Atlantic,Eastern
+2000-01,New York Islanders,NYI,0.299,72,Atlantic,Eastern
+2000-01,Detroit Red Wings,DET,0.652,86.1,Central,Western
+2000-01,St. Louis Blues,STL,0.598,83.9,Central,Western
+2000-01,Nashville Predators,NSH,0.47,78.8,Central,Western
+2000-01,Chicago Blackhawks,CHI,0.402,76.1,Central,Western
+2000-01,Columbus Blue Jackets,CBJ,0.396,75.8,Central,Western
+2000-01,Ottawa Senators,OTT,0.64,85.6,Northeast,Eastern
+2000-01,Buffalo Sabres,BUF,0.591,83.6,Northeast,Eastern
+2000-01,Toronto Maple Leafs,TOR,0.518,80.7,Northeast,Eastern
+2000-01,Boston Bruins,BOS,0.488,79.5,Northeast,Eastern
+2000-01,Montreal Canadiens,MTL,0.39,75.6,Northeast,Eastern
+2000-01,Colorado Avalanche,COL,0.695,87.8,Northwest,Western
+2000-01,Edmonton Oilers,EDM,0.549,82,Northwest,Western
+2000-01,Vancouver Canucks,VAN,0.506,80.2,Northwest,Western
+2000-01,Calgary Flames,CGY,0.421,76.8,Northwest,Western
+2000-01,Minnesota Wild,MIN,0.384,75.4,Northwest,Western
+2000-01,Dallas Stars,DAL,0.634,85.4,Pacific,Western
+2000-01,San Jose Sharks,SJS,0.561,82.4,Pacific,Western
+2000-01,Los Angeles Kings,LAK,0.543,81.7,Pacific,Western
+2000-01,Phoenix Coyotes,PHX,0.53,81.2,Pacific,Western
+2000-01,Washington Capitals,WSH,0.561,82.4,Southeast,Eastern
+2000-01,Carolina Hurricanes,CAR,0.518,80.7,Southeast,Eastern
+2000-01,Florida Panthers,FLA,0.348,73.9,Southeast,Eastern
+2000-01,Atlanta Thrashers,ATL,0.354,74.2,Southeast,Eastern
+2000-01,Tampa Bay Lightning,TBL,0.329,73.2,Southeast,Eastern
+2000-01,Mighty Ducks of Anaheim,MIG,0.372,74.9,Pacific,Unknown
