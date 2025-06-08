@@ -26,13 +26,10 @@ def run_free_sim():
     # ─────────────────────────────────────────────────────────────────
     @st.cache_data
     def load_season_df():
-        # Find the CSV in the repo’s data/ folder, next to this script
         here = os.path.dirname(__file__)
-        csv_path = os.path.join(here, "data", "teams_alignment_complete.csv")
-        if not os.path.exists(csv_path):
-            st.error(f"⚠️ Data file not found at {csv_path}")
-            st.stop()
-        return pd.read_csv(csv_path)
+        data_path = os.path.join(here, "data", "teams_alignment_complete.csv")
+        return pd.read_csv(data_path)
+
 
     season_df = load_season_df()
     teams = sorted(season_df["Team"].unique())
