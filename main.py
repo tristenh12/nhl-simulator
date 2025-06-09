@@ -9,6 +9,18 @@ st.set_page_config(
     layout="wide"
 )
 
+# Global shrink: slightly reduce overall app size
+global_css = """
+<style>
+  /* uniformly shrink entire app to 95% */
+  .block-container {
+    transform: scale(0.95) !important;
+    transform-origin: top center !important;
+  }
+</style>
+"""
+st.markdown(global_css, unsafe_allow_html=True)
+
 # Inject custom CSS for mobile responsiveness
 mobile_css = """
 <style>
