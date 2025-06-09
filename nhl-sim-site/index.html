@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NHL What-If Simulator</title>
+  <!-- Bootstrap CSS via CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  />
+</head>
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">NHL What-If</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero / Call-to-Action -->
+  <header class="py-5 text-center bg-gradient" style="background: linear-gradient(135deg,#0062E6,#33AEFF); color:white;">
+    <div class="container">
+      <h1 class="display-4">NHL What-If Simulator</h1>
+      <p class="lead">Pick 32 teams across eras, run an 82-game season, and view standings & playoffs.</p>
+      <a href="#simulator" class="btn btn-light btn-lg">Simulate Now</a>
+    </div>
+  </header>
+
+  <!-- Embed -->
+  <main id="simulator" class="py-5">
+    <div class="container">
+      <div class="ratio ratio-16x9 shadow rounded">
+        <iframe
+          src="https://share.streamlit.io/tristenh12/nhl-simulator/main/main.py?embed=true"
+          title="NHL What-If Simulator"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-3 bg-dark text-light text-center">
+    <div class="container">
+      &copy; 2025 NHL What-If Simulator
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS via CDN -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  ></script>
+</body>
+</html>
