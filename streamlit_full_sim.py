@@ -115,65 +115,84 @@ def run_full_sim():
         unsafe_allow_html=True
     )
 
+
     st.markdown("### 1) Customize Your 32-Team League")
 
+    # Toggle button
+    if "show_all_slots" not in st.session_state:
+        st.session_state.show_all_slots = False
+
+    if not st.session_state.show_all_slots:
+        if st.button("🔽 Show All 32 Slots"):
+            st.session_state.show_all_slots = True
+            st.rerun()
+
+    # Scrollable wrapper CSS (when collapsed)
+    if not st.session_state.show_all_slots:
+        st.markdown(
+            """
+            <style>
+            .scroll-box {
+                max-height: 500px;
+                overflow-y: auto;
+                padding-right: 10px;
+            }
+            </style>
+            <div class="scroll-box">
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # How many slots to show
+    num_slots = 32 if st.session_state.show_all_slots else 4
+
+    # Render the team + season pickers
     col1, col2 = st.columns(2)
-
-    with col1:
-        # Left side: Slots 1–16
-        for idx in range(16):
-            slot = st.session_state.team_slots[idx]
-            slot_num = idx + 1
-
-            # “– Team XX” dropdown
+    for i in range(num_slots // 2):
+        with col1:
+            slot = st.session_state.team_slots[i]
             st.selectbox(
-                label=f"– Team {slot_num:02d}",
-                key=f"team_select_{idx}",
-                options=[""] + all_teams,
+                f"– Team {i+1:02d}",
+                [""] + all_teams,
                 index=(all_teams.index(slot["team"]) + 1) if slot["team"] in all_teams else 0,
-                help="Select a team."
+                key=f"team_select_{i}"
             )
-
-            # “– Season XX” dropdown
             season_options = [""] + get_seasons_for_team(slot["team"])
-            season_index = season_options.index(slot["season"]) if slot["season"] in season_options else 0
             st.selectbox(
-                label=f"– Season {slot_num:02d}",
-                key=f"season_select_{idx}",
-                options=season_options,
-                index=season_index,
-                help="Select a season."
+                f"– Season {i+1:02d}",
+                season_options,
+                index=season_options.index(slot["season"]) if slot["season"] in season_options else 0,
+                key=f"season_select_{i}"
             )
-
-            # Thin horizontal divider
             st.markdown("<hr class='tight-hr' />", unsafe_allow_html=True)
 
-    with col2:
-        # Right side: Slots 17–32
-        for idx in range(16, 32):
-            slot = st.session_state.team_slots[idx]
-            slot_num = idx + 1
-
+    for i in range(num_slots // 2, num_slots):
+        with col2:
+            slot = st.session_state.team_slots[i]
             st.selectbox(
-                label=f"– Team {slot_num:02d}",
-                key=f"team_select_{idx}",
-                options=[""] + all_teams,
+                f"– Team {i+1:02d}",
+                [""] + all_teams,
                 index=(all_teams.index(slot["team"]) + 1) if slot["team"] in all_teams else 0,
-                help="Select a team."
+                key=f"team_select_{i}"
             )
-
             season_options = [""] + get_seasons_for_team(slot["team"])
-            season_index = season_options.index(slot["season"]) if slot["season"] in season_options else 0
             st.selectbox(
-                label=f"– Season {slot_num:02d}",
-                key=f"season_select_{idx}",
-                options=season_options,
-                index=season_index,
-                help="Select a season."
+                f"– Season {i+1:02d}",
+                season_options,
+                index=season_options.index(slot["season"]) if slot["season"] in season_options else 0,
+                key=f"season_select_{i}"
             )
-
             st.markdown("<hr class='tight-hr' />", unsafe_allow_html=True)
 
+    # Close scroll-box div
+    if not st.session_state.show_all_slots:
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # Collapse button at bottom
+    if st.session_state.show_all_slots:
+        if st.button("🔼 Collapse to 4 Slots"):
+            st.session_state.show_all_slots = False
+            st.rerun()
 
     # ──────────────────────────────────────────────────────────────────
     # C/D/E) LEAGUE-WIDE CONTROLS (buttons on top row, dropdowns below)
@@ -238,7 +257,7 @@ def run_full_sim():
 
     # — Control 3: “Same Team by Year” (button only on this row)
     with b3:
-        if st.button("🗓 Same Team by Year"):
+        if st.button("🗓 Fill Each Slot by Year"):
             t = st.session_state.get("one_team_selector", "")
             if t:
                 years = sorted(
@@ -385,7 +404,7 @@ def run_full_sim():
     # ──────────────────────────────────────────────────────────────────
     # ROW 2: TWO DROPDOWNS (directly under their buttons) + Back-to-Top
     # ──────────────────────────────────────────────────────────────────
-    d1, d2, d3, d4, d5, d6 = st.columns([1, 1, 0.9, 1, 1, 1])
+    d1, d2, d3, d4, d5, d6 = st.columns([.8, .6, .2, .6, 2, .6])
 
     with d1:
         st.write("")  # empty spacer
@@ -399,14 +418,15 @@ def run_full_sim():
         )
 
     with d3:
+        st.write("")  # empty spacer
+
+
+    with d4:
         st.selectbox(
-            "Select a Team → Fill Each Slot by Year",
+            "Select Team to Fill",
             options=[""] + all_teams,
             key="one_team_selector",
         )
-
-    with d4:
-        st.write("")  # empty spacer
 
     with d5:
         st.write("")  # empty spacer
