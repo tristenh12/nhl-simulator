@@ -23,110 +23,7 @@
   <!-- AOS for scroll animations -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
 
-  <style>
-    /* ————————————————————————————————
-       1) Font & design tokens
-    ———————————————————————————————— */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-    :root {
-      --color-primary:       #0062E6;
-      --color-secondary:     #33AEFF;
-      --color-bg-dark:       #111;
-      --color-bg-light:      #FFF;
-      --color-text-light:    #FFF;
-      --color-text-dark:     #333;
-      --radius:              1rem;
-      --transition:          0.3s ease;
-    }
-    body.dark-mode {
-      --color-bg-dark:    #222;
-      --color-bg-light:   #333;
-      --color-text-light: #EEE;
-      --color-text-dark:  #DDD;
-    }
-
-    /* ————————————————————————————————
-       2) Global resets
-    ———————————————————————————————— */
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--color-bg-dark);
-      color: var(--color-text-light);
-      min-height: 100vh;
-    }
-
-    /* ————————————————————————————————
-       3) Scroll Progress Bar
-    ———————————————————————————————— */
-    #scrollProgress {
-      position: fixed; top: 0; left: 0;
-      width: 0; height: 4px;
-      background: var(--color-secondary);
-      z-index: 2000;
-      transition: width 0.1s ease;
-    }
-
-    /* ————————————————————————————————
-       4) Glass-morphism navbar (landing style)
-    ———————————————————————————————— */
-    .navbar-home {
-      position: absolute; top:0; left:0; right:0;
-      display: flex; align-items:center;
-      padding:1rem 2rem; z-index:1000;
-      transition: background-color var(--transition), backdrop-filter var(--transition);
-    }
-    .navbar-home .nav-link {
-      color: var(--color-text-light) !important;
-      font-weight:600;
-      text-decoration:none !important;
-      margin-right:1.5rem;
-    }
-    .navbar-home .nav-link:hover {
-      color: var(--color-secondary) !important;
-    }
-    .navbar-home .theme-toggle {
-      margin-left:auto;
-      cursor:pointer;
-      font-size:1.25rem;
-    }
-    .navbar-home.scrolled {
-      background-color: rgba(255,255,255,0.80);
-      backdrop-filter: blur(10px);
-    }
-    .navbar-home.scrolled .nav-link {
-      color: #333 !important;
-    }
-
-    /* ————————————————————————————————
-       5) Aspect-ratio iframe wrapper
-    ———————————————————————————————— */
-    .iframe-container {
-      position: relative; width: 100%;
-    }
-    .iframe-container::before {
-      content: "";
-      display: block;
-      padding-bottom: 56.25%; /* 16:9 desktop */
-    }
-    @media (max-width: 768px) {
-      .iframe-container::before {
-        padding-bottom: 177.78%; /* 9:16 mobile */
-      }
-    }
-    .iframe-container iframe {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%; border: 0;
-    }
-
-    /* ————————————————————————————————
-       6) Section spacing
-    ———————————————————————————————— */
-    main, section {
-      padding: 4rem 0;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -139,6 +36,7 @@
     <a class="nav-link" href="simulator.html">Simulator</a>
     <a class="nav-link" href="about.html">About</a>
     <a class="nav-link" href="blog.html">Blog</a>
+    <a class="nav-link" href="donation.html">Donate</a>
     <span class="theme-toggle" aria-label="Toggle dark mode">🌙</span>
   </nav>
 

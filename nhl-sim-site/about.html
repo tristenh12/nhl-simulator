@@ -2,49 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <!-- Responsive viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About | NHL What-If</title>
 
-  <!-- SEO & Social Meta -->
-  <meta name="description" content="Learn more about Tristen Hovarter, the creator behind NHL What-If Simulator, fueled by AI and a lifelong love of hockey data.">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-
-  <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css"
-    rel="stylesheet" crossorigin="anonymous"
-  />
-  <!-- Bootstrap Icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-  />
-  <!-- AOS for scroll animations -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <style>
-    /* 1) Font & design tokens */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
     :root {
-      --color-primary:   #0062E6;
+      --color-primary: #0062E6;
       --color-secondary: #33AEFF;
-      --color-bg-dark:   #111;
-      --color-bg-light:  #FFF;
-      --color-text-light:#FFF;
+      --color-bg-dark: #111;
+      --color-bg-light: #FFF;
+      --color-text-light: #FFF;
       --color-text-dark: #333;
-      --radius:          1rem;
-      --transition:      0.3s ease;
+      --radius: 1rem;
+      --transition: 0.3s ease;
     }
     body.dark-mode {
-      --color-bg-dark:    #222;
-      --color-bg-light:   #333;
+      --color-bg-dark: #222;
+      --color-bg-light: #333;
       --color-text-light: #EEE;
-      --color-text-dark:  #DDD;
+      --color-text-dark: #DDD;
     }
-
-    /* 2) Global resets */
-    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', sans-serif;
@@ -52,211 +36,227 @@
       color: var(--color-text-light);
       min-height: 100vh;
     }
-
-    /* 3) Scroll Progress Bar */
     #scrollProgress {
-      position: fixed; top:0; left:0;
-      width:0; height:4px;
+      position: fixed; top: 0; left: 0;
+      width: 0; height: 4px;
       background: var(--color-secondary);
-      z-index:2000;
+      z-index: 2000;
       transition: width 0.1s ease;
     }
-
-    /* 4) Glass‐morphism navbar */
     .navbar-home {
-      position:absolute; top:0; left:0; right:0;
-      display:flex; align-items:center;
-      padding:1rem 2rem; z-index:1000;
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center;
+      padding: 1rem 2rem; z-index: 1000;
       transition: background-color var(--transition), backdrop-filter var(--transition);
     }
     .navbar-home .nav-link {
       color: var(--color-text-light) !important;
-      font-weight:600;
-      text-decoration:none !important;
-      margin-right:1.5rem;
+      font-weight: 600;
+      text-decoration: none !important;
+      margin-right: 1.5rem;
     }
     .navbar-home .nav-link:hover {
       color: var(--color-secondary) !important;
     }
     .navbar-home .theme-toggle {
-      margin-left:auto; cursor:pointer; font-size:1.25rem;
+      margin-left: auto; cursor: pointer; font-size: 1.25rem;
     }
     .navbar-home.scrolled {
-      background-color: rgba(255,255,255,0.80);
+      background-color: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(10px);
     }
     .navbar-home.scrolled .nav-link {
       color: #333 !important;
     }
 
-    /* 5) Hero header for About */
     .hero-about {
-      padding:8rem 2rem 4rem;
-      text-align:center;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-      color: var(--color-text-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('assets/hero-hockey.png') center/cover no-repeat fixed;
     }
     .hero-about h1 {
-      font-size: 2.5rem; margin-bottom:1rem;
+      font-size: 3rem;
+      margin-bottom: 1rem;
     }
     .hero-about p {
-      font-size:1.125rem;
+      font-size: 1.25rem;
+      max-width: 700px;
+      margin-bottom: 2rem;
     }
-
-    /* 6) Section spacing & card styles */
-    section {
-      padding:4rem 2rem;
-      background: var(--color-bg-light);
-      color: var(--color-text-dark);
+    .timeline {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
     }
-    section:nth-of-type(even) {
-      background: var(--color-bg-dark);
-      color: var(--color-text-light);
-    }
-    .card-round {
-      background: var(--color-bg-light);
-      color: var(--color-text-dark);
+    .timeline-item {
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid var(--color-secondary);
+      padding: 1rem;
       border-radius: var(--radius);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      overflow:hidden;
-      text-decoration:none !important;
-      transition: transform var(--transition);
+      min-width: 200px;
     }
-    .card-round:hover {
-      transform: translateY(-5px);
+    .timeline-item h5 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
     }
-    .card-round img {
-      width:100%; display:block;
+    .tech-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
     }
-    .card-body {
-      padding:1.5rem; text-align:center;
+    .tech-logos i,
+    .tech-logos img {
+      font-size: 2rem;
+      height: 32px;
+      filter: brightness(1.2);
+    }
+    .donate-blurb {
+      margin-top: 3rem;
+      font-size: 1.1rem;
+    }
+    .donate-blurb a {
+      color: var(--color-secondary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .donate-blurb a:hover {
+      text-decoration: underline;
+    }
+    .bio-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 800px;
+      margin-top: 4rem;
+    }
+    .bio-card h4 {
+      margin-top: 1.5rem;
+      font-size: 1.25rem;
+      color: var(--color-secondary);
+    }
+    .bio-card p {
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
     }
 
-    /* 7) Fade-in animation */
-    @keyframes fadeInUp {
-      from { opacity:0; transform: translateY(20px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-    .fade-in-up {
-      opacity:0;
-      animation: fadeInUp 0.6s var(--transition) forwards;
+    footer {
+      background: var(--color-bg-light);
+      color: var(--color-text-dark);
+      padding: 1rem 0;
     }
   </style>
 </head>
-
 <body>
-  <!-- Scroll progress -->
-  <div id="scrollProgress"></div>
 
-  <!-- Navbar -->
-  <nav class="navbar-home" role="navigation" aria-label="Main">
-    <a class="nav-link" href="index.html">Home</a>
-    <a class="nav-link" href="simulator.html">Simulator</a>
-    <a class="nav-link active" href="about.html">About</a>
-    <a class="nav-link" href="blog.html">Blog</a>
-    <span class="theme-toggle" aria-label="Toggle dark mode">🌙</span>
-  </nav>
+<div id="scrollProgress"></div>
 
-  <!-- Hero About -->
-  <header class="hero-about">
-    <h1 data-aos="fade-up">About NHL What-If Simulator</h1>
-    <p data-aos="fade-up" data-aos-delay="100">
-      I’m Tristen Hovarter—a washed-up hockey player nerd turned data enthusiast—running this whole
-      simulator solo (with a hefty AI assist to fuel the engine).
+<!-- Navbar -->
+<nav class="navbar-home" role="navigation" aria-label="Main">
+  <a class="nav-link" href="index.html">Home</a>
+  <a class="nav-link" href="simulator.html">Simulator</a>
+  <a class="nav-link active" href="about.html">About</a>
+  <a class="nav-link" href="blog.html">Blog</a>
+  <a class="nav-link" href="donation.html">Donate</a>
+  <span class="theme-toggle" aria-label="Toggle dark mode">🌙</span>
+</nav>
+
+<!-- Unified Hero About Section -->
+<section class="hero-about">
+  <h1 data-aos="fade-up">About NHL What-If</h1>
+  <p data-aos="fade-up" data-aos-delay="100">
+    A passion project to simulate matchups between the greatest NHL teams across all eras.
+  </p>
+
+  <!-- Timeline -->
+  <div class="timeline" data-aos="fade-up" data-aos-delay="200">
+    <div class="timeline-item">
+      <h5>May 2025</h5>
+      <p>Started locally in Tkinter with Python</p>
+    </div>
+    <div class="timeline-item">
+      <h5>June 2025</h5>
+      <p>Upgraded to Streamlit for better UI</p>
+    </div>
+    <div class="timeline-item">
+      <h5>Now</h5>
+      <p>Released the full web version 🚀</p>
+    </div>
+  </div>
+
+  <!-- Powered By Logos -->
+  <h2 class="mt-5" data-aos="fade-up">Powered By</h2>
+  <div class="tech-logos" data-aos="fade-up" data-aos-delay="100">
+    <i class="bi bi-bootstrap"></i>
+    <img src="assets/python.svg" alt="Python">
+    <img src="assets/streamlit.svg" alt="Streamlit">
+    <i class="bi bi-github"></i>
+  </div>
+
+  <!-- Donate CTA -->
+  <div class="donate-blurb" data-aos="fade-up" data-aos-delay="300">
+    Like the project? <a href="donation.html">Support it here →</a>
+  </div>
+
+  <!-- Bio Card -->
+  <div class="bio-card" data-aos="fade-up" data-aos-delay="400">
+    <p><strong>Built by Tristen Hovarter</strong> — hockey nerd, developer, and creator of a place where legends collide across eras.</p>
+
+    <h4>🏒 Why This Exists</h4>
+    <p>
+      NHL What-If lets fans run full 82-game seasons using historic teams — mixing Gretzky's Oilers with Crosby's Penguins, or 70s Flyers with today's Avs.
     </p>
-  </header>
 
-  <!-- Our Mission -->
-  <section data-aos="fade-up">
-    <div class="container">
-      <h2>Our Mission</h2>
-      <p>
-        To empower hockey fans with the ability to rewrite history, pit legendary lineups
-        against each other, and discover new insights through custom, AI-powered simulations.
-      </p>
-    </div>
-  </section>
+    <h4>👨‍💻 Who Made This</h4>
+    <p>
+      I'm Tristen, a full-stack developer and lifelong hockey fan. I built this solo, fueled by too much coffee and a deep love of simulation games.
+    </p>
 
-  <!-- About the Creator -->
-  <section data-aos="fade-up">
-    <div class="container">
-      <h2>About the Creator</h2>
-      <div class="row g-4 mt-4 justify-content-center">
-        <div class="col-md-6 col-lg-4">
-          <a href="#" class="card-round">
-            <img src="https://via.placeholder.com/400x300" alt="Tristen Hovarter">
-            <div class="card-body">
-              <h5>Tristen Hovarter</h5>
-              <p>
-                One-man dev team (plus AI), ex-player, full-stack coder, and hockey-stats nerd
-                obsessed with turning data into fun, interactive experiences.
-              </p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+    <h4>🛠 Powered By</h4>
+    <p>
+      This site runs on Python, Streamlit, Bootstrap, and a custom algorithm that mimics team performance over time.
+    </p>
 
-  <!-- Technologies We Use -->
-  <section data-aos="fade-up">
-    <div class="container">
-      <h2>Technologies We Use</h2>
-      <div class="row g-4 mt-4 text-center">
-        <div class="col-6 col-md-3">
-          <i class="bi bi-python display-4 text-secondary"></i>
-          <p class="mt-2">Python</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <i class="bi bi-github display-4 text-secondary"></i>
-          <p class="mt-2">GitHub</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <i class="bi bi-cloud display-4 text-secondary"></i>
-          <p class="mt-2">Cloud Hosting</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <i class="bi bi-bar-chart-line display-4 text-secondary"></i>
-          <p class="mt-2">Data Viz</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    <h4>📬 Get In Touch</h4>
+    <p>
+      Got feedback or feature ideas? Email me at
+      <a href="mailto:tristenh007@gmail.com" style="color: var(--color-secondary); text-decoration: none;">tristenh007@gmail.com</a>.
+    </p>
+  </div>
+</section>
 
-  <!-- Contact & Newsletter -->
-  <section data-aos="fade-up">
-    <div class="container text-center">
-      <h2>Stay Connected</h2>
-      <p>Got feedback, questions, or dream matchups? Shoot me an email!</p>
-      <a href="mailto:tristenh007@gmail.com" class="btn btn-primary mt-2">Contact Me</a>
-    </div>
-  </section>
+<!-- Footer -->
+<footer class="text-center">
+  &copy; 2025 NHL What-If Simulator<br>
+  Built with ❤️ by Tristen in Detroit, Michigan
+</footer>
 
-  <!-- Footer -->
-  <footer class="py-4 text-center" style="background: var(--color-bg-light); color: var(--color-text-dark);">
-    <div class="container">&copy; 2025 NHL What-If Simulator</div>
-  </footer>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 800, once: true });
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"
-          crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init({ duration:800, once:true });
+  const nav = document.querySelector('.navbar-home');
+  const prog = document.getElementById('scrollProgress');
+  const toggle = document.querySelector('.theme-toggle');
 
-    const nav = document.querySelector('.navbar-home'),
-          prog = document.getElementById('scrollProgress'),
-          toggle = document.querySelector('.theme-toggle');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+    prog.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+  });
 
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 20);
-      prog.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
-    });
-
-    toggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      toggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    });
-  </script>
+  toggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    toggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+  });
+</script>
 </body>
 </html>
