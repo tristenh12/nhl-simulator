@@ -1,18 +1,22 @@
 from fastapi import FastAPI, Request
 from supabase import create_client, Client
+from dotenv import load_dotenv
 import stripe
 import os
+
+# Load secrets from .env
+load_dotenv()
 
 app = FastAPI()
 
 # Supabase config
-SUPABASE_URL = "https://ufhjlyygntynwdgpeqbk.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmaGpseXlnbnR5bndkZ3BlcWJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyODAxNTAsImV4cCI6MjA2NTg1NjE1MH0.hPVEjp6Si3W8WTw_hPHPpEEpyqidt5bLezMtuwD9f2A"
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Stripe config
-stripe.api_key = "REMOVED_SECRET"
-endpoint_secret = "whsec_BA2zsHNvAvG3EDkEA1jtjYkbjb7ryPJ8"
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 @app.post("/webhook")
 async def stripe_webhook(request: Request):
