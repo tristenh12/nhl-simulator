@@ -1,16 +1,47 @@
 # main.py
-import streamlit as st
-from free_sim_gui import run_free_sim
-from streamlit_full_sim import run_full_sim
+
+import os
+from dotenv import load_dotenv
 import streamlit as st
 from supabase import create_client, Client
+import stripe
+from free_sim_gui import run_free_sim
+from streamlit_full_sim import run_full_sim
 
-# Supabase credentials
-SUPABASE_URL = "https://ufhjlyygntynwdgpeqbk.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmaGpseXlnbnR5bndkZ3BlcWJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyODAxNTAsImV4cCI6MjA2NTg1NjE1MH0.hPVEjp6Si3W8WTw_hPHPpEEpyqidt5bLezMtuwD9f2A"
+# Load environment variables
+load_dotenv()
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+
+# Initialize clients
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+stripe.api_key = STRIPE_SECRET_KEY
 
-# Auth logic
+# Set up page
+st.set_page_config(page_title="NHL What-If Simulator", layout="wide")
+
+# Apply custom CSS for responsive layout
+st.markdown("""
+<style>
+  .block-container {
+    transform: scale(0.95) !important;
+    transform-origin: top center !important;
+  }
+  @media (max-width: 600px) {
+    .block-container { padding: 1rem 0.5rem !important; }
+    h1, h2, h3 { font-size: 1.3rem !important; }
+    .stButton>button { padding: 0.5rem 1rem !important; font-size: 0.9rem !important; }
+  }
+  .stImage img, .stChart>div {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+</style>
+""", unsafe_allow_html=True)
+
+# --- AUTH ---
 if "user" not in st.session_state:
     st.sidebar.title("🔐 Login or Signup")
     mode = st.sidebar.radio("Select Mode", ["Login", "Signup"])
@@ -31,58 +62,31 @@ if "user" not in st.session_state:
                 st.sidebar.error("Failed to authenticate.")
         except Exception as e:
             st.sidebar.error(str(e))
+    st.stop()
+
 else:
     st.sidebar.success(f"Logged in as {st.session_state.user.email}")
     if st.sidebar.button("Logout"):
         del st.session_state.user
         st.rerun()
 
-# Set page config once
-st.set_page_config(
-    page_title="NHL What-If Simulator",
-    layout="wide"
-)
+# --- PAID CHECK ---
+email = st.session_state.user.email
+user_check = supabase.table("users").select("paid").eq("email", email).execute()
+is_paid = user_check.data and user_check.data[0].get("paid", False)
 
-# Global shrink: slightly reduce overall app size
-global_css = """
-<style>
-  /* uniformly shrink entire app to 95% */
-  .block-container {
-    transform: scale(0.95) !important;
-    transform-origin: top center !important;
-  }
-</style>
-"""
-st.markdown(global_css, unsafe_allow_html=True)
+# --- SELECT MODE ---
+mode = st.sidebar.radio("Pick Simulation Mode:", ("Free", "Full"))
 
-# Inject custom CSS for mobile responsiveness
-mobile_css = """
-<style>
-  /* MOBILE-SPECIFIC TWEAKS */
-  @media (max-width: 600px) {
-    /* tighten up margins/containers */
-    .block-container { padding: 1rem 0.5rem !important; }
-
-    /* scale down headings */
-    h1, h2, h3 { font-size: 1.3rem !important; }
-
-    /* make buttons a bit smaller */
-    .stButton>button { padding: 0.5rem 1rem !important; font-size: 0.9rem !important; }
-  }
-  /* ensure images/charts never overflow */
-  .stImage img, .stChart>div { max-width: 100% !important; height: auto !important; }
-</style>
-"""
-st.markdown(mobile_css, unsafe_allow_html=True)
-
-# Sidebar to choose mode
-mode = st.sidebar.radio(
-    "Pick Simulation Mode:",
-    ("Free", "Full")
-)
-
-# Run the selected simulation
+# --- RUN SIM ---
 if mode == "Free":
     run_free_sim()
-else:
-    run_full_sim()
+
+elif mode == "Full":
+    if is_paid:
+        run_full_sim()
+    else:
+        st.warning("🚫 Full simulation mode requires a one-time upgrade.")
+        if st.button("Upgrade Now"):
+            st.markdown("[Go to Pricing Page](https://www.nhlwhatif.com/pricing)")
+
