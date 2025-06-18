@@ -11,8 +11,8 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Stripe config
-stripe.api_key = "YOUR_STRIPE_SECRET_KEY"
-endpoint_secret = "YOUR_STRIPE_WEBHOOK_SECRET"
+stripe.api_key = "REMOVED_SECRET"
+endpoint_secret = "whsec_BA2zsHNvAvG3EDkEA1jtjYkbjb7ryPJ8"
 
 @app.post("/webhook")
 async def stripe_webhook(request: Request):
