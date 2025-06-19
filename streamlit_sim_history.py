@@ -1,21 +1,26 @@
-# streamlit_sim_history.py
-import streamlit as st
-from supabase import create_client
-import os
+def show_sim_history(user_email):
+    st.title("🕓 My Simulation History")
 
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-def show_sim_history(email):
-    st.subheader("🕓 Your Simulation History")
     try:
-        res = supabase.table("simulations").select("*").eq("email", email).order("timestamp", desc=True).execute()
-        if res.data:
-            for sim in res.data:
-                st.write(f"**Date:** {sim['timestamp']}")
-                st.json(sim["data"])
-        else:
-            st.info("You have no saved simulations yet.")
+        response = supabase.table("simulations").select("*").eq("email", user_email).order("timestamp", desc=True).execute()
+
+        if not response.data:
+            st.info("No simulations found.")
+            return
+
+        for sim in response.data:
+            st.markdown("---")
+            st.write(f"**Date**: {sim.get('timestamp', 'Unknown')}")
+            st.write("**Teams**:")
+            teams = sim.get("teams", [])
+            for t in teams:
+                st.write(f"- {t}")
+
+            if "standings" in sim:
+                df = pd.DataFrame(sim["standings"])
+                st.dataframe(df, use_container_width=True)
+            else:
+                st.warning("No standings data available.")
+
     except Exception as e:
         st.error(f"Failed to load history: {e}")
