@@ -61,8 +61,13 @@ async def stripe_webhook(request: Request, stripe_signature: str = Header(None))
 @app.post("/create-checkout-session")
 async def create_checkout_session(request: Request):
     try:
-        data = await request.json()
-        email = data.get("email")
+        # Handle empty or missing body safely
+        try:
+            data = await request.json()
+            email = data.get("email")
+        except:
+            data = {}
+            email = None
 
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
