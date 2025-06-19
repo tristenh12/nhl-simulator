@@ -5,9 +5,6 @@ import stripe
 # Load credentials
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
-stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
-PRICE_ID = st.secrets.get("PRICE_ID")
-
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # UI setup
@@ -75,6 +72,16 @@ elif mode == "Full":
                 st.session_state["is_paid"] = False
                 st.error("Could not check payment status.")
 
+        # Manual refresh option
+        if st.button("🔄 Refresh Access"):
+            try:
+                res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
+                paid = res.data.get("paid", False) if res.data else False
+                st.session_state["is_paid"] = paid
+                st.rerun()
+            except Exception as e:
+                st.error("Error refreshing payment status.")
+
         # --- IF PAID ---
         if st.session_state["is_paid"]:
             run_full_sim()
@@ -82,26 +89,4 @@ elif mode == "Full":
         # --- IF NOT PAID ---
         else:
             st.warning("You must pay to access the full simulation.")
-            try:
-                checkout_session = stripe.checkout.Session.create(
-                    payment_method_types=["card"],
-                    line_items=[{"price": PRICE_ID, "quantity": 1}],
-                    mode="payment",
-                    customer_email=user.email,
-                    success_url="https://www.nhlwhatif.com",
-                    cancel_url="https://www.nhlwhatif.com/cancelled"
-                )
-
-                # Show session info for debugging
-                st.subheader("Redirecting to Stripe Checkout...")
-                st.json(checkout_session)
-
-                # Do redirect
-                st.markdown(f"""
-                    <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
-                    <a href="{checkout_session.url}">Click here if not redirected</a>
-                """, unsafe_allow_html=True)
-                st.stop()
-
-            except Exception as e:
-                st.error(f"Checkout failed: {e}")
+            st.markdown("👉 [Go to Pricing Page](https://www.nhlwhatif.com/pricing)")
