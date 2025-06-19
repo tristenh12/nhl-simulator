@@ -1,6 +1,8 @@
 import streamlit as st
 from supabase import create_client, Client
 import stripe
+from streamlit_sim_history import show_sim_history
+
 
 # Load credentials
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
