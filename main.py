@@ -94,6 +94,8 @@ elif mode == "Full":
                   success_url="https://www.nhlwhatif.com/success",
                   cancel_url="https://www.nhlwhatif.com/cancelled"
               )
+              st.subheader("🔗 Stripe Checkout URL (manual)")
+              st.write("Stripe checkout URL:", checkout_session.url)
 
               st.subheader("✅ Stripe Checkout Session Created")
               st.json(checkout_session)
