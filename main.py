@@ -73,12 +73,46 @@ if mode == "Full":
             st.session_state["is_paid"] = is_paid
 
 # Run appropriate simulator
-if mode == "Free":
-    run_free_sim()
-elif mode == "Full":
-    if "user" in st.session_state and st.session_state.get("is_paid"):
+elif "user" in st.session_state:
+    # Check paid status only once
+    if "is_paid" not in st.session_state:
+        try:
+            email = st.session_state.user.email
+            res = supabase.table("users").select("paid").eq("email", email).execute()
+
+            if res.data and len(res.data) > 0:
+                is_paid = res.data[0].get("paid", False)
+            else:
+                is_paid = False
+
+            st.session_state["is_paid"] = is_paid
+        except Exception as e:
+            st.error("Unable to verify payment status.")
+            st.session_state["is_paid"] = False
+
+    if st.session_state["is_paid"]:
         run_full_sim()
-    elif "user" in st.session_state:
-        st.warning("🔒 You need to upgrade to access the Full Simulation mode.")
     else:
-        st.warning("🔐 Please log in to access Full Simulation.")
+        st.warning("Redirecting you to payment...")
+
+        import stripe
+
+        # Replace with your test or live price ID
+        PRICE_ID = "price_1RbUgFLh041OrJKozeN9eQJh"
+
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=["card"],
+                line_items=[{"price": PRICE_ID, "quantity": 1}],
+                mode="payment",
+                customer_email=st.session_state.user.email,
+                success_url="https://www.nhlwhatif.com",
+                cancel_url="https://www.nhlwhatif.com/cancelled"
+            )
+
+            st.markdown("Please wait... redirecting to Stripe.")
+            st.stop()
+            st.experimental_redirect(checkout_session.url)
+
+        except Exception as e:
+            st.error(f"Checkout failed: {e}")
