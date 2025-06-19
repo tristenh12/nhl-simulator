@@ -1,32 +1,42 @@
-import os
-from dotenv import load_dotenv
 import streamlit as st
 from supabase import create_client, Client
+import stripe
+import os
+
+# Securely pull in environment variables from st.secrets
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# Set Streamlit app layout
+st.set_page_config(
+    page_title="NHL What-If Simulator",
+    layout="wide"
+)
+
+# CSS Tweaks
+st.markdown("""
+<style>
+  .block-container { transform: scale(0.95); transform-origin: top center; }
+  @media (max-width: 600px) {
+    .block-container { padding: 1rem 0.5rem !important; }
+    h1, h2, h3 { font-size: 1.3rem !important; }
+    .stButton>button { padding: 0.5rem 1rem !important; font-size: 0.9rem !important; }
+  }
+  .stImage img, .stChart>div { max-width: 100% !important; height: auto !important; }
+</style>
+""", unsafe_allow_html=True)
+
+# Load simulation modules
 from free_sim_gui import run_free_sim
 from streamlit_full_sim import run_full_sim
 
-# Load environment variables
-load_dotenv()
-
-# Supabase setup
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-# Set page config
-st.set_page_config(page_title="NHL What-If Simulator", layout="wide")
-
-# Apply global styles (optional: your CSS block goes here)
-
-# Mode selector
+# Sidebar: Auth only if Full Sim is selected
 mode = st.sidebar.radio("Pick Simulation Mode:", ("Free", "Full"))
 
-if mode == "Free":
-    # Run Free Sim with no login required
-    run_free_sim()
-
-elif mode == "Full":
-    # Require login or signup
+if mode == "Full":
     if "user" not in st.session_state:
         st.sidebar.title("🔐 Login or Signup")
         auth_mode = st.sidebar.radio("Auth Mode", ["Login", "Signup"])
@@ -48,19 +58,15 @@ elif mode == "Full":
             except Exception as e:
                 st.sidebar.error(str(e))
     else:
-        # Logged in
         st.sidebar.success(f"Logged in as {st.session_state.user.email}")
         if st.sidebar.button("Logout"):
             del st.session_state.user
             st.rerun()
 
-        # OPTIONAL: Paywall logic
-        email = st.session_state.user.email
-        user_data = supabase.table("users").select("paid").eq("email", email).execute()
-        paid = user_data.data[0]["paid"] if user_data.data else False
-
-        if paid:
-            run_full_sim()
-        else:
-            st.warning("🚫 You must purchase access to use Full Sim.")
-            st.markdown("[Click here to upgrade](https://your-checkout-link.com)")
+# Run appropriate simulator
+if mode == "Free":
+    run_free_sim()
+elif "user" in st.session_state:
+    run_full_sim()
+else:
+    st.warning("You must be logged in to access the Full Simulation mode.")
