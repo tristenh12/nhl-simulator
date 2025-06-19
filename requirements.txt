@@ -3,3 +3,5 @@ pandas
 ttkbootstrap
 numpy
 python-dotenv
+stripe
+supabase
