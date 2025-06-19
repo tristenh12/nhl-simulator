@@ -1,14 +1,24 @@
 from fastapi import FastAPI, Request, Header
+from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from dotenv import load_dotenv
 import stripe
 import os
 
-# Load .env for local or Render environment
 load_dotenv()
-
 app = FastAPI()
 
+# 👇 Add CORS support for Webflow domain
+origins = [
+    "https://www.nhlwhatif.com",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # --- Supabase config ---
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
