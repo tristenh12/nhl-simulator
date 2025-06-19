@@ -6,7 +6,7 @@ import stripe
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
-PRICE_ID = st.secrets.get("PRICE_ID", "price_1RbTlFLh041OrJKo7b4JrjbL")
+PRICE_ID = st.secrets.get("PRICE_ID", "price_1RbUgFLh041OrJKozeN9eQJh")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -92,14 +92,16 @@ elif mode == "Full":
                     cancel_url="https://www.nhlwhatif.com/cancelled"
                 )
 
-                st.subheader("🔁 Redirecting to Stripe...")
-                st.json(checkout_session)  # 👈 show full response
+                # Show session info for debugging
+                st.subheader("Redirecting to Stripe Checkout...")
+                st.json(checkout_session)
+
+                # Do redirect
                 st.markdown(f"""
                     <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
-                    [Click here if not redirected]({checkout_session.url})
+                    <a href="{checkout_session.url}">Click here if not redirected</a>
                 """, unsafe_allow_html=True)
                 st.stop()
 
             except Exception as e:
-                st.subheader("🚨 Stripe Checkout Failed")
-                st.exception(e)  # 👈 show full error output
+                st.error(f"Checkout failed: {e}")
