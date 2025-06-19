@@ -68,6 +68,10 @@ elif mode == "Full":
     else:
         user = st.session_state.user
         st.sidebar.success(f"Logged in as {user.email}")
+        # --- Show History Page Link ---
+        st.sidebar.markdown("### 📁 Pages")
+        st.sidebar.page_link("pages/simulation_history.py", label="🕓 My Simulations")
+
         if st.sidebar.button("Logout"):
             del st.session_state["user"]
             st.session_state.pop("is_paid", None)

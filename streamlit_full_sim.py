@@ -395,6 +395,20 @@ def run_full_sim():
 
             df["Rating"] = df["RawTeam"].map(ratings_dict).fillna(0).astype(int)
             st.session_state["last_df"] = df
+            # --- Save sim history to Supabase (if user is logged in) ---
+            if "user" in st.session_state:
+                user_email = st.session_state["user"].email
+                try:
+                    supabase.table("simulations").insert({
+                        "email": user_email,
+                        "timestamp": pd.Timestamp.now().isoformat(),
+                        "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
+                        "standings": df.to_dict(orient="records")
+                    }).execute()
+                    st.success("📝 Simulation saved to your account.")
+                except Exception as e:
+                    st.warning(f"Could not save simulation: {e}")
+
 
             # ← Add this line to hide preview when simulation runs:
             st.session_state.show_preview = False
