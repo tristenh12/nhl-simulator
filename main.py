@@ -61,12 +61,24 @@ if mode == "Full":
         st.sidebar.success(f"Logged in as {st.session_state.user.email}")
         if st.sidebar.button("Logout"):
             del st.session_state.user
+            if "is_paid" in st.session_state:
+                del st.session_state["is_paid"]
             st.rerun()
+
+        # Check if user is paid only once
+        if "is_paid" not in st.session_state:
+            email = st.session_state.user.email
+            res = supabase.table("users").select("paid").eq("email", email).single().execute()
+            is_paid = res.data.get("paid", False) if res.data else False
+            st.session_state["is_paid"] = is_paid
 
 # Run appropriate simulator
 if mode == "Free":
     run_free_sim()
-elif "user" in st.session_state:
-    run_full_sim()
-else:
-    st.warning("You must be logged in to access the Full Simulation mode.")
+elif mode == "Full":
+    if "user" in st.session_state and st.session_state.get("is_paid"):
+        run_full_sim()
+    elif "user" in st.session_state:
+        st.warning("🔒 You need to upgrade to access the Full Simulation mode.")
+    else:
+        st.warning("🔐 Please log in to access Full Simulation.")
