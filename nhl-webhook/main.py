@@ -71,7 +71,7 @@ async def create_checkout_session(request: Request):
                 "quantity": 1
             }],
             mode="payment",
-            customer_email=email,
+            customer_creation="if_required",
             success_url="https://www.nhlwhatif.com/simulator",
             cancel_url="https://www.nhlwhatif.com/pricing"
         )
