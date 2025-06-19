@@ -82,30 +82,25 @@ elif mode == "Full":
         # --- IF NOT PAID ---
         else:
             st.warning("You must pay to access the full simulation.")
-           try:
-              checkout_session = stripe.checkout.Session.create(
-                  payment_method_types=["card"],
-                  line_items=[{
-                      "price": PRICE_ID,
-                      "quantity": 1,
-                  }],
-                  mode="payment",
-                  customer_email=user.email,
-                  success_url="https://www.nhlwhatif.com/success",
-                  cancel_url="https://www.nhlwhatif.com/cancelled"
-              )
-              st.subheader("🔗 Stripe Checkout URL (manual)")
-              st.write("Stripe checkout URL:", checkout_session.url)
+            try:
+                checkout_session = stripe.checkout.Session.create(
+                    payment_method_types=["card"],
+                    line_items=[{"price": PRICE_ID, "quantity": 1}],
+                    mode="payment",
+                    customer_email=user.email,
+                    success_url="https://www.nhlwhatif.com/success",
+                    cancel_url="https://www.nhlwhatif.com/cancelled"
+                )
 
-              st.subheader("✅ Stripe Checkout Session Created")
-              st.json(checkout_session)
+                st.subheader("✅ Stripe Checkout Session Created")
+                st.write("Stripe checkout URL:", checkout_session.url)
 
-              st.markdown(f"""
-                  <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
-                  [Click here if not redirected]({checkout_session.url})
-              """, unsafe_allow_html=True)
-              st.stop()
+                st.markdown(f"""
+                    <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
+                    [Click here if not redirected]({checkout_session.url})
+                """, unsafe_allow_html=True)
+                st.stop()
 
-          except Exception as e:
-              st.subheader("🚨 Stripe Error")
-              st.exception(e)
+            except Exception as e:
+                st.subheader("🚨 Stripe Checkout Failed")
+                st.exception(e)
