@@ -72,8 +72,8 @@ async def create_checkout_session(request: Request):
             }],
             mode="payment",
             customer_email=email,
-            success_url="https://www.nhlwhatif.com/app",
-            cancel_url="https://www.nhlwhatif.com/cancelled"
+            success_url="https://www.nhlwhatif.com/simulator",
+            cancel_url="https://www.nhlwhatif.com/pricing"
         )
 
         print(f"✅ Created Stripe Checkout session for {email or '[no email]'}")
