@@ -43,13 +43,24 @@ elif mode == "Full":
             try:
                 if auth_mode == "Signup":
                     res = supabase.auth.sign_up({"email": email, "password": password})
-                else:
+                    if res.user:
+                        try:
+                            supabase.table("users").insert({
+                                "email": email,
+                                "paid": False
+                            }).execute()
+                        except Exception as e:
+                            st.sidebar.warning("Signup worked, but user DB entry failed.")
+                            st.sidebar.text(str(e))
+                        st.session_state.user = res.user
+                        st.rerun()
+                elif auth_mode == "Login":
                     res = supabase.auth.sign_in_with_password({"email": email, "password": password})
-                if res.user:
-                    st.session_state.user = res.user
-                    st.rerun()
-                else:
-                    st.sidebar.error("Authentication failed.")
+                    if res.user:
+                        st.session_state.user = res.user
+                        st.rerun()
+                    else:
+                        st.sidebar.error("Authentication failed.")
             except Exception as e:
                 st.sidebar.error(str(e))
 
