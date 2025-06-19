@@ -67,7 +67,7 @@ async def create_checkout_session(request: Request):
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             line_items=[{
-                "price": PRICE_ID or "price_1RbUgFLh041OrJKozeN9eQJh",
+                "price": "price_1RbTlFLh041OrJKo7b4JrjbL",
                 "quantity": 1
             }],
             mode="payment",
