@@ -83,19 +83,20 @@ elif mode == "Full":
             try:
                 checkout_session = stripe.checkout.Session.create(
                     payment_method_types=["card"],
-                    line_items=[{"price": PRICE_ID, "quantity": 1}],
+                    line_items=[{
+                        "price": PRICE_ID,
+                        "quantity": 1,
+                    }],
                     mode="payment",
                     customer_email=st.session_state.user.email,
                     success_url="https://www.nhlwhatif.com/success",
                     cancel_url="https://www.nhlwhatif.com/cancelled"
                 )
-
-                # Note: Streamlit cannot redirect to external URLs automatically
+                st.write("Stripe session created successfully:", checkout_session.id)
                 st.markdown(f"""
                     <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
-                    If you are not redirected automatically, [click here]({checkout_session.url}).
+                    <a href="{checkout_session.url}">Click here if not redirected</a>
                 """, unsafe_allow_html=True)
                 st.stop()
-
             except Exception as e:
-                st.error(f"Checkout failed: {e}")
+                st.exception(e)
