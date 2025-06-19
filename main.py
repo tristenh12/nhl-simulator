@@ -9,6 +9,11 @@ stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
 PRICE_ID = st.secrets.get("PRICE_ID", "price_1RbTlFLh041OrJKo7b4JrjbL")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+st.title("✅ App loaded")
+st.write("Secrets loaded?", {
+    "SUPABASE_URL": "SUPABASE_URL" in st.secrets,
+    "STRIPE_SECRET_KEY": "STRIPE_SECRET_KEY" in st.secrets,
+})
 
 # UI setup
 st.set_page_config(page_title="NHL What-If Simulator", layout="wide")
