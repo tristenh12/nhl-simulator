@@ -6,7 +6,7 @@ import stripe
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
-PRICE_ID = st.secrets.get("PRICE_ID", "price_1RbUgFLh041OrJKozeN9eQJh")
+PRICE_ID = st.secrets.get("PRICE_ID")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -82,26 +82,28 @@ elif mode == "Full":
         # --- IF NOT PAID ---
         else:
             st.warning("You must pay to access the full simulation.")
-            try:
-                checkout_session = stripe.checkout.Session.create(
-                    payment_method_types=["card"],
-                    line_items=[{"price": PRICE_ID, "quantity": 1}],
-                    mode="payment",
-                    customer_email=user.email,
-                    success_url="https://www.nhlwhatif.com",
-                    cancel_url="https://www.nhlwhatif.com/cancelled"
-                )
+           try:
+              checkout_session = stripe.checkout.Session.create(
+                  payment_method_types=["card"],
+                  line_items=[{
+                      "price": PRICE_ID,
+                      "quantity": 1,
+                  }],
+                  mode="payment",
+                  customer_email=user.email,
+                  success_url="https://www.nhlwhatif.com/success",
+                  cancel_url="https://www.nhlwhatif.com/cancelled"
+              )
 
-                # Show session info for debugging
-                st.subheader("Redirecting to Stripe Checkout...")
-                st.json(checkout_session)
+              st.subheader("✅ Stripe Checkout Session Created")
+              st.json(checkout_session)
 
-                # Do redirect
-                st.markdown(f"""
-                    <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
-                    <a href="{checkout_session.url}">Click here if not redirected</a>
-                """, unsafe_allow_html=True)
-                st.stop()
+              st.markdown(f"""
+                  <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
+                  [Click here if not redirected]({checkout_session.url})
+              """, unsafe_allow_html=True)
+              st.stop()
 
-            except Exception as e:
-                st.error(f"Checkout failed: {e}")
+          except Exception as e:
+              st.subheader("🚨 Stripe Error")
+              st.exception(e)
