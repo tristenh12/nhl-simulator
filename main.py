@@ -3,18 +3,20 @@ from supabase import create_client, Client
 import stripe
 import os
 
-# --- Load environment securely ---
+# Securely pull in environment variables from st.secrets
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
-STRIPE_SECRET_KEY = st.secrets["STRIPE_SECRET_KEY"]
-PRICE_ID = "price_1RbUgFLh041OrJKozeN9eQJh"
+stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
 
-stripe.api_key = STRIPE_SECRET_KEY
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# --- Streamlit layout ---
-st.set_page_config(page_title="NHL What-If Simulator", layout="wide")
+# Set Streamlit app layout
+st.set_page_config(
+    page_title="NHL What-If Simulator",
+    layout="wide"
+)
 
+# CSS Tweaks
 st.markdown("""
 <style>
   .block-container { transform: scale(0.95); transform-origin: top center; }
@@ -27,17 +29,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- Import simulators ---
+# Load simulation modules
 from free_sim_gui import run_free_sim
 from streamlit_full_sim import run_full_sim
 
-# --- Simulation mode ---
+# Sidebar: Auth only if Full Sim is selected
 mode = st.sidebar.radio("Pick Simulation Mode:", ("Free", "Full"))
 
-if mode == "Free":
-    run_free_sim()
-
-elif mode == "Full":
+if mode == "Full":
     if "user" not in st.session_state:
         st.sidebar.title("🔐 Login or Signup")
         auth_mode = st.sidebar.radio("Auth Mode", ["Login", "Signup"])
@@ -62,41 +61,58 @@ elif mode == "Full":
         st.sidebar.success(f"Logged in as {st.session_state.user.email}")
         if st.sidebar.button("Logout"):
             del st.session_state.user
-            st.session_state.pop("is_paid", None)
+            if "is_paid" in st.session_state:
+                del st.session_state["is_paid"]
             st.rerun()
 
-        # Check paid status
+        # Check if user is paid only once
         if "is_paid" not in st.session_state:
-            try:
-                email = st.session_state.user.email
-                res = supabase.table("users").select("paid").eq("email", email).single().execute()
-                paid = res.data.get("paid", False) if res.data else False
-                st.session_state["is_paid"] = paid
-            except Exception:
-                st.session_state["is_paid"] = False
+            email = st.session_state.user.email
+            res = supabase.table("users").select("paid").eq("email", email).single().execute()
+            is_paid = res.data.get("paid", False) if res.data else False
+            st.session_state["is_paid"] = is_paid
 
-        if st.session_state["is_paid"]:
-            run_full_sim()
-        else:
-            st.warning("Redirecting you to payment...")
+# Run appropriate simulator
+elif "user" in st.session_state:
+    # Check paid status only once
+    if "is_paid" not in st.session_state:
+        try:
+            email = st.session_state.user.email
+            res = supabase.table("users").select("paid").eq("email", email).execute()
 
-            try:
-                checkout_session = stripe.checkout.Session.create(
-                    payment_method_types=["card"],
-                    line_items=[{
-                        "price": PRICE_ID,
-                        "quantity": 1,
-                    }],
-                    mode="payment",
-                    customer_email=st.session_state.user.email,
-                    success_url="https://www.nhlwhatif.com/success",
-                    cancel_url="https://www.nhlwhatif.com/cancelled"
-                )
-                st.write("Stripe session created successfully:", checkout_session.id)
-                st.markdown(f"""
-                    <meta http-equiv="refresh" content="0; url={checkout_session.url}" />
-                    <a href="{checkout_session.url}">Click here if not redirected</a>
-                """, unsafe_allow_html=True)
-                st.stop()
-            except Exception as e:
-                st.exception(e)
+            if res.data and len(res.data) > 0:
+                is_paid = res.data[0].get("paid", False)
+            else:
+                is_paid = False
+
+            st.session_state["is_paid"] = is_paid
+        except Exception as e:
+            st.error("Unable to verify payment status.")
+            st.session_state["is_paid"] = False
+
+    if st.session_state["is_paid"]:
+        run_full_sim()
+    else:
+        st.warning("Redirecting you to payment...")
+
+        import stripe
+
+        # Replace with your test or live price ID
+        PRICE_ID = "price_1RbUgFLh041OrJKozeN9eQJh"
+
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=["card"],
+                line_items=[{"price": PRICE_ID, "quantity": 1}],
+                mode="payment",
+                customer_email=st.session_state.user.email,
+                success_url="https://www.nhlwhatif.com",
+                cancel_url="https://www.nhlwhatif.com/cancelled"
+            )
+
+            st.markdown("Please wait... redirecting to Stripe.")
+            st.stop()
+            st.experimental_redirect(checkout_session.url)
+
+        except Exception as e:
+            st.error(f"Checkout failed: {e}")
