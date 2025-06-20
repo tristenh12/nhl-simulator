@@ -674,9 +674,9 @@ def run_full_sim(supabase):
                         st.write("  Game-by-game winners:")
                         for g, w in enumerate(log_lines, start=1):
                             st.write(f"   – Game {g}: {w}")
-                    st.markdown("")  # small gap
+                    st.markdown("")  # ← Paste after this, same indentation as above
 
-
+                # 💾 Save block starts here (same indentation level as `if checked:`)
                 if "last_df" in st.session_state and st.session_state["last_df"] is not None:
                     st.markdown("### 💾 Save This Simulation")
                     sim_name = st.text_input("Simulation Name")
