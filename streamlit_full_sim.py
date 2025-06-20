@@ -14,13 +14,13 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def run_full_sim():
-    # ─────────────────────────────────
-    # 0) PAGE CONFIG & TITLE
-    # ─────────────────────────────────
     st.title("📅 NHL Full-Season What-If Simulator")
-        if "user" not in st.session_state or not hasattr(st.session_state.user, "email"):
+
+    # ✅ Login check - this must be indented at the same level as the other code in run_full_sim
+    if "user" not in st.session_state or not hasattr(st.session_state.user, "email"):
         st.warning("⚠️ You must be logged in to use this simulator.")
         st.stop()
+
 
     
 
