@@ -7,20 +7,8 @@ import os
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
-from supabase import create_client, Client
-
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def run_full_sim():
-    st.write("🔥 Run tracker: ", st.session_state.get("run_count", 0))
-    st.session_state["run_count"] = st.session_state.get("run_count", 0) + 1
-
-    st.write("🧪 run_full_sim() loaded")
-    st.write("👤 User in session:", "user" in st.session_state)
-
-    st.write("💬 Email:", getattr(st.session_state.get("user"), "email", None))
     # ─────────────────────────────────
     # 0) PAGE CONFIG & TITLE
     # ─────────────────────────────────
@@ -407,54 +395,6 @@ def run_full_sim():
 
             df["Rating"] = df["RawTeam"].map(ratings_dict).fillna(0).astype(int)
             st.session_state["last_df"] = df
-            st.subheader("💾 Save this Simulation")
-
-            # Set up the input box with a stable key
-            save_name = st.text_input("Simulation Name:", key="sim_name_input")
-
-            # Use a stable button key and capture its return value
-            save_clicked = st.button("💾 Save Simulation", key="save_sim_button")
-
-            if save_clicked:
-                st.write("✅ Save button triggered")
-
-                save_name_clean = save_name.strip()
-                supabase = st.session_state.get("supabase_client")
-                user_email = st.session_state.get("user").email
-
-                if not save_name_clean:
-                    st.warning("Please enter a name.")
-                elif not supabase:
-                    st.error("Supabase client not initialized.")
-                else:
-                    try:
-                        payload = {
-                            "email": user_email,
-                            "timestamp": pd.Timestamp.now().isoformat(),
-                            "name": save_name_clean,
-                            "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
-                            "standings": st.session_state["last_df"].to_dict(orient="records"),
-                            "playoffs": None
-                        }
-
-                        st.write("📦 Payload:")
-                        st.json(payload)
-
-                        response = supabase.table("simulations").insert(payload).execute()
-
-                        st.write("🔁 Supabase response:")
-                        st.json(response)
-
-                        if hasattr(response, "status_code") and response.status_code == 201:
-                            st.success("✅ Simulation saved successfully!")
-                        else:
-                            st.error("❌ Save failed.")
-                    except Exception as e:
-                        st.error(f"❌ Exception during save: {e}")
-
-
-
-
 
             # ← Add this line to hide preview when simulation runs:
             st.session_state.show_preview = False
