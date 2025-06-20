@@ -46,6 +46,7 @@ def run_full_sim():
             """,
             unsafe_allow_html=True,
         )
+    all_teams = sorted(season_df["Team"].unique())
 
     # ─────────────────────────────────────────────────────────────────────
     # A) LOAD MASTER CSV + INITIALIZE 32 SLOTS
@@ -58,7 +59,7 @@ def run_full_sim():
 
 
     season_df = load_season_df()
-    all_teams = sorted(season_df["Team"].unique())
+
     available_seasons = sorted(season_df["Season"].unique(), reverse=True)
     default_season = available_seasons[0]
 
