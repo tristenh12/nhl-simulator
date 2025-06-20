@@ -27,4 +27,4 @@ def show_sim_history(supabase):
                 if st.button("Delete", key=f"del_{sim['name']}_{sim['timestamp']}"):
                     supabase.table("simulations").delete().eq("email", user_email).eq("name", sim["name"]).execute()
                     st.success("Deleted.")
-                    st.experimental_rerun()
+                    st.rerun()
