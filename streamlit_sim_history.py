@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 from supabase import create_client
-from supabase_config import SUPABASE_URL, SUPABASE_KEY  # or however you manage keys
 
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def show_sim_history(user_email):
