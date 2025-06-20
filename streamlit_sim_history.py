@@ -10,7 +10,12 @@ def show_sim_history(user_email):
     st.title("📂 Saved Simulations")
 
     try:
-        response = supabase.table("simulations").select("*").eq("email", user_email).order("timestamp", desc=True).execute()
+        response = supabase.table("simulations") \
+            .select("*") \
+            .eq("email", user_email) \
+            .order("timestamp", desc=True) \
+            .execute()
+
         data = response.data
 
         if not data:
@@ -18,27 +23,36 @@ def show_sim_history(user_email):
             return
 
         for sim in data:
-            st.markdown("---")
-            st.write(f"**📝 Name**: {sim['name']}")
-            st.write(f"**📅 Date**: {sim.get('timestamp', 'Unknown')}")
+            st.markdown("----")
+            st.subheader(sim['name'])
 
-            with st.expander("📊 View Standings"):
+            st.write(f"**📅 Date:** `{sim.get('timestamp', 'Unknown')}`")
+
+            with st.expander("📊 Standings"):
                 df = pd.DataFrame(sim.get("standings", []))
-                st.dataframe(df, use_container_width=True)
+                if not df.empty:
+                    st.dataframe(df, use_container_width=True)
+                else:
+                    st.write("No standings data available.")
 
-            col1, col2 = st.columns([1, 1])
+            col1, col2 = st.columns(2)
+
             with col1:
-                if st.button(f"↩ Load Into Full Sim", key=f"load_{sim['id']}"):
+                if st.button(f"↩ Load into Full Sim", key=f"load_{sim['id']}"):
                     st.session_state.team_slots = [
-                        {"team": entry.split(" (")[0], "season": entry.split("(")[-1].replace(")", "")}
+                        {
+                            "team": entry.split(" (")[0],
+                            "season": entry.split(" (")[1].replace(")", "")
+                        }
                         for entry in sim.get("teams", [])
                     ]
-                    st.success("✅ Loaded into Full Sim. Go to the Full Sim tab to view.")
+                    st.success("✅ Loaded. Head to the Full Sim tab to view or rerun.")
+            
             with col2:
                 if st.button("🗑 Delete", key=f"delete_{sim['id']}"):
                     supabase.table("simulations").delete().eq("id", sim["id"]).execute()
-                    st.warning(f"🗑 Deleted simulation: {sim['name']}")
+                    st.warning(f"Deleted simulation: **{sim['name']}**")
                     st.rerun()
 
     except Exception as e:
-        st.error(f"Failed to load history: {e}")
+        st.error(f"Failed to load saved simulations: {e}")

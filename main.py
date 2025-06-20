@@ -10,6 +10,7 @@ from streamlit_sim_history import show_sim_history
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+st.session_state["supabase_client"] = supabase
 
 # Streamlit setup
 st.set_page_config(page_title="NHL What-If Simulator", layout="wide")
@@ -26,7 +27,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar auth
+# Sidebar login
 st.sidebar.title("🔐 Login or Signup")
 
 if "user" not in st.session_state:
@@ -61,6 +62,7 @@ else:
     user = st.session_state.user
     st.sidebar.success(f"Logged in as {user.email}")
 
+    # Check payment status
     if "is_paid" not in st.session_state:
         try:
             res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
