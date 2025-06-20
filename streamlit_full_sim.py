@@ -429,51 +429,34 @@ def run_full_sim():
 
             df["Rating"] = df["RawTeam"].map(ratings_dict).fillna(0).astype(int)
             st.session_state["last_df"] = df
-            # -- After the simulation runs and st.session_state["last_df"] is set --
-
             if "user" in st.session_state:
-                with st.expander("💾 Save this Simulation?", expanded=False):
-                    save_name = st.text_input("Name your simulation:")
+                st.subheader("💾 Test Save Block (Debug Mode)")
 
-                    if st.button("💾 Save Simulation"):
-                        if save_name.strip():
-                            try:
-                                payload = {
-                                    "email": st.session_state["user"].email,
-                                    "timestamp": pd.Timestamp.now().isoformat(),
-                                    "name": save_name.strip(),
-                                    "teams": [
-                                        f"{slot['team']} ({slot['season']})"
-                                        for slot in st.session_state.get("team_slots", [])
-                                        if slot.get("team") and slot.get("season")
-                                    ],
-                                    "standings": st.session_state["last_df"].to_dict(orient="records"),
-                                    "playoffs": None  # Placeholder until playoff data is added
-                                }
+                if st.button("🚨 Force Save Test"):
+                    try:
+                        payload = {
+                            "email": st.session_state["user"].email,
+                            "timestamp": pd.Timestamp.now().isoformat(),
+                            "name": "Manual Test Insert",
+                            "teams": ["Detroit Red Wings (2024-25)", "Montreal Canadiens (2023-24)"],
+                            "standings": [{"Team": "Detroit", "W": 48, "PTS": 105}],
+                            "playoffs": None
+                        }
 
-                                # Debug output
-                                st.write("DEBUG — Payload to insert:")
-                                st.json(payload)
+                        st.write("Payload being sent to Supabase:")
+                        st.json(payload)
 
-                                response = supabase.table("simulations").insert(payload).execute()
+                        response = supabase.table("simulations").insert(payload).execute()
 
-                                # Check response
-                                if hasattr(response, "status_code") and response.status_code == 201:
-                                    st.success("✅ Simulation saved successfully!")
-                                else:
-                                    st.error("⚠️ Failed to save simulation.")
-                                    st.write("Supabase response:")
-                                    st.json(response)
-
-                            except Exception as e:
-                                st.error(f"❌ Exception while saving: {e}")
+                        st.write("Supabase raw response:")
+                        st.write(response)
+                        if hasattr(response, "status_code"):
+                            st.write(f"Status Code: {response.status_code}")
                         else:
-                            st.warning("Please enter a name for your simulation.")
+                            st.write("No status_code attribute found.")
 
-
-
-                        # ← Add this line to hide preview when simulation runs:
-                        st.session_state.show_preview = False
+                    except Exception as e:
+                        st.error(f"❌ Exception occurred: {e}")
 
 
 
