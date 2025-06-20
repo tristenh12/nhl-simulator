@@ -400,9 +400,9 @@ def run_full_sim():
 
             df["Rating"] = df["RawTeam"].map(ratings_dict).fillna(0).astype(int)
             st.session_state["last_df"] = df
-            # --- Save sim history to Supabase (if user is logged in) ---
             if "user" in st.session_state:
                 user_email = st.session_state["user"].email
+                supabase = st.session_state.get("supabase_client")
 
                 with st.expander("💾 Save this Simulation?", expanded=False):
                     save_name = st.text_input("Simulation Name:")
@@ -411,20 +411,23 @@ def run_full_sim():
                         save_name_clean = save_name.strip()
 
                         if not save_name_clean:
-                            st.warning("Please enter a name for your simulation.")
+                            st.warning("Please enter a name.")
+                        elif not supabase:
+                            st.error("Supabase client not initialized.")
                         else:
                             try:
-                                supabase.table("simulations").insert({
+                                payload = {
                                     "email": user_email,
                                     "timestamp": pd.Timestamp.now().isoformat(),
                                     "name": save_name_clean,
                                     "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
-                                    "standings": df.to_dict(orient="records"),
-                                    "playoffs": None  # Optional for now
-                                }).execute()
-                                st.success("📝 Simulation saved to your account.")
+                                    "standings": st.session_state["last_df"].to_dict(orient="records"),
+                                    "playoffs": None
+                                }
+                                response = supabase.table("simulations").insert(payload).execute()
+                                st.success("✅ Saved simulation to your account.")
                             except Exception as e:
-                                st.warning(f"Could not save simulation: {e}")
+                                st.error(f"❌ Save failed: {e}")
 
 
 
