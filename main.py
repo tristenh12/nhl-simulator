@@ -1,7 +1,9 @@
 import streamlit as st
 from supabase import create_client, Client
 import stripe
-
+from free_sim_gui import run_free_sim
+from streamlit_full_sim import run_full_sim
+from streamlit_sim_history import show_sim_history
 
 # Load credentials
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
@@ -22,90 +24,83 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Sim modules
-from free_sim_gui import run_free_sim
-from streamlit_full_sim import run_full_sim
+# --- SIDEBAR AUTH ---
+st.sidebar.title("🔐 Login or Signup")
 
-# Mode selector
-mode = st.sidebar.radio("Pick Simulation Mode:", ("Free", "Full"))
+if "user" not in st.session_state:
+    auth_mode = st.sidebar.radio("Auth Mode", ["Login", "Signup"])
+    email = st.sidebar.text_input("Email")
+    password = st.sidebar.text_input("Password", type="password")
 
-if mode == "Free":
+    if st.sidebar.button(auth_mode):
+        try:
+            if auth_mode == "Signup":
+                res = supabase.auth.sign_up({"email": email, "password": password})
+                if res.user:
+                    try:
+                        supabase.table("users").insert({
+                            "email": email,
+                            "paid": False
+                        }).execute()
+                    except Exception as e:
+                        st.sidebar.warning("Signup worked, but user DB entry failed.")
+                        st.sidebar.text(str(e))
+                    st.session_state.user = res.user
+                    st.rerun()
+            elif auth_mode == "Login":
+                res = supabase.auth.sign_in_with_password({"email": email, "password": password})
+                if res.user:
+                    st.session_state.user = res.user
+                    st.rerun()
+                else:
+                    st.sidebar.error("Authentication failed.")
+        except Exception as e:
+            st.sidebar.error(str(e))
+else:
+    user = st.session_state.user
+    st.sidebar.success(f"Logged in as {user.email}")
+    if st.sidebar.button("Logout"):
+        del st.session_state["user"]
+        st.session_state.pop("is_paid", None)
+        st.rerun()
+
+    # Payment check
+    if "is_paid" not in st.session_state:
+        try:
+            res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
+            paid = res.data.get("paid", False) if res.data else False
+            st.session_state["is_paid"] = paid
+        except Exception:
+            st.session_state["is_paid"] = False
+            st.error("Could not check payment status.")
+
+    if st.sidebar.button("🔄 Refresh Access"):
+        try:
+            res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
+            paid = res.data.get("paid", False) if res.data else False
+            st.session_state["is_paid"] = paid
+            st.rerun()
+        except Exception as e:
+            st.error("Error refreshing payment status.")
+
+# --- MAIN TABS ---
+tab1, tab2, tab3 = st.tabs(["🏒 Free Sim", "🧠 Full Sim", "📁 View Saved Sims"])
+
+with tab1:
     run_free_sim()
 
-elif mode == "Full":
-    # --- AUTH ---
-    if "user" not in st.session_state:
-        st.sidebar.title("🔐 Login or Signup")
-        auth_mode = st.sidebar.radio("Auth Mode", ["Login", "Signup"])
-        email = st.sidebar.text_input("Email")
-        password = st.sidebar.text_input("Password", type="password")
-
-        if st.sidebar.button(auth_mode):
-            try:
-                if auth_mode == "Signup":
-                    res = supabase.auth.sign_up({"email": email, "password": password})
-                    if res.user:
-                        try:
-                            supabase.table("users").insert({
-                                "email": email,
-                                "paid": False
-                            }).execute()
-                        except Exception as e:
-                            st.sidebar.warning("Signup worked, but user DB entry failed.")
-                            st.sidebar.text(str(e))
-                        st.session_state.user = res.user
-                        st.rerun()
-                elif auth_mode == "Login":
-                    res = supabase.auth.sign_in_with_password({"email": email, "password": password})
-                    if res.user:
-                        st.session_state.user = res.user
-                        st.rerun()
-                    else:
-                        st.sidebar.error("Authentication failed.")
-            except Exception as e:
-                st.sidebar.error(str(e))
-
-    # --- LOGGED IN ---
-    else:
-        user = st.session_state.user
-        st.sidebar.success(f"Logged in as {user.email}")
-        # --- Show History Page Link ---
-        st.sidebar.markdown("### 📁 Pages")
-        if st.sidebar.button("🕓 My Simulations"):
-            from streamlit_sim_history import show_sim_history
-            show_sim_history(user.email)
-
-
-        if st.sidebar.button("Logout"):
-            del st.session_state["user"]
-            st.session_state.pop("is_paid", None)
-            st.rerun()
-
-        # --- CHECK PAYMENT STATUS ---
-        if "is_paid" not in st.session_state:
-            try:
-                res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
-                paid = res.data.get("paid", False) if res.data else False
-                st.session_state["is_paid"] = paid
-            except Exception as e:
-                st.session_state["is_paid"] = False
-                st.error("Could not check payment status.")
-
-        # Manual refresh option
-        if st.button("🔄 Refresh Access"):
-            try:
-                res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
-                paid = res.data.get("paid", False) if res.data else False
-                st.session_state["is_paid"] = paid
-                st.rerun()
-            except Exception as e:
-                st.error("Error refreshing payment status.")
-
-        # --- IF PAID ---
-        if st.session_state["is_paid"]:
+with tab2:
+    if "user" in st.session_state:
+        if st.session_state.get("is_paid", False):
             run_full_sim()
-
-        # --- IF NOT PAID ---
         else:
             st.warning("You must pay to access the full simulation.")
             st.markdown("👉 [Go to Pricing Page](https://www.nhlwhatif.com/pricing)")
+    else:
+        st.warning("Please log in to access the Full Simulator.")
+
+with tab3:
+    if "user" in st.session_state:
+        show_sim_history(user.email)
+    else:
+        st.warning("Please log in to view your saved simulations.")
