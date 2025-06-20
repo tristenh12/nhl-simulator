@@ -225,6 +225,7 @@ def run_full_sim(supabase):
     # — Control 1: “Reset to Default (2023-24)”
     with b1:
         if st.button("♻ Reset to Default (2023-24)"):
+            # Reset the 32 team slots to default season
             teams_in_default = sorted(
                 season_df[season_df["Season"] == default_season]["Team"].unique()
             )
@@ -236,7 +237,17 @@ def run_full_sim(supabase):
                     }
                 else:
                     st.session_state.team_slots[i] = {"team": "", "season": ""}
+
+            # Clear everything else except saved sims
+            for key in list(st.session_state.keys()):
+                if key.startswith("chk_") or key in [
+                    "last_df", "playoff_bracket", "show_preview", "load_trigger"
+                ]:
+                    del st.session_state[key]
+
+            st.session_state.show_all_slots = False  # Collapse slot view
             st.rerun()
+
 
     # — Control 2: “Fill Full Season” (button only on this row)
     with b2:
