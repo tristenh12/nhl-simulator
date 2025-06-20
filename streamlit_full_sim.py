@@ -4,11 +4,12 @@ import streamlit as st
 import pandas as pd
 import random
 import os
+import datetime
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
 
-def run_full_sim():
+def run_full_sim(supabase):
     # ─────────────────────────────────
     # 0) PAGE CONFIG & TITLE
     # ─────────────────────────────────
@@ -674,3 +675,34 @@ def run_full_sim():
                         for g, w in enumerate(log_lines, start=1):
                             st.write(f"   – Game {g}: {w}")
                     st.markdown("")  # small gap
+
+
+if "last_df" in st.session_state and st.session_state["last_df"] is not None:
+    st.markdown("### 💾 Save This Simulation")
+    sim_name = st.text_input("Simulation Name")
+    if st.button("Save Simulation"):
+        user_email = st.session_state["user"].email
+        team_slots = [f"{slot['team']} ({slot['season']})" for slot in st.session_state["team_slots"]]
+        standings = st.session_state["last_df"].to_dict(orient="records")
+        playoffs = st.session_state.get("playoff_bracket", None)
+
+        if sim_name.strip() == "":
+            st.error("Please enter a name.")
+        else:
+            existing = supabase.table("simulations").select("*").eq("email", user_email).eq("name", sim_name).execute()
+            if existing.data:
+                st.error("You already saved a simulation with this name.")
+            else:
+                timestamp = datetime.datetime.utcnow().isoformat()
+                result = supabase.table("simulations").insert({
+                    "email": user_email,
+                    "name": sim_name,
+                    "timestamp": timestamp,
+                    "teams": team_slots,
+                    "standings": standings,
+                    "playoffs": playoffs
+                }).execute()
+                if result.data:
+                    st.success("Simulation saved successfully!")
+                else:
+                    st.error("Something went wrong saving the simulation.")
