@@ -21,8 +21,8 @@ def show_sim_history(supabase):
                         for t in sim["teams"]:
                             if " (" in t and t.endswith(")"):
                                 team = t.split(" (")[0]
-                                season = int(t.split(" (")[1].rstrip(")"))
-                                parsed_slots.append({"team": team, "season": season})
+                                season = t.split(" (")[1].rstrip(")")
+                                parsed_slots.append({"team": team, "season": season})  # keep season as string
                             else:
                                 raise ValueError(f"Invalid team format: {t}")
                         st.session_state["team_slots"] = parsed_slots
