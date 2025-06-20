@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 def show_sim_history(supabase):
     user_email = st.session_state["user"].email
@@ -17,20 +18,35 @@ def show_sim_history(supabase):
             with col1:
                 if st.button("Load", key=f"load_{sim['name']}_{sim['timestamp']}"):
                     try:
+                        # Parse team slots
                         parsed_slots = []
                         for t in sim["teams"]:
                             if " (" in t and t.endswith(")"):
                                 team = t.split(" (")[0]
                                 season = t.split(" (")[1].rstrip(")")
-                                parsed_slots.append({"team": team, "season": season})  # keep season as string
+                                parsed_slots.append({"team": team, "season": season})
                             else:
                                 raise ValueError(f"Invalid team format: {t}")
                         st.session_state["team_slots"] = parsed_slots
+
+                        # Restore standings DataFrame
+                        st.session_state["last_df"] = pd.DataFrame(sim["standings"])
+
+                        # Restore playoff bracket
+                        st.session_state["playoff_bracket"] = sim.get("playoffs", None)
+
+                        # Clear old checkboxes
+                        for key in list(st.session_state.keys()):
+                            if key.startswith("chk_east_") or key.startswith("chk_west_") or key.startswith("chk_final_"):
+                                del st.session_state[key]
+
+                        # Hide preview toggle and mark sim as loaded
+                        st.session_state["show_preview"] = False
                         st.session_state["load_trigger"] = True
+
                         st.success("Loaded into Full Sim tab.")
                     except Exception as e:
                         st.error(f"Error loading this simulation: {e}")
-
 
             with col2:
                 if st.button("Delete", key=f"del_{sim['name']}_{sim['timestamp']}"):
