@@ -14,6 +14,9 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def run_full_sim():
+    st.write("🔥 Run tracker: ", st.session_state.get("run_count", 0))
+    st.session_state["run_count"] = st.session_state.get("run_count", 0) + 1
+
     st.write("🧪 run_full_sim() loaded")
     st.write("👤 User in session:", "user" in st.session_state)
 
