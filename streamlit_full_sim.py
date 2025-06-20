@@ -18,6 +18,10 @@ def run_full_sim():
     # 0) PAGE CONFIG & TITLE
     # ─────────────────────────────────
     st.title("📅 NHL Full-Season What-If Simulator")
+    if "user" not in st.session_state or not hasattr(st.session_state.user, "email"):
+    st.warning("⚠️ You must be logged in to use this simulator.")
+    st.stop()
+
     
 
     # Two‐column layout: left = intro text + “#top” anchor, right = “Go to Tools” button
@@ -91,29 +95,6 @@ def run_full_sim():
             return []
         return sorted(season_df[season_df["Team"] == team_name]["Season"].unique(), reverse=True)
 
-    if "user" in st.session_state:
-        sims_resp = supabase.table("simulations").select("id", "name", "teams").eq("email", st.session_state["user"].email).order("timestamp", desc=True).execute()
-        saved_sims = sims_resp.data if sims_resp.data else []
-        sim_options = [f"{sim['name']} (#{sim['id']})" for sim in saved_sims]
-
-        if sim_options:
-            selected_sim_name = st.selectbox("📂 Load Slots from Saved Sim", [""] + sim_options, key="load_sim_selector")
-            if selected_sim_name and selected_sim_name != "":
-                sim_idx = sim_options.index(selected_sim_name) - 1
-                selected_teams = saved_sims[sim_idx]["teams"]
-                new_slots = []
-                for entry in selected_teams:
-                    try:
-                        team, season = entry.rsplit(" (", 1)
-                        season = season.replace(")", "")
-                        new_slots.append({"team": team.strip(), "season": season.strip()})
-                    except:
-                        new_slots.append({"team": "", "season": ""})
-                new_slots += [{"team": "", "season": ""}] * (32 - len(new_slots))
-                st.session_state.team_slots = new_slots
-                st.success(f"Loaded slot configuration from '{saved_sims[sim_idx]['name']}'")
-                st.rerun()
-
     # ──────────────────────────────────────────────────────────────
     # (B) 32-slot pickers (two columns of 16 each), no “Slot” labels
     # ──────────────────────────────────────────────────────────────
@@ -145,6 +126,31 @@ def run_full_sim():
 
 
     st.markdown("### 1) Customize Your 32-Team League")
+    # Load saved simulations from Supabase for this user
+    try:
+        sims_resp = supabase.table("simulations").select("name").eq("email", st.session_state.user.email).execute()
+        sim_options = [item["name"] for item in sims_resp.data] if sims_resp.data else []
+    except Exception as e:
+        st.error(f"Error fetching saved simulations: {e}")
+        sim_options = []
+
+    if sim_options:
+        selected_sim_name = st.selectbox("📂 Load Slots from Saved Simulation", sim_options)
+        if st.button("🔁 Load This Simulation"):
+            selected_sim_data = supabase.table("simulations").select("*").eq("name", selected_sim_name).eq("email", st.session_state.user.email).execute()
+            if selected_sim_data.data:
+                loaded = selected_sim_data.data[0]
+                loaded_teams = loaded.get("teams", [])
+                new_slots = []
+                for item in loaded_teams:
+                    if "(" in item:
+                        t, s = item.rsplit("(", 1)
+                        new_slots.append({"team": t.strip(), "season": s.replace(")", "").strip()})
+                if len(new_slots) == 32:
+                    st.session_state.team_slots = new_slots
+                    st.success("✅ Slots loaded successfully!")
+                    st.rerun()
+
 
     # Toggle button
     if "show_all_slots" not in st.session_state:
