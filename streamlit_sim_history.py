@@ -1,4 +1,7 @@
 import streamlit as st
+import pandas as pd
+from playoff import display_bracket_table_v4
+
 
 def show_sim_history(supabase):
     user_email = st.session_state["user"].email
