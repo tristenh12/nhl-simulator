@@ -7,24 +7,17 @@ import os
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
+from supabase import create_client, Client
 
-supabase = st.session_state.get("supabase_client")
-
-if supabase is None:
-    from supabase import create_client
-    supabase = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
-    st.session_state["supabase_client"] = supabase
-
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def run_full_sim():
+    # ─────────────────────────────────
+    # 0) PAGE CONFIG & TITLE
+    # ─────────────────────────────────
     st.title("📅 NHL Full-Season What-If Simulator")
-
-    # ✅ Login check - this must be indented at the same level as the other code in run_full_sim
-    if "user" not in st.session_state or not hasattr(st.session_state.user, "email"):
-        st.warning("⚠️ You must be logged in to use this simulator.")
-        st.stop()
-
-
     
 
     # Two‐column layout: left = intro text + “#top” anchor, right = “Go to Tools” button
@@ -129,31 +122,6 @@ def run_full_sim():
 
 
     st.markdown("### 1) Customize Your 32-Team League")
-    # Load saved simulations from Supabase for this user
-    try:
-        sims_resp = supabase.table("simulations").select("name").eq("email", st.session_state.user.email).execute()
-        sim_options = [item["name"] for item in sims_resp.data] if sims_resp.data else []
-    except Exception as e:
-        st.error(f"Error fetching saved simulations: {e}")
-        sim_options = []
-
-    if sim_options:
-        selected_sim_name = st.selectbox("📂 Load Slots from Saved Simulation", sim_options)
-        if st.button("🔁 Load This Simulation"):
-            selected_sim_data = supabase.table("simulations").select("*").eq("name", selected_sim_name).eq("email", st.session_state.user.email).execute()
-            if selected_sim_data.data:
-                loaded = selected_sim_data.data[0]
-                loaded_teams = loaded.get("teams", [])
-                new_slots = []
-                for item in loaded_teams:
-                    if "(" in item:
-                        t, s = item.rsplit("(", 1)
-                        new_slots.append({"team": t.strip(), "season": s.replace(")", "").strip()})
-                if len(new_slots) == 32:
-                    st.session_state.team_slots = new_slots
-                    st.success("✅ Slots loaded successfully!")
-                    st.rerun()
-
 
     # Toggle button
     if "show_all_slots" not in st.session_state:
@@ -432,34 +400,23 @@ def run_full_sim():
 
             df["Rating"] = df["RawTeam"].map(ratings_dict).fillna(0).astype(int)
             st.session_state["last_df"] = df
+            # --- Save sim history to Supabase (if user is logged in) ---
             if "user" in st.session_state:
-                st.subheader("💾 Test Save Block (Debug Mode)")
+                user_email = st.session_state["user"].email
+                try:
+                    supabase.table("simulations").insert({
+                        "email": user_email,
+                        "timestamp": pd.Timestamp.now().isoformat(),
+                        "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
+                        "standings": df.to_dict(orient="records")
+                    }).execute()
+                    st.success("📝 Simulation saved to your account.")
+                except Exception as e:
+                    st.warning(f"Could not save simulation: {e}")
 
-                if st.button("🚨 Force Save Test"):
-                    try:
-                        payload = {
-                            "email": st.session_state["user"].email,
-                            "timestamp": pd.Timestamp.now().isoformat(),
-                            "name": "Manual Test Insert",
-                            "teams": ["Detroit Red Wings (2024-25)", "Montreal Canadiens (2023-24)"],
-                            "standings": [{"Team": "Detroit", "W": 48, "PTS": 105}],
-                            "playoffs": None
-                        }
 
-                        st.write("Payload being sent to Supabase:")
-                        st.json(payload)
-
-                        response = supabase.table("simulations").insert(payload).execute()
-
-                        st.write("Supabase raw response:")
-                        st.write(response)
-                        if hasattr(response, "status_code"):
-                            st.write(f"Status Code: {response.status_code}")
-                        else:
-                            st.write("No status_code attribute found.")
-
-                    except Exception as e:
-                        st.error(f"❌ Exception occurred: {e}")
+            # ← Add this line to hide preview when simulation runs:
+            st.session_state.show_preview = False
 
 
 
