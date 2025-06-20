@@ -34,11 +34,31 @@ def show_sim_history(supabase):
                         div = min(divisions, key=lambda d: len(divisions[d]))
                     divisions[div].append(f"{team} ({season})")
 
-            for div_name, teams in divisions.items():
-                if teams:
-                    st.markdown(f"**{div_name}**")
-                    for t in teams:
-                        st.write(f"- {t}")
+            st.markdown("**Teams (Grouped by Division):**")
+            div_keys = list(divisions.keys())
+
+            # First row: Atlantic & Metropolitan
+            row1 = st.columns(2)
+            with row1[0]:
+                st.markdown(f"**{div_keys[0]}**")
+                for t in divisions[div_keys[0]]:
+                    st.write(f"- {t}")
+            with row1[1]:
+                st.markdown(f"**{div_keys[1]}**")
+                for t in divisions[div_keys[1]]:
+                    st.write(f"- {t}")
+
+            # Second row: Central & Pacific
+            row2 = st.columns(2)
+            with row2[0]:
+                st.markdown(f"**{div_keys[2]}**")
+                for t in divisions[div_keys[2]]:
+                    st.write(f"- {t}")
+            with row2[1]:
+                st.markdown(f"**{div_keys[3]}**")
+                for t in divisions[div_keys[3]]:
+                    st.write(f"- {t}")
+
 
             col1, col2 = st.columns(2)
 
