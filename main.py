@@ -96,7 +96,7 @@ with tab1:
 
 with tab2:
     if "user" in st.session_state:
-        if st.session_state.get("is_paid", False):
+        if st.session_state.get("is_paid", True):
             run_full_sim()
         else:
             st.warning("You must pay to access the full simulation.")
