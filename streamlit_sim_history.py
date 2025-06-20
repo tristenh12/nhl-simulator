@@ -100,20 +100,20 @@ def show_sim_history(supabase):
                     for div in df["Division"].unique():
                         st.write(f"#### {div}")
                         div_df = df[df["Division"] == div].sort_values(by=["PTS", "Win%"], ascending=[False, False]).reset_index(drop=True)
-                        div_df.insert(0, "#", range(1, len(df) + 1))
+                        div_df.insert(0, "#", range(1, len(div_df) + 1))
                         st.dataframe(div_df[["#", "Team", "GP", "W", "L", "OTL", "PTS", "Win%"]], use_container_width=True)
 
                 elif view_mode == "By Conference":
                     for conf in df["Conference"].unique():
                         st.write(f"#### {conf}")
                         conf_df = df[df["Conference"] == conf].sort_values(by=["PTS", "Win%"], ascending=[False, False]).reset_index(drop=True)
-                        conf_df.insert(0, "#", range(1, len(df) + 1))
+                        conf_df.insert(0, "#", range(1, len(conf_df) + 1))
                         st.dataframe(conf_df[["#", "Team", "GP", "W", "L", "OTL", "PTS", "Win%"]], use_container_width=True)
 
 
                 elif view_mode == "Entire League":
                     league_df = df.sort_values(by=["PTS", "Win%"], ascending=[False, False]).reset_index(drop=True)
-                    league_df.insert(0, "#", range(1, len(df) + 1))
+                    league_df.insert(0, "#", range(1, len(league_df) + 1))
                     st.dataframe(league_df[["#", "Team", "GP", "W", "L", "OTL", "PTS", "Win%"]], use_container_width=True)
 
 
