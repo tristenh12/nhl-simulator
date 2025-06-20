@@ -408,46 +408,44 @@ def run_full_sim():
                 user_email = st.session_state["user"].email
                 supabase = st.session_state.get("supabase_client")
 
-                save_name = st.text_input("💾 Simulation Name:")
-                st.write("📍 Reached save block")
+                st.subheader("💾 Save this Simulation")
 
+                save_name = st.text_input("Simulation Name:", key="save_name_input")
 
-                with st.expander("Click to Save Simulation", expanded=False):
-                    st.write("🧪 Inside save expander. Waiting for button click.")
+                if st.button("💾 Save Simulation"):
+                    st.write("✅ Save button triggered")
+                    save_name_clean = save_name.strip()
 
-                    if st.button("💾 Save Simulation"):
-                        st.write("💾 Save button clicked.")
-                        save_name_clean = save_name.strip()
+                    if not save_name_clean:
+                        st.warning("Please enter a name.")
+                    elif not supabase:
+                        st.error("Supabase client not initialized.")
+                    else:
+                        try:
+                            payload = {
+                                "email": user_email,
+                                "timestamp": pd.Timestamp.now().isoformat(),
+                                "name": save_name_clean,
+                                "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
+                                "standings": st.session_state["last_df"].to_dict(orient="records"),
+                                "playoffs": None
+                            }
 
-                        if not save_name_clean:
-                            st.warning("Please enter a name.")
-                        elif not supabase:
-                            st.error("Supabase client not initialized.")
-                        else:
-                            try:
-                                payload = {
-                                    "email": user_email,
-                                    "timestamp": pd.Timestamp.now().isoformat(),
-                                    "name": save_name_clean,
-                                    "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
-                                    "standings": st.session_state["last_df"].to_dict(orient="records"),
-                                    "playoffs": None
-                                }
+                            st.write("📦 Payload:")
+                            st.json(payload)
 
-                                st.write("📦 Payload:")
-                                st.json(payload)
+                            response = supabase.table("simulations").insert(payload).execute()
 
-                                response = supabase.table("simulations").insert(payload).execute()
+                            st.write("🔁 Supabase response:")
+                            st.json(response)
 
-                                st.write("🔁 Raw Supabase response:")
-                                st.json(response)
+                            if hasattr(response, "status_code") and response.status_code == 201:
+                                st.success("✅ Simulation saved successfully!")
+                            else:
+                                st.error("❌ Save failed.")
+                        except Exception as e:
+                            st.error(f"❌ Exception during save: {e}")
 
-                                if hasattr(response, "status_code") and response.status_code == 201:
-                                    st.success("✅ Saved simulation to your account.")
-                                else:
-                                    st.error("❌ Supabase insert failed.")
-                            except Exception as e:
-                                st.error(f"❌ Exception during insert: {e}")
 
 
 
