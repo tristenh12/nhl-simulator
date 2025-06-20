@@ -10,6 +10,11 @@ from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
 
 supabase = st.session_state.get("supabase_client")
 
+if supabase is None:
+    from supabase import create_client
+    supabase = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
+    st.session_state["supabase_client"] = supabase
+
 
 def run_full_sim():
     st.title("📅 NHL Full-Season What-If Simulator")
