@@ -437,24 +437,18 @@ def run_full_sim():
                     if st.button("💾 Save Simulation"):
                         if save_name.strip():
                             try:
-                                insert_data = {
+                                supabase.table("simulations").insert({
                                     "email": st.session_state["user"].email,
                                     "timestamp": pd.Timestamp.now().isoformat(),
                                     "name": save_name.strip(),
                                     "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
                                     "standings": st.session_state["last_df"].to_dict(orient="records")
-                                }
-
-                                response = supabase.table("simulations").insert(insert_data).execute()
-
-                                if response.data:
-                                    st.success("✅ Simulation saved successfully!")
-                                else:
-                                    st.error(f"❌ Save failed. No data returned. Error: {response.error}")
-                                    st.json(response)
+                                }).execute()
+                                st.success("✅ Simulation saved successfully!")
                             except Exception as e:
-                                st.error(f"⚠️ Exception thrown: {e}")
-
+                                st.warning(f"⚠️ Could not save simulation: {e}")
+                        else:
+                            st.warning("Please enter a name for your simulation.")
 
 
             # ← Add this line to hide preview when simulation runs:
