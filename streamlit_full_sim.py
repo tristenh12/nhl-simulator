@@ -14,6 +14,10 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def run_full_sim():
+    st.write("🧪 run_full_sim() loaded")
+    st.write("👤 User in session:", "user" in st.session_state)
+
+    st.write("💬 Email:", getattr(st.session_state.get("user"), "email", None))
     # ─────────────────────────────────
     # 0) PAGE CONFIG & TITLE
     # ─────────────────────────────────
@@ -405,6 +409,8 @@ def run_full_sim():
                 supabase = st.session_state.get("supabase_client")
 
                 save_name = st.text_input("💾 Simulation Name:")
+                st.write("📍 Reached save block")
+
 
                 with st.expander("Click to Save Simulation", expanded=False):
                     st.write("🧪 Inside save expander. Waiting for button click.")
