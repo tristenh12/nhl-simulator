@@ -434,21 +434,35 @@ def run_full_sim():
             if "user" in st.session_state:
                 with st.expander("💾 Save this Simulation?", expanded=False):
                     save_name = st.text_input("Name your simulation:")
+
                     if st.button("💾 Save Simulation"):
                         if save_name.strip():
+                            # Build the payload
+                            payload = {
+                                "email": st.session_state["user"].email,
+                                "timestamp": pd.Timestamp.now().isoformat(),
+                                "name": save_name.strip(),
+                                "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
+                                "standings": st.session_state["last_df"].to_dict(orient="records")
+                            }
+
+                            # Debug print
+                            st.write("DEBUG — About to save the following payload:")
+                            st.json(payload)
+
                             try:
-                                supabase.table("simulations").insert({
-                                    "email": st.session_state["user"].email,
-                                    "timestamp": pd.Timestamp.now().isoformat(),
-                                    "name": save_name.strip(),
-                                    "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
-                                    "standings": st.session_state["last_df"].to_dict(orient="records")
-                                }).execute()
-                                st.success("✅ Simulation saved successfully!")
+                                response = supabase.table("simulations").insert(payload).execute()
+
+                                if response.status_code == 201:
+                                    st.success("✅ Simulation saved successfully!")
+                                else:
+                                    st.error(f"⚠️ Save failed. Status code: {response.status_code}")
+                                    st.json(response.data)
                             except Exception as e:
                                 st.warning(f"⚠️ Could not save simulation: {e}")
                         else:
                             st.warning("Please enter a name for your simulation.")
+
 
 
             # ← Add this line to hide preview when simulation runs:
