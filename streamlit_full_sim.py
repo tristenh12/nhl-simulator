@@ -91,28 +91,28 @@ def run_full_sim():
             return []
         return sorted(season_df[season_df["Team"] == team_name]["Season"].unique(), reverse=True)
 
-if "user" in st.session_state:
-    sims_resp = supabase.table("simulations").select("id", "name", "teams").eq("email", st.session_state["user"].email).order("timestamp", desc=True).execute()
-    saved_sims = sims_resp.data if sims_resp.data else []
-    sim_options = [f"{sim['name']} (#{sim['id']})" for sim in saved_sims]
+    if "user" in st.session_state:
+        sims_resp = supabase.table("simulations").select("id", "name", "teams").eq("email", st.session_state["user"].email).order("timestamp", desc=True).execute()
+        saved_sims = sims_resp.data if sims_resp.data else []
+        sim_options = [f"{sim['name']} (#{sim['id']})" for sim in saved_sims]
 
-    if sim_options:
-        selected_sim_name = st.selectbox("📂 Load Slots from Saved Sim", [""] + sim_options, key="load_sim_selector")
-        if selected_sim_name and selected_sim_name != "":
-            sim_idx = sim_options.index(selected_sim_name) - 1
-            selected_teams = saved_sims[sim_idx]["teams"]
-            new_slots = []
-            for entry in selected_teams:
-                try:
-                    team, season = entry.rsplit(" (", 1)
-                    season = season.replace(")", "")
-                    new_slots.append({"team": team.strip(), "season": season.strip()})
-                except:
-                    new_slots.append({"team": "", "season": ""})
-            new_slots += [{"team": "", "season": ""}] * (32 - len(new_slots))
-            st.session_state.team_slots = new_slots
-            st.success(f"Loaded slot configuration from '{saved_sims[sim_idx]['name']}'")
-            st.rerun()
+        if sim_options:
+            selected_sim_name = st.selectbox("📂 Load Slots from Saved Sim", [""] + sim_options, key="load_sim_selector")
+            if selected_sim_name and selected_sim_name != "":
+                sim_idx = sim_options.index(selected_sim_name) - 1
+                selected_teams = saved_sims[sim_idx]["teams"]
+                new_slots = []
+                for entry in selected_teams:
+                    try:
+                        team, season = entry.rsplit(" (", 1)
+                        season = season.replace(")", "")
+                        new_slots.append({"team": team.strip(), "season": season.strip()})
+                    except:
+                        new_slots.append({"team": "", "season": ""})
+                new_slots += [{"team": "", "season": ""}] * (32 - len(new_slots))
+                st.session_state.team_slots = new_slots
+                st.success(f"Loaded slot configuration from '{saved_sims[sim_idx]['name']}'")
+                st.rerun()
 
     # ──────────────────────────────────────────────────────────────
     # (B) 32-slot pickers (two columns of 16 each), no “Slot” labels
