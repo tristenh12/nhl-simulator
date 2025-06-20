@@ -403,18 +403,15 @@ def run_full_sim():
             if "user" in st.session_state:
                 user_email = st.session_state["user"].email
                 supabase = st.session_state.get("supabase_client")
-                st.write("✅ Supabase client loaded:", bool(supabase))
 
+                save_name = st.text_input("💾 Simulation Name:")
 
-                with st.expander("💾 Save this Simulation?", expanded=False):
-                    save_name = st.text_input("Simulation Name:")
+                with st.expander("Click to Save Simulation", expanded=False):
                     st.write("🧪 Inside save expander. Waiting for button click.")
 
-
                     if st.button("💾 Save Simulation"):
-                        save_name_clean = save_name.strip()
                         st.write("💾 Save button clicked.")
-
+                        save_name_clean = save_name.strip()
 
                         if not save_name_clean:
                             st.warning("Please enter a name.")
@@ -422,6 +419,15 @@ def run_full_sim():
                             st.error("Supabase client not initialized.")
                         else:
                             try:
+                                payload = {
+                                    "email": user_email,
+                                    "timestamp": pd.Timestamp.now().isoformat(),
+                                    "name": save_name_clean,
+                                    "teams": [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots],
+                                    "standings": st.session_state["last_df"].to_dict(orient="records"),
+                                    "playoffs": None
+                                }
+
                                 st.write("📦 Payload:")
                                 st.json(payload)
 
@@ -436,7 +442,6 @@ def run_full_sim():
                                     st.error("❌ Supabase insert failed.")
                             except Exception as e:
                                 st.error(f"❌ Exception during insert: {e}")
-
 
 
 
