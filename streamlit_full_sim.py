@@ -126,30 +126,30 @@ def run_full_sim():
 
 
     st.markdown("### 1) Customize Your 32-Team League")
-        # Load saved simulations from Supabase for this user
-        try:
-            sims_resp = supabase.table("simulations").select("name").eq("email", st.session_state.user.email).execute()
-            sim_options = [item["name"] for item in sims_resp.data] if sims_resp.data else []
-        except Exception as e:
-            st.error(f"Error fetching saved simulations: {e}")
-            sim_options = []
+    # Load saved simulations from Supabase for this user
+    try:
+        sims_resp = supabase.table("simulations").select("name").eq("email", st.session_state.user.email).execute()
+        sim_options = [item["name"] for item in sims_resp.data] if sims_resp.data else []
+    except Exception as e:
+        st.error(f"Error fetching saved simulations: {e}")
+        sim_options = []
 
-        if sim_options:
-            selected_sim_name = st.selectbox("📂 Load Slots from Saved Simulation", sim_options)
-            if st.button("🔁 Load This Simulation"):
-                selected_sim_data = supabase.table("simulations").select("*").eq("name", selected_sim_name).eq("email", st.session_state.user.email).execute()
-                if selected_sim_data.data:
-                    loaded = selected_sim_data.data[0]
-                    loaded_teams = loaded.get("teams", [])
-                    new_slots = []
-                    for item in loaded_teams:
-                        if "(" in item:
-                            t, s = item.rsplit("(", 1)
-                            new_slots.append({"team": t.strip(), "season": s.replace(")", "").strip()})
-                    if len(new_slots) == 32:
-                        st.session_state.team_slots = new_slots
-                        st.success("✅ Slots loaded successfully!")
-                        st.rerun()
+    if sim_options:
+        selected_sim_name = st.selectbox("📂 Load Slots from Saved Simulation", sim_options)
+        if st.button("🔁 Load This Simulation"):
+            selected_sim_data = supabase.table("simulations").select("*").eq("name", selected_sim_name).eq("email", st.session_state.user.email).execute()
+            if selected_sim_data.data:
+                loaded = selected_sim_data.data[0]
+                loaded_teams = loaded.get("teams", [])
+                new_slots = []
+                for item in loaded_teams:
+                    if "(" in item:
+                        t, s = item.rsplit("(", 1)
+                        new_slots.append({"team": t.strip(), "season": s.replace(")", "").strip()})
+                if len(new_slots) == 32:
+                    st.session_state.team_slots = new_slots
+                    st.success("✅ Slots loaded successfully!")
+                    st.rerun()
 
 
     # Toggle button
