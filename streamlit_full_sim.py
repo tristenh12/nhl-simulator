@@ -7,11 +7,9 @@ import os
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
-from supabase import create_client, Client
 
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = st.session_state.get("supabase_client")
+
 
 def run_full_sim():
     st.title("📅 NHL Full-Season What-If Simulator")
