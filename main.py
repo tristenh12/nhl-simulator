@@ -64,11 +64,15 @@ else:
     if "is_paid" not in st.session_state:
         try:
             res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
-            paid = res.data.get("paid", False) if res.data else False
-            st.session_state["is_paid"] = paid
-        except Exception:
+            st.write("DEBUG: Supabase response", res)
+            if res.data and "paid" in res.data:
+                st.session_state["is_paid"] = res.data["paid"]
+            else:
+                st.session_state["is_paid"] = False
+        except Exception as e:
             st.session_state["is_paid"] = False
-            st.error("Could not check payment status.")
+            st.error(f"Could not check payment status: {e}")
+
 
     if st.sidebar.button("🔄 Refresh Access"):
         try:
