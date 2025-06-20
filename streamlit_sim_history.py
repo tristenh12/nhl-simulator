@@ -16,12 +16,21 @@ def show_sim_history(supabase):
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("Load", key=f"load_{sim['name']}_{sim['timestamp']}"):
-                    st.session_state["team_slots"] = [
-                        {"team": t.split(" (")[0], "season": int(t.split(" (")[1][:-1])}
-                        for t in sim["teams"]
-                    ]
-                    st.session_state["load_trigger"] = True
-                    st.success("Loaded into Full Sim tab.")
+                    try:
+                        parsed_slots = []
+                        for t in sim["teams"]:
+                            if " (" in t and t.endswith(")"):
+                                team = t.split(" (")[0]
+                                season = int(t.split(" (")[1].rstrip(")"))
+                                parsed_slots.append({"team": team, "season": season})
+                            else:
+                                raise ValueError(f"Invalid team format: {t}")
+                        st.session_state["team_slots"] = parsed_slots
+                        st.session_state["load_trigger"] = True
+                        st.success("Loaded into Full Sim tab.")
+                    except Exception as e:
+                        st.error(f"Error loading this simulation: {e}")
+
 
             with col2:
                 if st.button("Delete", key=f"del_{sim['name']}_{sim['timestamp']}"):
