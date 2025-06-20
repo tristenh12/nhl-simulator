@@ -59,12 +59,8 @@ if "user" not in st.session_state:
 else:
     user = st.session_state.user
     st.sidebar.success(f"Logged in as {user.email}")
-    if st.sidebar.button("Logout"):
-        del st.session_state["user"]
-        st.session_state.pop("is_paid", None)
-        st.rerun()
 
-    # Payment check
+    # ✅ Make sure this runs before tabs so is_paid is available
     if "is_paid" not in st.session_state:
         try:
             res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
@@ -82,6 +78,11 @@ else:
             st.rerun()
         except Exception as e:
             st.error("Error refreshing payment status.")
+
+    if st.sidebar.button("Logout"):
+        del st.session_state["user"]
+        st.session_state.pop("is_paid", None)
+        st.rerun()
 
 # --- MAIN TABS ---
 tab1, tab2, tab3 = st.tabs(["🏒 Free Sim", "🧠 Full Sim", "📁 View Saved Sims"])
@@ -101,6 +102,6 @@ with tab2:
 
 with tab3:
     if "user" in st.session_state:
-        show_sim_history(user.email)
+        show_sim_history(st.session_state.user.email)
     else:
         st.warning("Please log in to view your saved simulations.")
