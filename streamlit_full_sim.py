@@ -211,24 +211,49 @@ def run_full_sim(supabase):
     with tab_results:
         # league preview
         if st.session_state.show_preview:
-            st.subheader("🔍 Custom League Preview")
-            divs = {"Atlantic": [], "Metropolitan": [], "Central": [], "Pacific": []}
-            for slot in st.session_state.team_slots:
-                t, s = slot["team"], slot["season"]
-                if t and s:
-                    row = season_df[(season_df["Team"]==t)&(season_df["Season"]==s)]
-                    d = row.iloc[0]["Division"] if not row.empty else min(divs, key=lambda d: len(divs[d]))
-                    divs[d].append(f"{t} ({s})")
-            cols = st.columns(2)
-            for idx, name in enumerate(["Atlantic","Metropolitan"]):
-                with cols[0 if idx==0 else 1]:
-                    st.write(f"**{name}**")
-                    st.write("\n".join(divs[name]))
-            cols = st.columns(2)
-            for idx, name in enumerate(["Central","Pacific"]):
-                with cols[0 if idx==0 else 1]:
-                    st.write(f"**{name}**")
-                    st.write("\n".join(divs[name]))
+            # Gather all selected (team, season) pairs:
+            selected_pairs = [
+                (slot["team"], slot["season"])
+                for slot in st.session_state.team_slots
+                if slot["team"] and slot["season"]
+            ]
+
+            if len(selected_pairs) != 32:
+                st.warning(f"⚠️ You have filled {len(selected_pairs)}/32 slots. Please fill all 32 to preview.")
+            else:
+                # Make sure this dict is called "divisions" (not "divs")
+                divisions = {"Atlantic": [], "Metropolitan": [], "Central": [], "Pacific": []}
+
+                for team, season in selected_pairs:
+                    row = season_df[(season_df["Team"] == team) & (season_df["Season"] == season)]
+                    if not row.empty:
+                        hist_div = row.iloc[0]["Division"]
+                        # fallback if historical division isn't one of our four
+                        if hist_div not in divisions:
+                            hist_div = min(divisions, key=lambda k: len(divisions[k]))
+                    else:
+                        hist_div = min(divisions, key=lambda k: len(divisions[k]))
+                    divisions[hist_div].append(f"{team} ({season})")
+
+                # Render a 2×2 grid
+                st.markdown("<h2 style='text-align: center;'>Custom League Preview</h2>", unsafe_allow_html=True)
+                keys = list(divisions.keys())
+                # Atlantic & Metropolitan
+                r1 = st.columns([1,1,1,1])
+                with r1[1]:
+                    st.write(f"**{keys[0]}**")
+                    for t in divisions[keys[0]]: st.write(f"- {t}")
+                with r1[2]:
+                    st.write(f"**{keys[1]}**")
+                    for t in divisions[keys[1]]: st.write(f"- {t}")
+                # Central & Pacific
+                r2 = st.columns([1,1,1,1])
+                with r2[1]:
+                    st.write(f"**{keys[2]}**")
+                    for t in divisions[keys[2]]: st.write(f"- {t}")
+                with r2[2]:
+                    st.write(f"**{keys[3]}**")
+                    for t in divisions[keys[3]]: st.write(f"- {t}")
 
         # standings & playoffs
         if "last_df" in st.session_state:
