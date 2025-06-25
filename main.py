@@ -85,8 +85,8 @@ with tabs[1]:
         </style>
 
         <div class="login-alert">
-            🔐 <strong>You must be logged in via Webflow to access Full Sim.</strong><br><br>
-            👉 <a href="https://www.nhlwhatif.com/login" target="_blank">Login on Webflow</a>
+            🔐 <strong>You must be logged in to access Full Sim.</strong><br><br>
+            👉 <a href="https://www.nhlwhatif.com/login" target="_blank">Go to Login/Signup</a>
         </div>
         """, unsafe_allow_html=True)
         st.stop()
