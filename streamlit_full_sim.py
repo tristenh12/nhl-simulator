@@ -15,13 +15,6 @@ def run_full_sim(supabase):
     st.markdown("Fill 32 slots (team + season), simulate an 82-game schedule, then view standings + playoffs.")
 
     # ─────────────────────────────────────────────────────────────────
-    # 0.5) Stats-update guard (only run once per simulation)
-    # ─────────────────────────────────────────────────────────────────
-    if "stats_updated" not in st.session_state:
-        st.session_state["stats_updated"] = False
-
-
-    # ─────────────────────────────────────────────────────────────────
     # A) LOAD DATA + INITIALIZE STATE
     # ─────────────────────────────────────────────────────────────────
     @st.cache_data
@@ -178,46 +171,104 @@ def run_full_sim(supabase):
             if st.button("👀 Toggle Preview"):
                 st.session_state.show_preview = not st.session_state.show_preview
                 st.rerun()
+        # Replace your existing “Run Full-Season Simulation” button handler with this block:
         with c4:
             if st.button("✅ Run Full-Season Simulation"):
-                st.session_state.pop("playoff_bracket",None)
-                st.session_state.show_preview=False
+                # 1) Clear old bracket & hide preview
+                st.session_state.pop("playoff_bracket", None)
+                st.session_state.show_preview = False
 
+                # 2) Build your regular‐season selection
                 sel = [
                     {
-                        "RawTeam":slot["team"], "Season":slot["season"],
+                        "RawTeam": slot["team"],
+                        "Season": slot["season"],
                         **season_df[
-                            (season_df["Team"]==slot["team"]) &
-                            (season_df["Season"]==slot["season"])
-                        ].iloc[0][["Division","Conference","Rating"]].to_dict()
+                            (season_df["Team"] == slot["team"]) &
+                            (season_df["Season"] == slot["season"])
+                        ].iloc[0][["Division", "Conference", "Rating"]].to_dict()
                     }
                     for slot in st.session_state.team_slots
                     if slot["team"] and slot["season"]
                 ]
-                if len(sel)<10:
+                if len(sel) < 10:
                     st.warning("Please select at least 10 valid teams.")
-                else:
-                    modern_divs={"Atlantic":[],"Metropolitan":[],"Central":[],"Pacific":[]}
-                    ratings={}
-                    for ts in sel:
-                        uid=f"{ts['RawTeam']} ({ts['Season']})"
-                        ratings[uid]=ts["Rating"]
-                        d=ts["Division"]
-                        if d in modern_divs:
-                            modern_divs[d].append(uid)
-                        else:
-                            modern_divs[min(modern_divs, key=lambda k:len(modern_divs[k]))].append(uid)
-                    with st.spinner("Simulating…"):
-                        stats=simulate_season(modern_divs,ratings)
-                    df,af=build_dataframe(stats,modern_divs,season_df,
-                                          team_to_season_map={ts["RawTeam"]:ts["Season"] for ts in sel})
-                    if af:
-                        st.info("Some teams auto-assigned.")
-                    df["Rating"]=df["RawTeam"].map(ratings).fillna(0).astype(int)
-                    st.session_state["last_df"]=df
+                    st.stop()
 
-                    st.session_state.active_tab="results"
-                    st.rerun()
+                # 3) Prepare divisions & ratings
+                modern_divs = {"Atlantic": [], "Metropolitan": [], "Central": [], "Pacific": []}
+                ratings = {}
+                for ts in sel:
+                    uid = f"{ts['RawTeam']} ({ts['Season']})"
+                    ratings[uid] = ts["Rating"]
+                    d = ts["Division"]
+                    if d in modern_divs:
+                        modern_divs[d].append(uid)
+                    else:
+                        modern_divs[min(modern_divs, key=lambda k: len(modern_divs[k]))].append(uid)
+
+                # 4) Simulate regular season
+                with st.spinner("Simulating…"):
+                    stats = simulate_season(modern_divs, ratings)
+                df, af = build_dataframe(
+                    stats, modern_divs, season_df,
+                    team_to_season_map={ts["RawTeam"]: ts["Season"] for ts in sel}
+                )
+                if af:
+                    st.info("Some teams auto-assigned.")
+                df["Rating"] = df["RawTeam"].map(ratings).fillna(0).astype(int)
+
+                # 5) Simulate playoffs immediately & stash bracket
+                bracket = simulate_playoffs_streamlit(df, ratings)
+                st.session_state["playoff_bracket"] = bracket
+
+                # 6) Bump Supabase stats exactly once
+                if not st.session_state.get("stats_updated", False):
+                    top = df.sort_values("PTS", ascending=False).iloc[0]
+                    pres_winner = top["RawTeam"]
+                    cup_winner  = bracket["final"][0]["winner"]
+
+                    champ = df[df["RawTeam"] == cup_winner].iloc[0]
+                    champ_wins, champ_pts, champ_losses = int(champ["W"]), int(champ["PTS"]), int(champ["L"])
+
+                    user_email = st.session_state["user"].email
+                    res = supabase.table("users") \
+                                .select(
+                                    "favorite_team,championships_won,"
+                                    "presidents_trophies,cups_won,"
+                                    "record_wins,record_pts,record_losses"
+                                ) \
+                                .eq("email", user_email) \
+                                .single() \
+                                .execute()
+
+                    if res.data:
+                        row = res.data
+                        fav = row["favorite_team"]
+
+                        new_champs = row["championships_won"] + (1 if cup_winner == fav else 0)
+                        new_pres   = row["presidents_trophies"] + (1 if pres_winner == fav else 0)
+                        new_cups   = row["cups_won"] + 1
+                        new_wins   = max(row["record_wins"],   champ_wins)
+                        new_pts    = max(row["record_pts"],    champ_pts)
+                        new_losses = max(row["record_losses"], champ_losses)
+
+                        supabase.table("users").update({
+                            "championships_won":   new_champs,
+                            "presidents_trophies": new_pres,
+                            "cups_won":            new_cups,
+                            "record_wins":         new_wins,
+                            "record_pts":          new_pts,
+                            "record_losses":       new_losses
+                        }).eq("email", user_email).execute()
+
+                    st.session_state["stats_updated"] = True
+
+                # 7) Store DataFrame & jump to RESULTS
+                st.session_state["last_df"] = df
+                st.session_state.active_tab = "results"
+                st.rerun()
+
 
         # inline preview in Tools
         if st.session_state.show_preview:
@@ -248,74 +299,8 @@ def run_full_sim(supabase):
             return
 
         df = st.session_state["last_df"]
-
-        st.write("🛠️ DEBUG: In RESULTS block; stats_updated =", 
-             st.session_state.get("stats_updated"))
-        if not st.session_state["stats_updated"]:
-            st.write("🛠️ DEBUG: Entering stats_update branch")
-        # … your existing playoff & update code here …
-            resp = supabase.table("users")….execute()
-            st.write("🔄 UPDATE response", resp)
-        # (and/or re-fetch row)
-            after = supabase.table("users")….execute().data
-            st.write("📊 Row after update", after)
-            st.session_state["stats_updated"] = True
-        else:
-            st.write("🛠️ DEBUG: Skipping stats_update (already ran)")
-
-
-
-        # ────────────────────────────────────────────────────────────
-        # ONCE‐PER‐RUN: simulate playoffs & bump Supabase stats
-        # ────────────────────────────────────────────────────────────
-        if not st.session_state["stats_updated"]:
-            # ensure playoff bracket exists
-            if "playoff_bracket" not in st.session_state:
-                ratings_for_playoffs = { r["Team"]: r["Rating"] for _, r in df.iterrows() }
-                st.session_state["playoff_bracket"] = simulate_playoffs_streamlit(df, ratings_for_playoffs)
-            bracket = st.session_state["playoff_bracket"]
-
-            # pick regular‐season leader and Cup winner
-            top = df.sort_values("PTS", ascending=False).iloc[0]
-            presidents_trophy_winner = top["RawTeam"]
-            stanley_cup_winner       = bracket["final"][0]["winner"]
-
-            # champion’s record
-            champ = df[df["RawTeam"] == stanley_cup_winner].iloc[0]
-            champ_wins, champ_pts, champ_losses = int(champ["W"]), int(champ["PTS"]), int(champ["L"])
-
-            # fetch user row
-            user_email = st.session_state["user"].email
-            res = supabase.table("users") \
-                        .select("favorite_team,championships_won,presidents_trophies,cups_won,record_wins,record_pts,record_losses") \
-                        .eq("email", user_email) \
-                        .single().execute()
-
-            if res.data:
-                row = res.data
-                fav = row["favorite_team"]   # ← add this line!
-
-                new_champs = row["championships_won"]   + (1 if stanley_cup_winner    == fav else 0)
-                new_pres   = row["presidents_trophies"] + (1 if presidents_trophy_winner == fav else 0)
-                new_cups   = row["cups_won"] + 1
-                new_wins   = max(row["record_wins"],   champ_wins)
-                new_pts    = max(row["record_pts"],    champ_pts)
-                new_losses = max(row["record_losses"], champ_losses)
-
-                supabase.table("users").update({
-                    "championships_won":   new_champs,
-                    "presidents_trophies": new_pres,
-                    "cups_won":            new_cups,
-                    "record_wins":         new_wins,
-                    "record_pts":          new_pts,
-                    "record_losses":       new_losses
-                }).eq("email", user_email).execute()
-
-            st.session_state["stats_updated"] = True
-        # ────────────────────────────────────────────────────────────
-
         st.markdown("---")
-        st.subheader("View Standings / Playoffs")
+        st.subheader("4) View Standings / Playoffs")
         view = st.selectbox("Select View",
                             ["By Division", "By Conference", "Entire League", "Playoffs"],
                             key="view_mode")
