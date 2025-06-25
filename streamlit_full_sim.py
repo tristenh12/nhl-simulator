@@ -247,7 +247,7 @@ def run_full_sim(supabase):
                             ["By Division", "By Conference", "Entire League", "Playoffs"],
                             key="view_mode")
 
-        # — By Division
+        # By Division
         if view == "By Division":
             st.write("### NHL STANDINGS (By Division)")
             for d in df["Division"].unique():
@@ -260,7 +260,7 @@ def run_full_sim(supabase):
                 st.write(f"#### {d}")
                 st.dataframe(div_df[["Team","GP","W","L","OTL","PTS","Win%"]], use_container_width=True)
 
-        # — By Conference
+        # By Conference
         elif view == "By Conference":
             st.write("### NHL STANDINGS (By Conference)")
             for c in df["Conference"].unique():
@@ -273,7 +273,7 @@ def run_full_sim(supabase):
                 st.write(f"#### {c}")
                 st.dataframe(conf_df[["Team","GP","W","L","OTL","PTS","Win%"]], use_container_width=True)
 
-        # — Entire League
+        # Entire League
         elif view == "Entire League":
             st.write("### NHL STANDINGS (Entire League)")
             league_df = (
@@ -283,7 +283,7 @@ def run_full_sim(supabase):
             league_df.index += 1
             st.dataframe(league_df[["Team","GP","W","L","OTL","PTS","Win%"]], use_container_width=True)
 
-        # — Playoffs
+        # Playoffs
         else:
             st.write("### Playoff Bracket")
             if "playoff_bracket" not in st.session_state:
@@ -340,3 +340,38 @@ def run_full_sim(supabase):
                     st.write(f"• Result → {final['home']} ({wins[final['home']]}) vs {final['away']} ({wins[final['away']]}) → **{winner}**")
                     for g, w in enumerate(final.get("log", []), start=1):
                         st.write(f"   – Game {g}: {w}")
+
+            # ────────────────────────────────────────────────────────────
+            # Save This Simulation
+            # ────────────────────────────────────────────────────────────
+            st.markdown("### 💾 Save This Simulation")
+            sim_name = st.text_input("Simulation Name", key="save_name")
+            if st.button("Save Simulation"):
+                if not sim_name.strip():
+                    st.error("Please enter a name.")
+                else:
+                    email = st.session_state["user"].email
+                    teams = [f"{s['team']} ({s['season']})" for s in st.session_state.team_slots]
+                    standings = df.to_dict("records")
+                    playoffs = st.session_state.playoff_bracket
+                    existing = (supabase.table("simulations")
+                                        .select("*")
+                                        .eq("email", email)
+                                        .eq("name", sim_name)
+                                        .execute().data)
+                    if existing:
+                        st.error("You already have a simulation with that name.")
+                    else:
+                        timestamp = datetime.datetime.utcnow().isoformat()
+                        res = supabase.table("simulations").insert({
+                            "email": email,
+                            "name": sim_name,
+                            "timestamp": timestamp,
+                            "teams": teams,
+                            "standings": standings,
+                            "playoffs": playoffs
+                        }).execute()
+                        if res.data:
+                            st.success("Simulation saved successfully!")
+                        else:
+                            st.error("Something went wrong saving.")
