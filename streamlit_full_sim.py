@@ -275,9 +275,8 @@ def run_full_sim(supabase):
                         .eq("email", user_email) \
                         .single().execute()
 
-            if not res.error and res.data:
+            if res.data:
                 row = res.data
-                fav = row["favorite_team"]
 
                 new_champs = row["championships_won"]   + (1 if stanley_cup_winner    == fav else 0)
                 new_pres   = row["presidents_trophies"] + (1 if presidents_trophy_winner == fav else 0)
