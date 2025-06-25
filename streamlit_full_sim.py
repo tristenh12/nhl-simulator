@@ -3,7 +3,6 @@ import pandas as pd
 import random
 import os
 import datetime
-import traceback
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
@@ -174,81 +173,44 @@ def run_full_sim(supabase):
                 st.rerun()
         with c4:
             if st.button("✅ Run Full-Season Simulation"):
-                # Clear old bracket & preview
-                st.session_state.pop("playoff_bracket", None)
-                st.session_state.show_preview = False
+                st.session_state.pop("playoff_bracket",None)
+                st.session_state.show_preview=False
 
-                # Build and run the season
-                sel = [ ... ]  # your existing sel construction
-                with st.spinner("Simulating…"):
-                    try:
-                        stats = simulate_season(modern_divs, ratings)
-                    except Exception as e:
-                        st.error("🚨 simulate_season crashed with KeyError or similar.")
-                        st.write("**modern_divs**:", modern_divs)
-                        st.write("**ratings** keys:", list(ratings.keys()))
-                        st.write("Full exception:")
-                        st.code(traceback.format_exc(), language="python")
-                        return
+                sel = [
+                    {
+                        "RawTeam":slot["team"], "Season":slot["season"],
+                        **season_df[
+                            (season_df["Team"]==slot["team"]) &
+                            (season_df["Season"]==slot["season"])
+                        ].iloc[0][["Division","Conference","Rating"]].to_dict()
+                    }
+                    for slot in st.session_state.team_slots
+                    if slot["team"] and slot["season"]
+                ]
+                if len(sel)<10:
+                    st.warning("Please select at least 10 valid teams.")
+                else:
+                    modern_divs={"Atlantic":[],"Metropolitan":[],"Central":[],"Pacific":[]}
+                    ratings={}
+                    for ts in sel:
+                        uid=f"{ts['RawTeam']} ({ts['Season']})"
+                        ratings[uid]=ts["Rating"]
+                        d=ts["Division"]
+                        if d in modern_divs:
+                            modern_divs[d].append(uid)
+                        else:
+                            modern_divs[min(modern_divs, key=lambda k:len(modern_divs[k]))].append(uid)
+                    with st.spinner("Simulating…"):
+                        stats=simulate_season(modern_divs,ratings)
+                    df,af=build_dataframe(stats,modern_divs,season_df,
+                                          team_to_season_map={ts["RawTeam"]:ts["Season"] for ts in sel})
+                    if af:
+                        st.info("Some teams auto-assigned.")
+                    df["Rating"]=df["RawTeam"].map(ratings).fillna(0).astype(int)
+                    st.session_state["last_df"]=df
 
-                if af:
-                    st.info("Some teams auto-assigned.")
-                df["Rating"] = df["RawTeam"].map(ratings).fillna(0).astype(int)
-
-                # Store standings
-                st.session_state["last_df"] = df
-
-                # ────────────────────────────────────────────────────────────────────
-                # 1) Simulate and store playoffs so we have the bracket now
-                ratings_for_playoffs = {row["Team"]: row["Rating"] for _, row in df.iterrows()}
-                st.session_state["playoff_bracket"] = simulate_playoffs_streamlit(df, ratings_for_playoffs)
-
-                # 2) Extract Presidents’ Trophy & Stanley Cup winners
-                top = df.sort_values("PTS", ascending=False).iloc[0]
-                presidents_trophy_winner = top["RawTeam"]
-                bracket = st.session_state["playoff_bracket"]
-                stanley_cup_winner = bracket["final"][0]["winner"]
-
-                # 3) Champion’s own record
-                champ_row = df[df["RawTeam"] == stanley_cup_winner].iloc[0]
-                champ_wins   = int(champ_row["W"])
-                champ_pts    = int(champ_row["PTS"])
-                champ_losses = int(champ_row["L"])
-
-                # 4) Fetch current user stats
-                user_email = st.session_state["user"].email
-                res = supabase.table("users") \
-                            .select("favorite_team, championships_won, presidents_trophies, cups_won, record_wins, record_pts, record_losses") \
-                            .eq("email", user_email) \
-                            .single() \
-                            .execute()
-
-                if not res.error and res.data:
-                    row = res.data
-                    fav = row["favorite_team"]
-
-                    # 5) Compute new stat values
-                    new_champs   = row["championships_won"]    + (1 if stanley_cup_winner == fav else 0)
-                    new_pres     = row["presidents_trophies"]  + (1 if presidents_trophy_winner == fav else 0)
-                    new_cups     = row["cups_won"] + 1
-                    new_wins     = max(row["record_wins"],   champ_wins)
-                    new_pts      = max(row["record_pts"],    champ_pts)
-                    new_losses   = max(row["record_losses"], champ_losses)
-
-                    # 6) Write back all six stats
-                    supabase.table("users").update({
-                        "championships_won":   new_champs,
-                        "presidents_trophies": new_pres,
-                        "cups_won":            new_cups,
-                        "record_wins":         new_wins,
-                        "record_pts":          new_pts,
-                        "record_losses":       new_losses
-                    }).eq("email", user_email).execute()
-
-                # ────────────────────────────────────────────────────────────────────
-                # Finally: switch to Results tab
-                st.session_state.active_tab = "results"
-                st.rerun()
+                    st.session_state.active_tab="results"
+                    st.rerun()
 
         # inline preview in Tools
         if st.session_state.show_preview:
