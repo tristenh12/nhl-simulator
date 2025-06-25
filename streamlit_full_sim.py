@@ -209,6 +209,43 @@ def run_full_sim(supabase):
                     df["Rating"]=df["RawTeam"].map(ratings).fillna(0).astype(int)
                     st.session_state["last_df"]=df
 
+                        # ─── Update user stats in Supabase ────────────────────────────
+                    top = df.sort_values("PTS", ascending=False).iloc[0]
+                    presidents_trophy_winner = top["RawTeam"]
+                    final_series = st.session_state["playoff_bracket"]["final"][0]
+                    stanley_cup_winner = final_series["winner"]
+
+                    champ_row   = df[df["RawTeam"] == stanley_cup_winner].iloc[0]
+                    champ_wins   = int(champ_row["W"])
+                    champ_pts    = int(champ_row["PTS"])
+                    champ_losses = int(champ_row["L"])
+
+                    user_email = st.session_state["user"].email
+                    res = supabase.table("users") \
+                                .select("favorite_team, championships_won, presidents_trophies, cups_won, record_wins, record_pts, record_losses") \
+                                .eq("email", user_email) \
+                                .single().execute()
+                    if not res.error and res.data:
+                        row = res.data
+                        fav = row["favorite_team"]
+
+                        new_champs   = row["championships_won"]    + (1 if stanley_cup_winner == fav else 0)
+                        new_pres     = row["presidents_trophies"]  + (1 if presidents_trophy_winner == fav else 0)
+                        new_cups     = row["cups_won"] + 1
+                        new_wins     = max(row["record_wins"],   champ_wins)
+                        new_pts      = max(row["record_pts"],    champ_pts)
+                        new_losses   = max(row["record_losses"], champ_losses)
+
+                        supabase.table("users").update({
+                            "championships_won":   new_champs,
+                            "presidents_trophies": new_pres,
+                            "cups_won":            new_cups,
+                            "record_wins":         new_wins,
+                            "record_pts":          new_pts,
+                            "record_losses":       new_losses
+                        }).eq("email", user_email).execute()
+
+
                     st.session_state.active_tab="results"
                     st.rerun()
 
