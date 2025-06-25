@@ -123,7 +123,7 @@ def run_free_sim():
             st.session_state["game_full_box_df"] = full_box_df
             st.session_state["game_feed_idx"] = 0
             st.session_state["game_playing"] = False
-            st.experimental_rerun()
+            st.rerun()
 
         # Live feed & final stats (only if we have feed state)
         if "game_commentary" in st.session_state:
@@ -153,7 +153,7 @@ def run_free_sim():
             if st.session_state["game_playing"] and idx < len(comm):
                 time.sleep(delay_map[speed])
                 st.session_state["game_feed_idx"] = idx + 1
-                st.experimental_rerun()
+                st.rerun()
 
             if idx >= len(comm):
                 st.markdown("---")
@@ -249,7 +249,7 @@ def run_free_sim():
         for k in list(st.session_state.keys()):
             if k.startswith("game_") or k.startswith("series_"):
                 del st.session_state[k]
-        st.experimental_rerun()
+        st.rerun()
 
 
 if __name__ == '__main__':
