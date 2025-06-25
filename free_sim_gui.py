@@ -70,13 +70,12 @@ def run_free_sim():
                 key="game_season2"
             )
 
-        # simulate one game
         if st.button("▶️ Sim One Game", key="btn_one_game"):
-            # clear any previous game-run state
+            # Clear old game state
             for k in list(st.session_state.keys()):
                 if k.startswith("game_"):
                     st.session_state.pop(k)
-            # re-read after clear
+            # Re-read after clear
             t1 = st.session_state.get("game_team1", "")
             t2 = st.session_state.get("game_team2", "")
             s1 = st.session_state.get("game_season1", "")
@@ -93,7 +92,7 @@ def run_free_sim():
             full2 = f"{t2} ({s2})"
             commentary, stats, full_box_df = simulate_one_game(t1, s1, t2, s2)
 
-            # sort commentary by period and timestamp
+            # Sort commentary
             ts_match = re.compile(r"(\d+):(\d+)")
             def parse_ts(ln):
                 m = ts_match.search(ln)
@@ -116,7 +115,7 @@ def run_free_sim():
                 commentary_sorted.append(f"=== {p}{suffix} Period ===")
                 commentary_sorted.extend(sorted(period_events[p], key=parse_ts))
 
-            # stash into session state
+            # Store in session
             st.session_state["game_commentary"] = commentary_sorted
             st.session_state["game_stats"] = stats
             st.session_state["game_full1"] = full1
@@ -126,16 +125,16 @@ def run_free_sim():
             st.session_state["game_playing"] = False
             st.experimental_rerun()
 
-        # live feed + final stats
+        # Live feed & final stats (only if commentary exists)
         if "game_commentary" in st.session_state:
             comm = st.session_state["game_commentary"]
             stats = st.session_state["game_stats"]
             full1 = st.session_state["game_full1"]
             full2 = st.session_state["game_full2"]
-            idx = st.session_state["game_feed_idx"]
+            idx = st.session_state.get("game_feed_idx", 0)
 
             speed = st.selectbox("Speed", ["1×","2×","4×"], index=0, key="game_speed")
-            delay_map = {"1×":.5, "2×":.25, "4×":.125}
+            delay_map = {"1×": .5, "2×": .25, "4×": .125}
 
             p1, p2, p3 = st.columns(3)
             with p1:
@@ -153,7 +152,7 @@ def run_free_sim():
 
             if st.session_state["game_playing"] and idx < len(comm):
                 time.sleep(delay_map[speed])
-                st.session_state["game_feed_idx"] += 1
+                st.session_state["game_feed_idx"] = idx + 1
                 st.experimental_rerun()
 
             if idx >= len(comm):
@@ -182,7 +181,6 @@ def run_free_sim():
                             rows.append({"Time": "", "Team": "", "Event": ln})
                     df_display = pd.DataFrame(rows)
                     st.dataframe(df_display, use_container_width=True)
-
 
     # ─── Best-of-7 Tab ───────────────────────────────────────────────
     with tab_series:
@@ -228,7 +226,6 @@ def run_free_sim():
             )
 
         if st.button("▶️ Sim Best of 7", key="btn_best_of_7"):
-            # no shared state to clear here
             if not (t1s and t2s and s1s and s2s):
                 st.error("❗ Select both teams and their seasons.")
                 st.stop()
