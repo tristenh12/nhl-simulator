@@ -230,7 +230,7 @@ def run_full_sim(supabase):
                 st.session_state.team_slots = parsed_slots
 
                 # Clear trigger to avoid blocking other buttons
-                st.session_state.quickload_sim_name = ""  # resets the dropdown
+
                 st.session_state.load_trigger = False
                 st.rerun()
             except Exception as e:
