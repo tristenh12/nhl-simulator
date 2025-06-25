@@ -1,5 +1,3 @@
-# streamlit_sim_history.py
-
 import streamlit as st
 import pandas as pd
 from playoff import display_bracket_table_v4
@@ -21,41 +19,12 @@ def show_sim_history(supabase):
         return
 
     for sim in sims:
-        # Use an expander per saved sim
-        with st.expander(f"{sim['name']} — {sim['timestamp'][:19].replace('T',' ')}"):
-            # (existing code to display teams & inline results omitted for brevity)
-            # … your code that shows teams and results …
+        with st.expander(f"{sim['name']} — {sim['timestamp'][:19].replace('T', ' ')}"):
+            # … your existing code to display teams & inline standings/playoffs …
 
-            col1, col2 = st.columns(2)
+            # Only show Delete button here:
+            col1, col2 = st.columns([1,1])
             with col1:
-                load_key = f"load_{sim['name']}_{sim['timestamp']}"
-                if st.button("📥 Load", key=load_key):
-                    # 1) Rebuild team_slots
-                    new_slots = []
-                    for t in sim["teams"]:
-                        if " (" in t and t.endswith(")"):
-                            team, yr = t.rsplit(" (", 1)
-                            season = yr.rstrip(")")
-                            new_slots.append({"team": team, "season": season})
-                        else:
-                            new_slots.append({"team": "", "season": ""})
-                    # pad up to 32
-                    while len(new_slots) < 32:
-                        new_slots.append({"team": "", "season": ""})
-                    st.session_state.team_slots = new_slots
-
-                    # 2) Clear any prior simulation/preview state
-                    for key in ("last_df", "playoff_bracket", "show_preview"):
-                        if key in st.session_state:
-                            del st.session_state[key]
-
-                    # 3) Jump back to the Team Selector tab
-                    st.session_state.active_tab = "teams"
-
-                    # 4) Rerun so the full-sim UI updates immediately
-                    st.rerun()
-
-            with col2:
                 del_key = f"del_{sim['name']}_{sim['timestamp']}"
                 if st.button("🗑 Delete", key=del_key):
                     supabase.table("simulations") \
@@ -65,9 +34,6 @@ def show_sim_history(supabase):
                             .execute()
                     st.success("Deleted.")
                     st.rerun()
-
-            # … rest of your inline display (standings/playoffs) …
-
 
             # Show results inline if available
             if "standings" in sim and sim["standings"]:
