@@ -251,6 +251,18 @@ def run_full_sim(supabase):
 
         st.write("🛠️ DEBUG: In RESULTS block; stats_updated =", 
              st.session_state.get("stats_updated"))
+        if not st.session_state["stats_updated"]:
+            st.write("🛠️ DEBUG: Entering stats_update branch")
+        # … your existing playoff & update code here …
+            resp = supabase.table("users")….execute()
+            st.write("🔄 UPDATE response", resp)
+        # (and/or re-fetch row)
+            after = supabase.table("users")….execute().data
+            st.write("📊 Row after update", after)
+            st.session_state["stats_updated"] = True
+        else:
+            st.write("🛠️ DEBUG: Skipping stats_update (already ran)")
+
 
 
         # ────────────────────────────────────────────────────────────
