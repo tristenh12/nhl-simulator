@@ -78,14 +78,9 @@ with tabs[1]:
 # --- SAVED SIMS TAB ---
 with tabs[2]:
     if not user:
-        st.markdown("""
-        <div style='padding:1rem; margin-top:1rem; background-color:#ffe6e6; border-left: 6px solid #e53935; border-radius: 6px; font-size: 1rem;'>
-            🔐 <strong>Access Restricted:</strong> You must be logged in to view Saved Simulations.<br><br>
-            👉 <a href='https://www.nhlwhatif.com/login' target='_blank' style='text-decoration: none; color: #1565c0; font-weight: 600;'>Click here to log in</a>
-        </div>
-        """, unsafe_allow_html=True)
+        st.warning("🔐 You must be logged in to view Saved Simulations.")
+        st.markdown("👉 [Login to Access](https://www.nhlwhatif.com/login)")
         st.stop()
-
     elif not st.session_state.get("is_paid", False):
         st.warning("🚫 Saved Simulations are only available to paid users.")
         st.markdown("👉 [Go to Pricing Page](https://www.nhlwhatif.com/pricing)")
