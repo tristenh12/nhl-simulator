@@ -707,6 +707,7 @@ def run_full_sim(supabase):
                             else:
                                 timestamp = datetime.datetime.utcnow().isoformat()
                                 result = supabase.table("simulations").insert({
+                                    "user_id": user_id,
                                     "email": user_email,
                                     "name": sim_name,
                                     "timestamp": timestamp,
