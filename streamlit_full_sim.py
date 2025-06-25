@@ -365,7 +365,7 @@ def run_full_sim(supabase):
             st.stop()
 
     # — Control 6: “Run Full-Season Simulation”
-    with b6:
+    with b4:
         if st.button("✅ Run Full-Season Simulation"):
 
                         # (1) Clear old playoff keys so a fresh bracket can be generated later
