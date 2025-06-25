@@ -6,6 +6,8 @@ import datetime
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
+from stats_updater import update_user_stats
+
 
 def run_full_sim(supabase):
     # ─────────────────────────────────────────────────────────────────
@@ -293,54 +295,19 @@ def run_full_sim(supabase):
 
             bracket = st.session_state["playoff_bracket"]
             display_bracket_table_v4(bracket)
+            # ————————————— UPDATE USER STATS —————————————
+            if "stats_updated" not in st.session_state:
+                update_user_stats(
+                    supabase,
+                    bracket,
+                    st.session_state["last_df"],
+                    st.session_state["user"].email
+                )
+                st.session_state["stats_updated"] = True
 
-            if "playoff_bracket" in st.session_state and "stats_updated" not in st.session_state:
-                bracket = st.session_state["playoff_bracket"]
-
-                # Stanley Cup winner
-                cup_final = bracket["final"][0]
-                cup_winner = cup_final["winner"]
-                st.write(f"Stanley Cup Winner: {cup_winner}")
-
-                # Presidents' Trophy winner
-                df = st.session_state["last_df"]
-                presidents_trophy_team = df.sort_values(by=["PTS", "Win%"], ascending=[False, False]).iloc[0]
-                st.write(f"Presidents' Trophy Winner: {presidents_trophy_team['RawTeam']}")
-
-                # Fetch current user
-                user_email = st.session_state["user"].email
-                user_data = supabase.table("users").select("*").eq("email", user_email).single().execute().data
-                st.write(f"Current user favorite team: {user_data['favorite_team']}")
-
-                if user_data:
-                    updates = {}
-
-                    if user_data["favorite_team"] == cup_winner.split(" (")[0]:
-                        updates["championships_won"] = user_data["championships_won"] + 1
-                        st.write("Incrementing championships_won")
-
-                    if user_data["favorite_team"] == presidents_trophy_team["RawTeam"]:
-                        updates["presidents_trophies"] = user_data["presidents_trophies"] + 1
-                        st.write("Incrementing presidents_trophies")
-
-                    updates["cups_won"] = user_data["cups_won"] + 1
-                    st.write("Incrementing cups_won")
-
-                    team_record = df[df["Team"] == cup_winner].iloc[0]
-                    updates["record_wins"] = max(user_data["record_wins"], team_record["W"])
-                    updates["record_pts"] = max(user_data["record_pts"], team_record["PTS"])
-                    updates["record_losses"] = max(user_data["record_losses"], team_record["L"])
-                    st.write(f"Updating records: Wins={updates['record_wins']}, Pts={updates['record_pts']}, Losses={updates['record_losses']}")
-
-                    # Push updates to Supabase
-                    response = supabase.table("users").update(updates).eq("email", user_email).execute()
-                    st.write("Supabase update response:", response.data)
-
-                    st.session_state["stats_updated"] = True
 
             st.markdown("---")
             st.subheader("Series Details (click to reveal)")
-
 
             # Eastern Conference
             ec, wc = st.columns(2)
