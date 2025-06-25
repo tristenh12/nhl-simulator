@@ -295,6 +295,16 @@ def run_full_sim(supabase):
                     "record_losses":       new_losses
                 }).eq("email", user_email).execute()
 
+                st.write("🔄 UPDATE response", resp)  # should show status, data, etc.
+
+                # re-fetch the row immediately
+                after = supabase.table("users") \
+                                .select("*") \
+                                .eq("email", user_email) \
+                                .single() \
+                                .execute().data
+                st.write("📊 Row after update", after)
+
             st.session_state["stats_updated"] = True
         # ────────────────────────────────────────────────────────────
 
