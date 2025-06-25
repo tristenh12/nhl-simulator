@@ -166,6 +166,7 @@ def run_full_sim(supabase):
         with c3:
             if st.button("👀 Toggle Preview"):
                 st.session_state.show_preview = not st.session_state.show_preview
+                st.rerun()
         with c4:
             if st.button("✅ Run Full-Season Simulation"):
                 # clear old playoff state
