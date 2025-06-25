@@ -202,29 +202,32 @@ def run_full_sim(supabase):
     st.markdown("### 2) League-Wide Controls / Preview / Run Simulation")
 
     # ⬇ Load from saved sim (populate slots)
-# ──────────────────────────────────────────────────────────────────
-# C) Load from Saved Simulation
-# ──────────────────────────────────────────────────────────────────
+    # ──────────────────────────────────────────────────────────────────
+    # C) Load from Saved Simulation
+    # ──────────────────────────────────────────────────────────────────
     st.markdown("#### 🔁 Load Teams from a Saved Simulation")
 
     user_email = st.session_state["user"].email
     sims = supabase.table("simulations").select("name, teams").eq("email", user_email).order("timestamp", desc=True).execute().data
     sim_names = [sim["name"] for sim in sims]
 
-    # Prevent auto-rerun loop by managing a load_trigger flag
-    if "load_trigger" not in st.session_state:
-        st.session_state.load_trigger = False
+    # Track previous selection to detect changes
+    if "previous_sim_selection" not in st.session_state:
+        st.session_state.previous_sim_selection = ""
 
-    # Selectbox for choosing a sim
+    # Sim selector
     selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="quickload_sim_name")
 
-    # If a new sim is selected, set load_trigger and rerun
-    if selected_sim_name and not st.session_state.load_trigger:
-        st.session_state.load_trigger = True
+    # If selection has changed, set flag and rerun
+    if selected_sim_name != st.session_state.previous_sim_selection:
+        st.session_state.previous_sim_selection = selected_sim_name
+        st.session_state.should_load_sim = True
         st.rerun()
 
-    # On rerun: actually load and inject teams
-    if st.session_state.load_trigger:
+    # Only load if a change was made
+    if st.session_state.get("should_load_sim", False):
+        st.session_state.should_load_sim = False  # reset flag
+
         selected_sim = next((s for s in sims if s["name"] == selected_sim_name), None)
         if selected_sim:
             try:
@@ -241,7 +244,6 @@ def run_full_sim(supabase):
                 st.session_state.team_slots = parsed_slots
             except Exception as e:
                 st.error(f"Error loading team config: {e}")
-        st.session_state.load_trigger = False
 
 
 
