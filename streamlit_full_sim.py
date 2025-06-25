@@ -253,17 +253,32 @@ def run_full_sim(supabase):
                         new_pts    = max(row["record_pts"],    champ_pts)
                         new_losses = max(row["record_losses"], champ_losses)
 
-                        supabase.table("users").update({
-                            "championships_won":   new_champs,
-                            "presidents_trophies": new_pres,
-                            "cups_won":            new_cups,
-                            "record_wins":         new_wins,
-                            "record_pts":          new_pts,
-                            "record_losses":       new_losses
-                        }).eq("email", user_email).execute()
-                        st.write("🏹 Supabase update resp:", resp)
-                        st.write(" • error:", resp.error)
-                        st.write(" • count:", resp.count)
+                        # … inside your if res.data: block …
+
+                        # 1) Perform the update and capture the response
+                        resp = supabase.table("users") \
+                            .update({
+                                "championships_won":   new_champs,
+                                "presidents_trophies": new_pres,
+                                "cups_won":            new_cups,
+                                "record_wins":         new_wins,
+                                "record_pts":          new_pts,
+                                "record_losses":       new_losses
+                            }) \
+                            .eq("email", user_email) \
+                            .execute()
+
+                        # 2) Debug-print the response right here
+                        st.write("🏹 Supabase update response:", resp)
+                        try:
+                            st.write(" • error field:", resp.error)        # will be None if successful
+                        except AttributeError:
+                            st.write(" • no .error attribute, resp object is:", resp)
+
+                        # 3) Also show how many rows matched/updated
+                        if hasattr(resp, "count"):
+                            st.write(" • count:", resp.count)
+
 
                     st.session_state["stats_updated"] = True
 
