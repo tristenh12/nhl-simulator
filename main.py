@@ -54,12 +54,43 @@ with tabs[0]:
 with tabs[1]:
     if not user:
         st.markdown("""
-        <div style='padding:1rem; margin-top:1rem; background-color:#fff3cd; border-left: 6px solid #ffecb5; border-radius: 6px; font-size: 1rem;'>
+        <style>
+        .login-alert {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 6px solid #0d6efd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .login-alert {
+                background-color: #1e1e1e;
+                color: #f0f0f0;
+            }
+            .login-alert a {
+                color: #66b2ff;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .login-alert {
+                background-color: #f0f8ff;
+                color: #000000;
+            }
+            .login-alert a {
+                color: #0d6efd;
+            }
+        }
+        </style>
+
+        <div class="login-alert">
             🔐 <strong>You must be logged in via Webflow to access Full Sim.</strong><br><br>
-            👉 <a href='https://www.nhlwhatif.com/login' target='_blank' style='text-decoration: none; color: #0d6efd; font-weight: 600;'>Login on Webflow</a>
+            👉 <a href="https://www.nhlwhatif.com/login" target="_blank">Login on Webflow</a>
         </div>
         """, unsafe_allow_html=True)
         st.stop()
+
 
     else:
         st.success(
