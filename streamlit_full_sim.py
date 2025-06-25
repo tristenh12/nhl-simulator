@@ -15,181 +15,165 @@ def run_full_sim(supabase):
     st.markdown("Fill 32 slots (team + season), simulate an 82-game schedule, then view standings + playoffs.")
 
     # ─────────────────────────────────────────────────────────────────────
-    # A) LOAD MASTER CSV + INITIALIZE STATE
+    # A) LOAD DATA + INITIALIZE
     # ─────────────────────────────────────────────────────────────────────
     @st.cache_data
     def load_season_df():
         here = os.path.dirname(__file__)
-        data_path = os.path.join(here, "data", "teams_alignment_complete.csv")
-        return pd.read_csv(data_path)
+        return pd.read_csv(os.path.join(here, "data", "teams_alignment_complete.csv"))
 
     season_df = load_season_df()
     all_teams = sorted(season_df["Team"].unique())
     available_seasons = sorted(season_df["Season"].unique(), reverse=True)
     default_season = available_seasons[0]
 
-    # Initialize preview toggle
+    # init preview toggle
     if "show_preview" not in st.session_state:
         st.session_state.show_preview = False
 
-    # Initialize slots
+    # init team slots
     if "team_slots" not in st.session_state:
-        teams_in_default = sorted(season_df[season_df["Season"] == default_season]["Team"].unique())
-        slots = []
-        for i in range(32):
-            if i < len(teams_in_default):
-                slots.append({"team": teams_in_default[i], "season": default_season})
-            else:
-                slots.append({"team": "", "season": ""})
-        st.session_state.team_slots = slots
+        teams_def = sorted(season_df[season_df["Season"] == default_season]["Team"].unique())
+        st.session_state.team_slots = [
+            {"team": teams_def[i], "season": default_season} if i < len(teams_def)
+            else {"team": "", "season": ""}
+            for i in range(32)
+        ]
 
-    def get_seasons_for_team(t):
-        return sorted(season_df[season_df["Team"] == t]["Season"].unique(), reverse=True) if t else []
+    def get_seasons_for_team(team):
+        return sorted(season_df[season_df["Team"] == team]["Season"].unique(), reverse=True) if team else []
 
-    # Build full list for randomize
-    all_valid_pairs = [(row.Team, row.Season) for _, row in season_df.iterrows()]
+    all_valid_pairs = [(r.Team, r.Season) for _, r in season_df.iterrows()]
 
     # ─────────────────────────────────────────────────────────────────────
-    # B) INNER TABS: Teams | Tools | Results
+    # B) INNER TABS CONTROLLED BY session_state["inner_tab"]
     # ─────────────────────────────────────────────────────────────────────
-    tab_teams, tab_tools, tab_results = st.tabs([
-        "1) Team Selector", "2) Tools", "3) Results"
-    ])
+    tabs = ["1) Team Selector", "2) Tools", "3) Results"]
+    if "inner_tab" not in st.session_state:
+        st.session_state.inner_tab = tabs[0]
+    st.radio("", tabs,
+             index=tabs.index(st.session_state.inner_tab),
+             format_func=lambda x: x,
+             horizontal=True,
+             key="inner_tab"
+    )
 
     # ─────────────────────────────────────────────────────────────────────
-    # 1) TEAM SELECTOR
+    # 1) TEAM SELECTOR TAB
     # ─────────────────────────────────────────────────────────────────────
-    with tab_teams:
+    if st.session_state.inner_tab == tabs[0]:
         st.markdown("### Customize Your 32-Team League")
+
+        # show/hide all slots
         if not st.session_state.get("show_all_slots", False):
             if st.button("🔽 Show All 32 Slots"):
                 st.session_state.show_all_slots = True
-                st.rerun()
+                st.experimental_rerun()
         else:
             if st.button("🔼 Collapse to 4 Slots"):
                 st.session_state.show_all_slots = False
-                st.rerun()
+                st.experimental_rerun()
 
         num_slots = 32 if st.session_state.get("show_all_slots", False) else 4
         col1, col2 = st.columns(2)
+
         for i in range(num_slots // 2):
             with col1:
                 slot = st.session_state.team_slots[i]
-                t = st.selectbox(
-                    f"– Team {i+1:02d}",
-                    [""] + all_teams,
-                    index=(all_teams.index(slot["team"])+1) if slot["team"] in all_teams else 0,
-                    key=f"team_{i}"
-                )
-                s = st.selectbox(
-                    f"– Season {i+1:02d}",
-                    [""] + get_seasons_for_team(t),
-                    index=(get_seasons_for_team(t).index(slot["season"])+1) if slot["season"] in get_seasons_for_team(t) else 0,
-                    key=f"season_{i}"
-                )
+                t = st.selectbox(f"– Team {i+1:02d}", [""]+all_teams,
+                                 index=(all_teams.index(slot["team"])+1) if slot["team"] in all_teams else 0,
+                                 key=f"team_{i}")
+                s = st.selectbox(f"– Season {i+1:02d}", [""]+get_seasons_for_team(t),
+                                 index=(get_seasons_for_team(t).index(slot["season"])+1) if slot["season"] in get_seasons_for_team(t) else 0,
+                                 key=f"season_{i}")
                 st.session_state.team_slots[i] = {"team": t, "season": s}
 
         for i in range(num_slots // 2, num_slots):
             with col2:
                 slot = st.session_state.team_slots[i]
-                t = st.selectbox(
-                    f"– Team {i+1:02d}",
-                    [""] + all_teams,
-                    index=(all_teams.index(slot["team"])+1) if slot["team"] in all_teams else 0,
-                    key=f"team_{i}"
-                )
-                s = st.selectbox(
-                    f"– Season {i+1:02d}",
-                    [""] + get_seasons_for_team(t),
-                    index=(get_seasons_for_team(t).index(slot["season"])+1) if slot["season"] in get_seasons_for_team(t) else 0,
-                    key=f"season_{i}"
-                )
+                t = st.selectbox(f"– Team {i+1:02d}", [""]+all_teams,
+                                 index=(all_teams.index(slot["team"])+1) if slot["team"] in all_teams else 0,
+                                 key=f"team_{i}")
+                s = st.selectbox(f"– Season {i+1:02d}", [""]+get_seasons_for_team(t),
+                                 index=(get_seasons_for_team(t).index(slot["season"])+1) if slot["season"] in get_seasons_for_team(t) else 0,
+                                 key=f"season_{i}")
                 st.session_state.team_slots[i] = {"team": t, "season": s}
 
     # ─────────────────────────────────────────────────────────────────────
-    # 2) TOOLS
+    # 2) TOOLS TAB
     # ─────────────────────────────────────────────────────────────────────
-    with tab_tools:
+    elif st.session_state.inner_tab == tabs[1]:
         st.markdown("### League-Wide Controls / Load-Save / Run Simulation")
 
-        # — Load Saved Simulation
         user_email = st.session_state["user"].email
-        sims = (supabase.table("simulations")
-                        .select("name, teams")
-                        .eq("email", user_email)
-                        .order("timestamp", desc=True)
-                        .execute()
-                        .data)
+        sims = supabase.table("simulations")\
+                       .select("name, teams")\
+                       .eq("email", user_email)\
+                       .order("timestamp", desc=True)\
+                       .execute().data
         names = [s["name"] for s in sims]
-        sel = st.selectbox("🔁 Load Saved Simulation", [""] + names, key="sel_saved")
+
+        # Load saved
+        sel = st.selectbox("🔁 Load Saved Simulation", [""]+names, key="sel_saved")
         if st.button("📥 Load into Slots"):
             if sel:
                 sim = next(s for s in sims if s["name"] == sel)
-                new_slots = []
+                new = []
                 for t in sim["teams"]:
-                    team, yr = t.rsplit(" (", 1)
-                    yr = yr.rstrip(")")
-                    new_slots.append({"team": team, "season": yr})
-                while len(new_slots) < 32:
-                    new_slots.append({"team": "", "season": ""})
-                st.session_state.team_slots = new_slots
-                st.rerun()
+                    team, yr = t.rsplit(" (",1)
+                    new.append({"team": team, "season": yr.rstrip(")")})
+                while len(new) < 32:
+                    new.append({"team":"", "season":""})
+                st.session_state.team_slots = new
+                st.session_state.inner_tab = tabs[0]
+                st.experimental_rerun()
 
-        # — Fill Full Season
-        season_to_fill = st.selectbox(
-            "📅 Fill Full Season → Select Season",
-            available_seasons,
-            index=available_seasons.index(default_season),
-            key="fill_season"
-        )
+        # Fill full season
+        season_to_fill = st.selectbox("📅 Fill Full Season → Select Season", available_seasons,
+                                      index=available_seasons.index(default_season), key="fill_season")
         if st.button("📅 Fill Full Season"):
-            teams_that_year = sorted(
-                season_df[season_df["Season"] == season_to_fill]["Team"].unique()
-            )
+            teams_year = sorted(season_df[season_df["Season"]==season_to_fill]["Team"].unique())
             for i in range(32):
-                if i < len(teams_that_year):
-                    st.session_state.team_slots[i] = {"team": teams_that_year[i], "season": season_to_fill}
+                if i < len(teams_year):
+                    st.session_state.team_slots[i] = {"team": teams_year[i], "season": season_to_fill}
                 else:
-                    st.session_state.team_slots[i] = {"team": "", "season": ""}
-            st.rerun()
+                    st.session_state.team_slots[i] = {"team":"", "season":""}
+            st.session_state.inner_tab = tabs[0]
+            st.experimental_rerun()
 
-        # — Fill Each Slot by Year
-        one_team = st.selectbox("🗓 Fill Each Slot by Team", [""] + all_teams, key="one_team")
+        # Fill each slot by year
+        one_team = st.selectbox("🗓 Fill Each Slot by Team", [""]+all_teams, key="one_team")
         if st.button("🗓 Fill Each Slot by Year"):
             if one_team:
-                years = sorted(
-                    season_df[season_df["Team"] == one_team]["Season"].unique(),
-                    reverse=True
-                )
+                yrs = sorted(season_df[season_df["Team"]==one_team]["Season"].unique(), reverse=True)
                 for i in range(32):
-                    if i < len(years):
-                        st.session_state.team_slots[i] = {"team": one_team, "season": years[i]}
+                    if i < len(yrs):
+                        st.session_state.team_slots[i] = {"team": one_team, "season": yrs[i]}
                     else:
-                        st.session_state.team_slots[i] = {"team": "", "season": ""}
-                st.rerun()
+                        st.session_state.team_slots[i] = {"team":"", "season":""}
+            st.session_state.inner_tab = tabs[0]
+            st.experimental_rerun()
 
         st.markdown("---")
-        # optional CSS for small buttons
-        st.markdown("""
-        <style>
-          div.stButton > button { padding:4px 8px !important; font-size:0.85rem !important; }
-        </style>""", unsafe_allow_html=True)
+        st.markdown("""<style>div.stButton>button{padding:4px 8px!important;font-size:0.85rem!important;}</style>""", unsafe_allow_html=True)
 
-        # — Quick Actions
         c1, c2, c3, c4 = st.columns(4)
         with c1:
             if st.button("♻ Reset to Default"):
                 st.session_state.pop("team_slots", None)
-                st.rerun()
+                st.session_state.inner_tab = tabs[0]
+                st.experimental_rerun()
         with c2:
             if st.button("🔀 Randomize All Slots"):
                 sample = random.sample(all_valid_pairs, 32)
-                st.session_state.team_slots = [{"team": t, "season": s} for t, s in sample]
-                st.rerun()
+                st.session_state.team_slots = [{"team":t,"season":s} for t,s in sample]
+                st.session_state.inner_tab = tabs[0]
+                st.experimental_rerun()
         with c3:
             if st.button("👀 Toggle Preview"):
                 st.session_state.show_preview = not st.session_state.show_preview
-                st.rerun()
+                # keep on Tools
+                st.experimental_rerun()
         with c4:
             if st.button("✅ Run Full-Season Simulation"):
                 st.session_state.pop("playoff_bracket", None)
@@ -200,8 +184,8 @@ def run_full_sim(supabase):
                         "RawTeam": slot["team"],
                         "Season": slot["season"],
                         **season_df[
-                            (season_df["Team"] == slot["team"]) &
-                            (season_df["Season"] == slot["season"])
+                            (season_df["Team"]==slot["team"]) &
+                            (season_df["Season"]==slot["season"])
                         ].iloc[0][["Division","Conference","Rating"]].to_dict()
                     }
                     for slot in st.session_state.team_slots
@@ -210,23 +194,18 @@ def run_full_sim(supabase):
                 if len(sel) < 10:
                     st.warning("Please select at least 10 valid teams before simulating.")
                 else:
-                    modern_divs = {"Atlantic": [], "Metropolitan": [], "Central": [], "Pacific": []}
+                    modern_divs = {"Atlantic":[], "Metropolitan":[], "Central":[], "Pacific":[]}
                     ratings = {}
                     for ts in sel:
                         uid = f"{ts['RawTeam']} ({ts['Season']})"
                         ratings[uid] = ts["Rating"]
                         div = ts["Division"]
-                        if div in modern_divs:
-                            modern_divs[div].append(uid)
-                        else:
-                            modern_divs[min(modern_divs, key=lambda d: len(modern_divs[d]))].append(uid)
+                        (modern_divs[div] if div in modern_divs else modern_divs[min(modern_divs, key=lambda d: len(modern_divs[d]))]).append(uid)
 
                     with st.spinner("Simulating season…"):
                         stats = simulate_season(modern_divs, ratings)
                     df, auto_flag = build_dataframe(
-                        stats,
-                        modern_divs,
-                        season_df,
+                        stats, modern_divs, season_df,
                         team_to_season_map={ts["RawTeam"]: ts["Season"] for ts in sel}
                     )
                     if auto_flag:
@@ -234,73 +213,50 @@ def run_full_sim(supabase):
                     df["Rating"] = df["RawTeam"].map(ratings).fillna(0).astype(int)
                     st.session_state["last_df"] = df
 
-        # ─────────────────────────────────────────────────────────────────────
-        # Render Preview Here (under Tools)
-        # ─────────────────────────────────────────────────────────────────────
+                    # jump to Results
+                    st.session_state.inner_tab = tabs[2]
+                    st.experimental_rerun()
+
+        # render preview under Tools
         if st.session_state.show_preview:
-            selected_pairs = [
-                (slot["team"], slot["season"])
-                for slot in st.session_state.team_slots
-                if slot["team"] and slot["season"]
-            ]
-            if len(selected_pairs) != 32:
-                st.warning(f"⚠️ You have filled {len(selected_pairs)}/32 slots. Please fill all 32 to preview.")
+            selected = [(slot["team"], slot["season"]) for slot in st.session_state.team_slots
+                        if slot["team"] and slot["season"]]
+            if len(selected)!=32:
+                st.warning(f"⚠️ You have filled {len(selected)}/32 slots.")
             else:
-                divisions = {"Atlantic": [], "Metropolitan": [], "Central": [], "Pacific": []}
-                for team, season in selected_pairs:
-                    row = season_df[
-                        (season_df["Team"] == team) &
-                        (season_df["Season"] == season)
-                    ]
-                    if not row.empty:
-                        hist_div = row.iloc[0]["Division"]
-                        if hist_div not in divisions:
-                            hist_div = min(divisions, key=lambda k: len(divisions[k]))
-                    else:
-                        hist_div = min(divisions, key=lambda k: len(divisions[k]))
-                    divisions[hist_div].append(f"{team} ({season})")
-
-                st.subheader("Custom League Preview (By Division)")
-                cols = st.columns(2)
-                with cols[0]:
-                    st.write("**Atlantic**")
-                    for t in divisions["Atlantic"]: st.write(f"- {t}")
-                    st.write("**Metropolitan**")
-                    for t in divisions["Metropolitan"]: st.write(f"- {t}")
-                with cols[1]:
-                    st.write("**Central**")
-                    for t in divisions["Central"]: st.write(f"- {t}")
-                    st.write("**Pacific**")
-                    for t in divisions["Pacific"]: st.write(f"- {t}")
+                divisions = {"Atlantic":[], "Metropolitan":[], "Central":[], "Pacific":[]}
+                for team, y in selected:
+                    row = season_df[(season_df["Team"]==team)&(season_df["Season"]==y)]
+                    div = row.iloc[0]["Division"] if not row.empty and row.iloc[0]["Division"] in divisions else min(divisions, key=lambda k: len(divisions[k]))
+                    divisions[div].append(f"{team} ({y})")
+                st.subheader("Custom League Preview")
+                c1, c2 = st.columns(2)
+                with c1:
+                    st.write("**Atlantic**"); [st.write(f"- {t}") for t in divisions["Atlantic"]]
+                    st.write("**Metropolitan**"); [st.write(f"- {t}") for t in divisions["Metropolitan"]]
+                with c2:
+                    st.write("**Central**"); [st.write(f"- {t}") for t in divisions["Central"]]
+                    st.write("**Pacific**"); [st.write(f"- {t}") for t in divisions["Pacific"]]
 
     # ─────────────────────────────────────────────────────────────────────
-    # 3) RESULTS
+    # 3) RESULTS TAB
     # ─────────────────────────────────────────────────────────────────────
-    with tab_results:
+    elif st.session_state.inner_tab == tabs[2]:
         if "last_df" in st.session_state:
             df = st.session_state["last_df"]
             st.markdown("---")
             st.subheader("4) View Standings / Playoffs")
-            view = st.selectbox(
-                "Select View",
-                ["By Division", "By Conference", "Entire League", "Playoffs"],
-                key="view_mode"
-            )
+            view = st.selectbox("Select View", ["By Division","By Conference","Entire League","Playoffs"], key="view_mode")
             if view != "Playoffs":
                 group = None
-                if view == "By Division":
-                    group = "Division"
-                elif view == "By Conference":
-                    group = "Conference"
-                table = df if group is None else df.sort_values([group, "PTS", "Win%"], ascending=[True, False, False])
-                st.dataframe(
-                    table[["Team","GP","W","L","OTL","PTS","Win%"]].reset_index(drop=True),
-                    use_container_width=True
-                )
+                if view=="By Division":   group="Division"
+                if view=="By Conference": group="Conference"
+                tbl = df.sort_values([group,"PTS","Win%"] if group else ["PTS","Win%"], ascending=[True,False,False])
+                st.dataframe(tbl[["Team","GP","W","L","OTL","PTS","Win%"]].reset_index(drop=True), use_container_width=True)
             else:
                 if "playoff_bracket" not in st.session_state:
                     with st.spinner("Simulating playoffs…"):
-                        ratings = {row["Team"]: row["Rating"] for _, row in df.iterrows()}
+                        ratings = {r["Team"]:r["Rating"] for _,r in df.iterrows()}
                         st.session_state.playoff_bracket = simulate_playoffs_streamlit(df, ratings)
                 bracket = st.session_state.playoff_bracket
                 display_bracket_table_v4(bracket)
@@ -312,26 +268,21 @@ def run_full_sim(supabase):
                         st.error("Enter a name.")
                     else:
                         email = st.session_state["user"].email
-                        teams = [f"{slot['team']} ({slot['season']})" for slot in st.session_state.team_slots]
+                        teams = [f"{s['team']} ({s['season']})" for s in st.session_state.team_slots]
                         standings = df.to_dict("records")
                         playoffs = bracket
-                        exists = (supabase.table("simulations")
-                                         .select("*")
-                                         .eq("email", email)
-                                         .eq("name", name)
-                                         .execute()
-                                         .data)
+                        exists = supabase.table("simulations")\
+                                        .select("*")\
+                                        .eq("email", email)\
+                                        .eq("name", name)\
+                                        .execute().data
                         if exists:
                             st.error("You already have a sim with that name.")
                         else:
                             ts = datetime.datetime.utcnow().isoformat()
                             res = supabase.table("simulations").insert({
-                                "email": email,
-                                "name": name,
-                                "timestamp": ts,
-                                "teams": teams,
-                                "standings": standings,
-                                "playoffs": playoffs
+                                "email": email, "name": name, "timestamp": ts,
+                                "teams": teams, "standings": standings, "playoffs": playoffs
                             }).execute()
                             if res.data:
                                 st.success("Saved!")
