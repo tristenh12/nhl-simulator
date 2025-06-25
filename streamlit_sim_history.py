@@ -76,8 +76,7 @@ def show_sim_history(supabase):
                         st.session_state["team_slots"] = parsed_slots
                         st.session_state["last_df"] = pd.DataFrame(sim["standings"])
                         st.session_state["playoff_bracket"] = sim["playoffs"]
-                        st.session_state["load_from_sim_name"] = sim["name"]
-                        st.success("Loaded teams — switch to Full Sim to rerun.")
+                        st.success("Simulation loaded! Scroll down to view results.")
                     except Exception as e:
                         st.error(f"Error loading this simulation: {e}")
 

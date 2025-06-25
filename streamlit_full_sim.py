@@ -200,37 +200,6 @@ def run_full_sim(supabase):
     st.markdown("<a id='tools'></a>", unsafe_allow_html=True)
     # ──────────────────────────────────────────────────────────────────
     st.markdown("### 2) League-Wide Controls / Preview / Run Simulation")
-
-    # ⬇ Load from saved sim (populate slots)
-    st.markdown("#### 🔁 Load Teams from a Saved Simulation")
-
-    user_email = st.session_state["user"].email
-    sims = supabase.table("simulations").select("name, teams").eq("email", user_email).order("timestamp", desc=True).execute().data
-
-    sim_names = [sim["name"] for sim in sims]
-    selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="quickload_sim_name")
-
-    if selected_sim_name:
-        selected_sim = next((s for s in sims if s["name"] == selected_sim_name), None)
-        if selected_sim:
-            try:
-                parsed_slots = []
-                for t in selected_sim["teams"]:
-                    if " (" in t and t.endswith(")"):
-                        team = t.split(" (")[0]
-                        season = t.split(" (")[1].rstrip(")")
-                        parsed_slots.append({"team": team, "season": season})
-                    else:
-                        parsed_slots.append({"team": "", "season": ""})
-                # Fill empty slots if fewer than 32
-                while len(parsed_slots) < 32:
-                    parsed_slots.append({"team": "", "season": ""})
-                st.session_state["team_slots"] = parsed_slots
-                st.success("✅ Team configuration loaded from saved sim.")
-                st.rerun()
-            except Exception as e:
-                st.error(f"Error loading team config: {e}")
-
     # (Optional) If you still want smaller buttons, you can keep the CSS snippet:
     st.markdown(
         """
