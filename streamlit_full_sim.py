@@ -294,8 +294,50 @@ def run_full_sim(supabase):
             bracket = st.session_state["playoff_bracket"]
             display_bracket_table_v4(bracket)
 
+            if "playoff_bracket" in st.session_state and "stats_updated" not in st.session_state:
+                bracket = st.session_state["playoff_bracket"]
+
+                # Determine Stanley Cup winner
+                cup_final = bracket["final"][0]
+                cup_winner = cup_final["winner"]
+
+                # Determine Presidents' Trophy winner (top team in regular season)
+                df = st.session_state["last_df"]
+                presidents_trophy_team = df.sort_values(by=["PTS", "Win%"], ascending=[False, False]).iloc[0]
+
+                # Fetch current user
+                user_email = st.session_state["user"].email
+                user_data = supabase.table("users").select("*").eq("email", user_email).single().execute().data
+
+                if user_data:
+                    updates = {}
+
+                    # Check if user's favorite team won the Cup
+                    if user_data["favorite_team"] == cup_winner.split(" (")[0]:
+                        updates["championships_won"] = user_data["championships_won"] + 1
+
+                    # Check if user's favorite team won Presidents' Trophy
+                    if user_data["favorite_team"] == presidents_trophy_team["RawTeam"]:
+                        updates["presidents_trophies"] = user_data["presidents_trophies"] + 1
+
+                    # Always increment cups_won
+                    updates["cups_won"] = user_data["cups_won"] + 1
+
+                    # Update record stats to be max of current vs. new champ's stats
+                    team_record = df[df["Team"] == cup_winner].iloc[0]
+                    updates["record_wins"] = max(user_data["record_wins"], team_record["W"])
+                    updates["record_pts"] = max(user_data["record_pts"], team_record["PTS"])
+                    updates["record_losses"] = max(user_data["record_losses"], team_record["L"])
+
+                    # Push updated stats back to Supabase
+                    supabase.table("users").update(updates).eq("email", user_email).execute()
+
+                    st.session_state["stats_updated"] = True
+                    
+
             st.markdown("---")
             st.subheader("Series Details (click to reveal)")
+
 
             # Eastern Conference
             ec, wc = st.columns(2)
