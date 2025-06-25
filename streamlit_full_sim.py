@@ -201,6 +201,12 @@ def run_full_sim(supabase):
     # ──────────────────────────────────────────────────────────────────
     st.markdown("### 2) League-Wide Controls / Preview / Run Simulation")
 
+    # Fetch saved simulations from Supabase (for Load Saved Sim dropdown)
+    user_email = st.session_state["user"].email
+    sims = supabase.table("simulations").select("name, teams").eq("email", user_email).order("timestamp", desc=True).execute().data
+    sim_names = [sim["name"] for sim in sims]
+
+
     # ⬇ Load from saved sim (populate slots)
     # ──────────────────────────────────────────────────────────────────
     # NEW LAYOUT: 3 Vertically Stacked Controls (Dropdown + Button Each)
