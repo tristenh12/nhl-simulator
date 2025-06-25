@@ -226,6 +226,7 @@ def run_full_sim(supabase):
                 while len(parsed_slots) < 32:
                     parsed_slots.append({"team": "", "season": ""})
                 st.session_state["team_slots"] = parsed_slots
+                st.session_state["quickload_sim_name"] = ""
                 st.success("✅ Team configuration loaded from saved sim.")
                 st.rerun()
             except Exception as e:
