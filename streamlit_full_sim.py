@@ -119,7 +119,7 @@ def run_full_sim(supabase):
                 while len(new_slots) < 32:
                     new_slots.append({"team": "", "season": ""})
                 st.session_state.team_slots = new_slots
-                st.experimental_rerun()
+                st.rerun()
 
         # — Fill Full Season
         season_to_fill = st.selectbox("📅 Fill Full Season → Select Season", available_seasons,
@@ -131,7 +131,7 @@ def run_full_sim(supabase):
                     st.session_state.team_slots[i] = {"team": teams_that_year[i], "season": season_to_fill}
                 else:
                     st.session_state.team_slots[i] = {"team": "", "season": ""}
-            st.experimental_rerun()
+            st.rerun()
 
         # — Fill Each Slot by Year
         one_team = st.selectbox("🗓 Fill Each Slot by Team", [""] + all_teams, key="one_team")
@@ -143,7 +143,7 @@ def run_full_sim(supabase):
                         st.session_state.team_slots[i] = {"team": one_team, "season": years[i]}
                     else:
                         st.session_state.team_slots[i] = {"team": "", "season": ""}
-                st.experimental_rerun()
+                st.rerun()
 
         st.markdown("---")
         # optional CSS for small buttons
@@ -157,12 +157,12 @@ def run_full_sim(supabase):
         with c1:
             if st.button("♻ Reset to Default"):
                 st.session_state.pop("team_slots", None)
-                st.experimental_rerun()
+                st.rerun()
         with c2:
             if st.button("🔀 Randomize All Slots"):
                 sample = random.sample(all_valid_pairs, 32)
                 st.session_state.team_slots = [{"team": t, "season": s} for t, s in sample]
-                st.experimental_rerun()
+                st.rerun()
         with c3:
             if st.button("👀 Toggle Preview"):
                 st.session_state.show_preview = not st.session_state.show_preview
