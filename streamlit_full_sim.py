@@ -3,6 +3,7 @@ import pandas as pd
 import random
 import os
 import datetime
+import traceback
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
@@ -180,8 +181,16 @@ def run_full_sim(supabase):
                 # Build and run the season
                 sel = [ ... ]  # your existing sel construction
                 with st.spinner("Simulating…"):
-                    stats = simulate_season(modern_divs, ratings)
-                df, af = build_dataframe(stats, modern_divs, season_df, team_to_season_map={ts["RawTeam"]: ts["Season"] for ts in sel})
+                    try:
+                        stats = simulate_season(modern_divs, ratings)
+                    except Exception as e:
+                        st.error("🚨 simulate_season crashed with KeyError or similar.")
+                        st.write("**modern_divs**:", modern_divs)
+                        st.write("**ratings** keys:", list(ratings.keys()))
+                        st.write("Full exception:")
+                        st.code(traceback.format_exc(), language="python")
+                        return
+
                 if af:
                     st.info("Some teams auto-assigned.")
                 df["Rating"] = df["RawTeam"].map(ratings).fillna(0).astype(int)
