@@ -203,7 +203,7 @@ def run_full_sim(supabase):
 
     # ⬇ Load from saved sim (populate slots)
     # ──────────────────────────────────────────────────────────────────
-    # C) Load from Saved Simulation
+    # C) Load from Saved Simulation (Dropdown + Button)
     # ──────────────────────────────────────────────────────────────────
     st.markdown("#### 🔁 Load Teams from a Saved Simulation")
 
@@ -211,23 +211,9 @@ def run_full_sim(supabase):
     sims = supabase.table("simulations").select("name, teams").eq("email", user_email).order("timestamp", desc=True).execute().data
     sim_names = [sim["name"] for sim in sims]
 
-    # Track previous selection to detect changes
-    if "previous_sim_selection" not in st.session_state:
-        st.session_state.previous_sim_selection = ""
+    selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="dropdown_sim_to_load")
 
-    # Sim selector
-    selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="quickload_sim_name")
-
-    # If selection has changed, set flag and rerun
-    if selected_sim_name != st.session_state.previous_sim_selection:
-        st.session_state.previous_sim_selection = selected_sim_name
-        st.session_state.should_load_sim = True
-        st.rerun()
-
-    # Only load if a change was made
-    if st.session_state.get("should_load_sim", False):
-        st.session_state.should_load_sim = False  # reset flag
-
+    if st.button("📥 Load Selected Simulation into 32 Slots"):
         selected_sim = next((s for s in sims if s["name"] == selected_sim_name), None)
         if selected_sim:
             try:
@@ -241,9 +227,13 @@ def run_full_sim(supabase):
                         parsed_slots.append({"team": "", "season": ""})
                 while len(parsed_slots) < 32:
                     parsed_slots.append({"team": "", "season": ""})
+
                 st.session_state.team_slots = parsed_slots
+                st.rerun()
+
             except Exception as e:
                 st.error(f"Error loading team config: {e}")
+
 
 
 
