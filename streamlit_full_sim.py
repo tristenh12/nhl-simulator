@@ -242,7 +242,7 @@ def run_full_sim(supabase):
 
         df = st.session_state["last_df"]
         st.markdown("---")
-        st.subheader("4) View Standings / Playoffs")
+        st.subheader("View Standings / Playoffs")
         view = st.selectbox("Select View",
                             ["By Division", "By Conference", "Entire League", "Playoffs"],
                             key="view_mode")

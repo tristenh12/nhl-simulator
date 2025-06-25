@@ -2,12 +2,12 @@ import streamlit as st
 from supabase import create_client, Client
 import stripe
 
-# Load credentials
+# Supabase setup
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# UI setup
+# UI config
 st.set_page_config(page_title="NHL What-If Simulator", layout="wide")
 st.markdown("""
 <style>
@@ -21,50 +21,44 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Sim modules
+# Import simulator modules
 from free_sim_gui import run_free_sim
 from streamlit_full_sim import run_full_sim
 from streamlit_sim_history import show_sim_history
 
+# Helper: get token from URL and authenticate
+def authenticate_with_token():
+    if "user" not in st.session_state:
+        token = st.query_params.get("token")
+        if token:
+            try:
+                supabase.auth.set_session(access_token=token, refresh_token=token)
+                user = supabase.auth.get_user().user
+                if user:
+                    st.session_state["user"] = user
+            except Exception as e:
+                st.error("Login session invalid or expired.")
+    return st.session_state.get("user")
+
+# Authenticate once
+user = authenticate_with_token()
+
+# Tabs
 tabs = st.tabs(["🏒 Free Sim", "📊 Full Sim", "📁 Saved Sims"])
 
-# --- FREE SIM ---
+# --- FREE SIM TAB ---
 with tabs[0]:
     run_free_sim()
 
-# --- FULL SIM (Requires login & payment) ---
+# --- FULL SIM TAB ---
 with tabs[1]:
-    if "user" not in st.session_state:
-        st.warning("🔐 Please log in to access Full Sim.")
-        auth_mode = st.radio("Auth Mode", ["Login", "Signup"])
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        if st.button(auth_mode):
-            try:
-                if auth_mode == "Signup":
-                    res = supabase.auth.sign_up({"email": email, "password": password})
-                    if res.user:
-                        supabase.table("users").insert({"email": email, "paid": False}).execute()
-                        st.session_state.user = res.user
-                        st.rerun()
-                else:
-                    res = supabase.auth.sign_in_with_password({"email": email, "password": password})
-                    if res.user:
-                        st.session_state.user = res.user
-                        st.rerun()
-                    else:
-                        st.error("Authentication failed.")
-            except Exception as e:
-                st.error(str(e))
+    if not user:
+        st.warning("🔐 You must be logged in via Webflow to access Full Sim.")
+        st.markdown("👉 [Login on Webflow](https://www.nhlwhatif.com/login)")
+        st.stop()
     else:
-        user = st.session_state.user
         st.success(f"✅ Logged in as {user.email}")
-        if st.button("Logout"):
-            del st.session_state["user"]
-            st.session_state.pop("is_paid", None)
-            st.rerun()
 
-        # Fetch paid status once on login
         if "is_paid" not in st.session_state:
             try:
                 res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
@@ -75,12 +69,17 @@ with tabs[1]:
         if st.session_state["is_paid"]:
             run_full_sim(supabase)
         else:
-            st.warning("You must pay to access the full simulation.")
+            st.warning("🚫 You must purchase access to use the Full Sim.")
             st.markdown("👉 [Go to Pricing Page](https://www.nhlwhatif.com/pricing)")
 
 # --- SAVED SIMS TAB ---
 with tabs[2]:
-    if "user" not in st.session_state:
-        st.warning("🔐 Please log in to view your saved simulations.")
+    if not user:
+        st.warning("🔐 You must be logged in to view Saved Simulations.")
+        st.markdown("👉 [Login on Webflow](https://www.nhlwhatif.com/login)")
+        st.stop()
+    elif not st.session_state.get("is_paid", False):
+        st.warning("🚫 Saved Simulations are only available to paid users.")
+        st.markdown("👉 [Go to Pricing Page](https://www.nhlwhatif.com/pricing)")
     else:
         show_sim_history(supabase)
