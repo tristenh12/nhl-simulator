@@ -79,7 +79,13 @@ with tabs[1]:
 with tabs[2]:
     if not user:
         st.warning("🔐 You must be logged in to view Saved Simulations.")
-        st.markdown("👉 [Login on Webflow](https://www.nhlwhatif.com/login)")
+        st.markdown("""
+        <div style='padding:0.75rem; background-color:#f9f9f9; border-left: 5px solid #ff4b4b; font-size: 1.05rem;'>
+            🔐 <strong>Access Restricted:</strong> You must be logged in to use this feature.<br>
+            👉 <a href='https://www.nhlwhatif.com/login' target='_blank' style='text-decoration: none; color: #007bff; font-weight: bold;'>Click here to log in</a>
+        </div>
+        """, unsafe_allow_html=True)
+
         st.stop()
     elif not st.session_state.get("is_paid", False):
         st.warning("🚫 Saved Simulations are only available to paid users.")
