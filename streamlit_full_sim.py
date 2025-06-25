@@ -277,6 +277,7 @@ def run_full_sim(supabase):
 
             if res.data:
                 row = res.data
+                fav = row["favorite_team"]   # ← add this line!
 
                 new_champs = row["championships_won"]   + (1 if stanley_cup_winner    == fav else 0)
                 new_pres   = row["presidents_trophies"] + (1 if presidents_trophy_winner == fav else 0)
