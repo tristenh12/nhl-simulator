@@ -58,8 +58,7 @@ with tabs[1]:
         st.stop()
     else:
         st.success(
-    f"✅ Logged in as {user.email} — [Manage Account](https://www.nhlwhatif.com/account)",
-    icon="✅"
+    f"✅ Logged in as {user.email} — [Manage Account](https://www.nhlwhatif.com/account)"
 )
 
 
