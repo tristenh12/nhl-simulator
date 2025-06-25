@@ -249,6 +249,10 @@ def run_full_sim(supabase):
 
         df = st.session_state["last_df"]
 
+        st.write("🛠️ DEBUG: In RESULTS block; stats_updated =", 
+             st.session_state.get("stats_updated"))
+
+
         # ────────────────────────────────────────────────────────────
         # ONCE‐PER‐RUN: simulate playoffs & bump Supabase stats
         # ────────────────────────────────────────────────────────────
@@ -294,16 +298,6 @@ def run_full_sim(supabase):
                     "record_pts":          new_pts,
                     "record_losses":       new_losses
                 }).eq("email", user_email).execute()
-
-                st.write("🔄 UPDATE response", resp)  # should show status, data, etc.
-
-                # re-fetch the row immediately
-                after = supabase.table("users") \
-                                .select("*") \
-                                .eq("email", user_email) \
-                                .single() \
-                                .execute().data
-                st.write("📊 Row after update", after)
 
             st.session_state["stats_updated"] = True
         # ────────────────────────────────────────────────────────────
