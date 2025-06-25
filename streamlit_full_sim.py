@@ -317,7 +317,7 @@ def run_full_sim(supabase):
 
 
     # — Control 4: “Randomize All Slots”
-    with b4:
+    with b2:
         if st.button("🔀 Randomize All Slots"):
             if len(all_valid_pairs) >= 32:
                 chosen_pairs = random.sample(all_valid_pairs, 32)
@@ -328,7 +328,7 @@ def run_full_sim(supabase):
             st.rerun()
 
     # — Control 5: “Preview League”
-    with b5:
+    with b3:
         if st.button("👀 Preview League"):
             st.session_state.show_preview = not st.session_state.show_preview
             st.rerun()
