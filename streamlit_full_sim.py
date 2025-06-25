@@ -210,7 +210,9 @@ def run_full_sim(supabase):
     sim_names = [sim["name"] for sim in sims]
     selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="quickload_sim_name")
 
-    if selected_sim_name:
+
+
+    if selected_sim_name and not st.session_state.get("load_trigger", False):
         selected_sim = next((s for s in sims if s["name"] == selected_sim_name), None)
         if selected_sim:
             try:
@@ -222,15 +224,19 @@ def run_full_sim(supabase):
                         parsed_slots.append({"team": team, "season": season})
                     else:
                         parsed_slots.append({"team": "", "season": ""})
-                # Fill empty slots if fewer than 32
                 while len(parsed_slots) < 32:
                     parsed_slots.append({"team": "", "season": ""})
-                st.session_state["team_slots"] = parsed_slots
-                del st.session_state["quickload_sim_name"]
-                st.success("✅ Team configuration loaded from saved sim.")
+
+                st.session_state.team_slots = parsed_slots
+
+                # Clear trigger to avoid blocking other buttons
+                st.session_state.quickload_sim_name = ""  # resets the dropdown
+                st.session_state.load_trigger = False
                 st.rerun()
             except Exception as e:
                 st.error(f"Error loading team config: {e}")
+
+
 
     # (Optional) If you still want smaller buttons, you can keep the CSS snippet:
     st.markdown(
