@@ -44,10 +44,7 @@ with tabs[1]:
                 if auth_mode == "Signup":
                     res = supabase.auth.sign_up({"email": email, "password": password})
                     if res.user:
-                        try:
-                            supabase.table("users").insert({"email": email, "paid": False}).execute()
-                        except:
-                            pass
+                        supabase.table("users").insert({"email": email, "paid": False}).execute()
                         st.session_state.user = res.user
                         st.rerun()
                 else:
@@ -67,20 +64,13 @@ with tabs[1]:
             st.session_state.pop("is_paid", None)
             st.rerun()
 
+        # Fetch paid status once on login
         if "is_paid" not in st.session_state:
             try:
                 res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
                 st.session_state["is_paid"] = res.data.get("paid", False)
             except:
                 st.session_state["is_paid"] = False
-
-        if st.button("🔄 Refresh Access"):
-            try:
-                res = supabase.table("users").select("paid").eq("email", user.email).single().execute()
-                st.session_state["is_paid"] = res.data.get("paid", False)
-                st.rerun()
-            except:
-                st.error("Error refreshing payment status.")
 
         if st.session_state["is_paid"]:
             run_full_sim(supabase)
