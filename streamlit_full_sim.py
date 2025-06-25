@@ -693,6 +693,8 @@ def run_full_sim(supabase):
                     sim_name = st.text_input("Simulation Name")
                     if st.button("Save Simulation"):
                         user_email = st.session_state["user"].email
+                        user_id = st.session_state["user"].id
+                        timestamp = datetime.datetime.now().isoformat()
                         team_slots = [f"{slot['team']} ({str(slot['season'])})" for slot in st.session_state["team_slots"]]
 
                         standings = st.session_state["last_df"].to_dict(orient="records")
