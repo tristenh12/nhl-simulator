@@ -239,47 +239,104 @@ def run_full_sim(supabase):
         if "last_df" not in st.session_state:
             st.info("No simulation run yet.")
             return
+
         df = st.session_state["last_df"]
         st.markdown("---")
         st.subheader("4) View Standings / Playoffs")
-        view = st.selectbox("Select View",["By Division","By Conference","Entire League","Playoffs"], key="view_mode")
-        if view!="Playoffs":
-            group = "Division" if view=="By Division" else ("Conference" if view=="By Conference" else None)
-            sort_cols = [group,"PTS","Win%"] if group else ["PTS","Win%"]
-            tbl = df.sort_values(sort_cols, ascending=[True,False,False])
-            st.dataframe(tbl[["Team","GP","W","L","OTL","PTS","Win%"]].reset_index(drop=True),
-                         use_container_width=True)
+        view = st.selectbox("Select View",
+                            ["By Division", "By Conference", "Entire League", "Playoffs"],
+                            key="view_mode")
+
+        # — By Division
+        if view == "By Division":
+            st.write("### NHL STANDINGS (By Division)")
+            for d in df["Division"].unique():
+                div_df = (
+                    df[df["Division"] == d]
+                      .sort_values(by=["PTS", "Win%"], ascending=[False, False])
+                      .reset_index(drop=True)
+                )
+                div_df.index += 1
+                st.write(f"#### {d}")
+                st.dataframe(div_df[["Team","GP","W","L","OTL","PTS","Win%"]], use_container_width=True)
+
+        # — By Conference
+        elif view == "By Conference":
+            st.write("### NHL STANDINGS (By Conference)")
+            for c in df["Conference"].unique():
+                conf_df = (
+                    df[df["Conference"] == c]
+                      .sort_values(by=["PTS", "Win%"], ascending=[False, False])
+                      .reset_index(drop=True)
+                )
+                conf_df.index += 1
+                st.write(f"#### {c}")
+                st.dataframe(conf_df[["Team","GP","W","L","OTL","PTS","Win%"]], use_container_width=True)
+
+        # — Entire League
+        elif view == "Entire League":
+            st.write("### NHL STANDINGS (Entire League)")
+            league_df = (
+                df.sort_values(by=["PTS", "Win%"], ascending=[False, False])
+                  .reset_index(drop=True)
+            )
+            league_df.index += 1
+            st.dataframe(league_df[["Team","GP","W","L","OTL","PTS","Win%"]], use_container_width=True)
+
+        # — Playoffs
         else:
+            st.write("### Playoff Bracket")
             if "playoff_bracket" not in st.session_state:
                 with st.spinner("Simulating playoffs…"):
-                    ratings={r["Team"]:r["Rating"] for _,r in df.iterrows()}
-                    st.session_state.playoff_bracket = simulate_playoffs_streamlit(df,ratings)
-            display_bracket_table_v4(st.session_state.playoff_bracket)
+                    ratings_for_playoffs = {row["Team"]: row["Rating"] for _, row in df.iterrows()}
+                    st.session_state.playoff_bracket = simulate_playoffs_streamlit(df, ratings_for_playoffs)
 
-            st.markdown("### 💾 Save This Simulation")
-            name = st.text_input("Simulation Name", key="save_name")
-            if st.button("Save Simulation"):
-                if not name.strip():
-                    st.error("Enter a name.")
-                else:
-                    email=st.session_state["user"].email
-                    teams=[f"{s['team']} ({s['season']})" for s in st.session_state.team_slots]
-                    standings=df.to_dict("records")
-                    playoffs=st.session_state.playoff_bracket
-                    exists = (supabase.table("simulations")
-                                     .select("*")
-                                     .eq("email",email)
-                                     .eq("name",name)
-                                     .execute().data)
-                    if exists:
-                        st.error("You already have a sim with that name.")
-                    else:
-                        ts=datetime.datetime.utcnow().isoformat()
-                        res=supabase.table("simulations").insert({
-                            "email":email,"name":name,"timestamp":ts,
-                            "teams":teams,"standings":standings,"playoffs":playoffs
-                        }).execute()
-                        if res.data:
-                            st.success("Saved!")
-                        else:
-                            st.error("Save failed.")
+            bracket = st.session_state["playoff_bracket"]
+            display_bracket_table_v4(bracket)
+
+            st.markdown("---")
+            st.subheader("Series Details (click to reveal)")
+
+            # Eastern Conference
+            ec, wc = st.columns(2)
+            with ec:
+                st.write("#### Eastern Conference")
+                for rnd_idx, round_series in enumerate(bracket["east"], start=1):
+                    for sidx, m in enumerate(round_series, start=1):
+                        key = f"chk_east_{rnd_idx}_{sidx}"
+                        if key not in st.session_state:
+                            st.session_state[key] = False
+                        if st.checkbox(f"East R{rnd_idx} – {m['home']} vs {m['away']}", key=key):
+                            wins, winner = m["wins"], m["winner"]
+                            st.write(f"• Result → {m['home']} ({wins[m['home']]}) vs {m['away']} ({wins[m['away']]}) → **{winner}**")
+                            for g, w in enumerate(m.get("log", []), start=1):
+                                st.write(f"   – Game {g}: {w}")
+
+            # Western Conference
+            with wc:
+                st.write("#### Western Conference")
+                for rnd_idx, round_series in enumerate(bracket["west"], start=1):
+                    for sidx, m in enumerate(round_series, start=1):
+                        key = f"chk_west_{rnd_idx}_{sidx}"
+                        if key not in st.session_state:
+                            st.session_state[key] = False
+                        if st.checkbox(f"West R{rnd_idx} – {m['home']} vs {m['away']}", key=key):
+                            wins, winner = m["wins"], m["winner"]
+                            st.write(f"• Result → {m['home']} ({wins[m['home']]}) vs {m['away']} ({wins[m['away']]}) → **{winner}**")
+                            for g, w in enumerate(m.get("log", []), start=1):
+                                st.write(f"   – Game {g}: {w}")
+
+            # Stanley Cup Final
+            st.markdown("<br>", unsafe_allow_html=True)
+            _, center, _ = st.columns([1,2,1])
+            with center:
+                st.write("#### Stanley Cup Final")
+                final = bracket["final"][0]
+                key = "chk_final_1_1"
+                if key not in st.session_state:
+                    st.session_state[key] = False
+                if st.checkbox(f"Final – {final['home']} vs {final['away']}", key=key):
+                    wins, winner = final["wins"], final["winner"]
+                    st.write(f"• Result → {final['home']} ({wins[final['home']]}) vs {final['away']} ({wins[final['away']]}) → **{winner}**")
+                    for g, w in enumerate(final.get("log", []), start=1):
+                        st.write(f"   – Game {g}: {w}")
