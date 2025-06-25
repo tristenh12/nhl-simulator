@@ -202,24 +202,29 @@ def run_full_sim(supabase):
     st.markdown("### 2) League-Wide Controls / Preview / Run Simulation")
 
     # ⬇ Load from saved sim (populate slots)
+# ──────────────────────────────────────────────────────────────────
+# C) Load from Saved Simulation
+# ──────────────────────────────────────────────────────────────────
     st.markdown("#### 🔁 Load Teams from a Saved Simulation")
 
     user_email = st.session_state["user"].email
     sims = supabase.table("simulations").select("name, teams").eq("email", user_email).order("timestamp", desc=True).execute().data
-
     sim_names = [sim["name"] for sim in sims]
-    selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="quickload_sim_name")
 
-        # ⬅ Place before selectbox so it resets before widget is created
+    # Prevent auto-rerun loop by managing a load_trigger flag
     if "load_trigger" not in st.session_state:
         st.session_state.load_trigger = False
-    elif st.session_state.load_trigger:
-        st.session_state.load_trigger = False
 
+    # Selectbox for choosing a sim
+    selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="quickload_sim_name")
 
+    # If a new sim is selected, set load_trigger and rerun
+    if selected_sim_name and not st.session_state.load_trigger:
+        st.session_state.load_trigger = True
+        st.rerun()
 
-
-    if selected_sim_name and not st.session_state.get("load_trigger", False):
+    # On rerun: actually load and inject teams
+    if st.session_state.load_trigger:
         selected_sim = next((s for s in sims if s["name"] == selected_sim_name), None)
         if selected_sim:
             try:
@@ -233,15 +238,11 @@ def run_full_sim(supabase):
                         parsed_slots.append({"team": "", "season": ""})
                 while len(parsed_slots) < 32:
                     parsed_slots.append({"team": "", "season": ""})
-
                 st.session_state.team_slots = parsed_slots
-
-                # Clear trigger to avoid blocking other buttons
-
-                st.session_state.load_trigger = False
-                st.rerun()
             except Exception as e:
                 st.error(f"Error loading team config: {e}")
+        st.session_state.load_trigger = False
+
 
 
 
