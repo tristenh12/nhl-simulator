@@ -6,7 +6,7 @@ import random
 import os
 from free_sim import simulate_one_game, simulate_best_of_7
 
-# Compile once
+# Compile period header pattern once
 period_pattern = re.compile(r"=== (\d+)(?:st|nd|rd) Period ===")
 
 def run_free_sim():
@@ -27,31 +27,31 @@ def run_free_sim():
     with tab_game:
         col1, col2 = st.columns(2)
         with col1:
-            # Random Team 1 callback
+            # 🎲 Random Team 1
             def pick_rand1():
                 st.session_state["game_team1"] = random.choice(teams)
-            st.button("🎲 Random Team 1", on_click=pick_rand1, key="game_rand1")
+            st.button("🎲 Random Team 1", on_click=pick_rand1, key="btn_rand1_game")
 
             t1 = st.selectbox("Team 1", [""] + teams, key="game_team1")
             s1_opts = sorted(season_df[season_df["Team"] == t1]["Season"].unique(), reverse=True) if t1 else []
             s1 = st.selectbox("Season 1", s1_opts, key="game_season1")
 
         with col2:
-            # Random Team 2 callback
+            # 🎲 Random Team 2
             def pick_rand2():
                 st.session_state["game_team2"] = random.choice(teams)
-            st.button("🎲 Random Team 2", on_click=pick_rand2, key="game_rand2")
+            st.button("🎲 Random Team 2", on_click=pick_rand2, key="btn_rand2_game")
 
             t2 = st.selectbox("Team 2", [""] + teams, key="game_team2")
             s2_opts = sorted(season_df[season_df["Team"] == t2]["Season"].unique(), reverse=True) if t2 else []
             s2 = st.selectbox("Season 2", s2_opts, key="game_season2")
 
-        if st.button("▶️ Sim One Game", key="game_sim"):
-            # Clear any old game output
+        if st.button("▶️ Sim One Game", key="btn_sim_game"):
+            # clear old game-state keys
             for k in ["game_commentary", "game_stats", "game_full1", "game_full2", "game_box", "game_idx", "game_play"]:
                 st.session_state.pop(k, None)
 
-            # Validate
+            # validation
             if not (t1 and t2 and s1 and s2):
                 st.error("❗ Select both teams and their seasons.")
                 st.stop()
@@ -63,32 +63,32 @@ def run_free_sim():
             full2 = f"{t2} ({s2})"
             commentary, stats, full_box_df = simulate_one_game(t1, s1, t2, s2)
 
-            # Group and sort by period
-            ts_match = re.compile(r"(\d+):(\d+)")
+            # group by period and sort
+            time_re = re.compile(r"(\d+):(\d+)")
             def parse_ts(ln):
-                m = ts_match.search(ln)
-                return int(m.group(1))*60 + int(m.group(2)) if m else float('inf')
+                m = time_re.search(ln)
+                return int(m.group(1)) * 60 + int(m.group(2)) if m else float("inf")
 
-            period_order, period_events, current = [], {}, None
+            order, events, current = [], {}, None
             for ln in commentary:
                 m = period_pattern.match(ln)
                 if m:
                     p = m.group(1)
                     current = p
-                    if p not in period_order:
-                        period_order.append(p)
-                    period_events[p] = []
+                    if p not in order:
+                        order.append(p)
+                    events[p] = []
                 elif current:
-                    period_events[current].append(ln)
+                    events[current].append(ln)
 
-            commentary_sorted = []
-            for p in period_order:
-                suffix = {'1':'st','2':'nd','3':'rd'}.get(p,'')
-                commentary_sorted.append(f"=== {p}{suffix} Period ===")
-                commentary_sorted.extend(sorted(period_events[p], key=parse_ts))
+            sorted_feed = []
+            for p in order:
+                suffix = {"1":"st","2":"nd","3":"rd"}.get(p,"")
+                sorted_feed.append(f"=== {p}{suffix} Period ===")
+                sorted_feed.extend(sorted(events[p], key=parse_ts))
 
-            # Store for live feed
-            st.session_state["game_commentary"] = commentary_sorted
+            # stash in session_state
+            st.session_state["game_commentary"] = sorted_feed
             st.session_state["game_stats"] = stats
             st.session_state["game_full1"] = full1
             st.session_state["game_full2"] = full2
@@ -97,7 +97,7 @@ def run_free_sim():
             st.session_state["game_play"] = False
             st.rerun()
 
-        # Live feed & final stats
+        # Live feed / final stats
         if "game_commentary" in st.session_state:
             comm = st.session_state["game_commentary"]
             stats = st.session_state["game_stats"]
@@ -106,19 +106,23 @@ def run_free_sim():
             idx = st.session_state["game_idx"]
 
             speed = st.selectbox("Speed", ["1×","2×","4×"], index=0, key="game_speed")
-            delay_map = {"1×": .5, "2×": .25, "4×": .125}
-            delay = delay_map[speed]
+            delay = {"1×":0.5, "2×":0.25, "4×":0.125}[speed]
 
-            p1, p2, p3 = st.columns(3)
-            with p1:
-                if st.button("▶ Play", key="game_play"):
-                    st.session_state["game_play"] = True
-            with p2:
-                if st.button("⏸ Pause", key="game_pause"):
-                    st.session_state["game_play"] = False
-            with p3:
-                if st.button("⏭ Skip to End", key="game_skip"):
-                    st.session_state["game_idx"] = len(comm)
+            # callbacks for play/pause/skip
+            def play_cb():
+                st.session_state["game_play"] = True
+            def pause_cb():
+                st.session_state["game_play"] = False
+            def skip_cb():
+                st.session_state["game_idx"] = len(comm)
+
+            b1, b2, b3 = st.columns(3)
+            with b1:
+                st.button("▶ Play", key="btn_play_game", on_click=play_cb)
+            with b2:
+                st.button("⏸ Pause", key="btn_pause_game", on_click=pause_cb)
+            with b3:
+                st.button("⏭ Skip to End", key="btn_skip_game", on_click=skip_cb)
 
             st.subheader(f"{full1} vs {full2} — Live Feed")
             st.text("\n".join(comm[max(0, idx-10):idx]))
@@ -138,7 +142,7 @@ def run_free_sim():
                 st.text(f"PPG/PP: {stats[full1]['PPG']}/{stats[full1]['PP']} – {stats[full2]['PPG']}/{stats[full2]['PP']}")
                 st.text(f"POSSESSION: {stats[full1]['Possession']} – {stats[full2]['Possession']}")
 
-                if st.button("📊 View Full Box Score", key="game_box"):
+                if st.button("📊 View Full Box Score", key="btn_box_game"):
                     rows = []
                     for ln in comm:
                         if period_pattern.match(ln):
@@ -154,28 +158,28 @@ def run_free_sim():
                             rows.append({"Time": "", "Team": "", "Event": ln})
                     st.dataframe(pd.DataFrame(rows), use_container_width=True)
 
-    # ─── Best of 7 Tab ───────────────────────────────────────────────
+    # ─── Best of 7 Tab (stateless) ───────────────────────────────────
     with tab_series:
         col1, col2 = st.columns(2)
         with col1:
-            def pick_rand1s():
+            def pick_r1s():
                 st.session_state["series_team1"] = random.choice(teams)
-            st.button("🎲 Random Team 1", on_click=pick_rand1s, key="series_rand1")
+            st.button("🎲 Random Team 1", on_click=pick_r1s, key="btn_rand1_series")
 
             t1s = st.selectbox("Team 1", [""] + teams, key="series_team1")
             s1s_opts = sorted(season_df[season_df["Team"] == t1s]["Season"].unique(), reverse=True) if t1s else []
             s1s = st.selectbox("Season 1", s1s_opts, key="series_season1")
 
         with col2:
-            def pick_rand2s():
+            def pick_r2s():
                 st.session_state["series_team2"] = random.choice(teams)
-            st.button("🎲 Random Team 2", on_click=pick_rand2s, key="series_rand2")
+            st.button("🎲 Random Team 2", on_click=pick_r2s, key="btn_rand2_series")
 
             t2s = st.selectbox("Team 2", [""] + teams, key="series_team2")
             s2s_opts = sorted(season_df[season_df["Team"] == t2s]["Season"].unique(), reverse=True) if t2s else []
             s2s = st.selectbox("Season 2", s2s_opts, key="series_season2")
 
-        if st.button("▶️ Sim Best of 7", key="series_sim"):
+        if st.button("▶️ Sim Best of 7", key="btn_sim_series"):
             if not (t1s and t2s and s1s and s2s):
                 st.error("❗ Select both teams and their seasons.")
                 st.stop()
@@ -192,17 +196,16 @@ def run_free_sim():
             st.text(f"{full2s}: {wins[full2s]} wins")
             champ = full1s if wins[full1s] == 4 else full2s
             st.success(f"🏆 {champ}")
-
             st.markdown("---")
             st.subheader("Game Logs")
             for g in logs:
                 st.write(g)
 
-    # ─── Reset just the Single-Game session state ───────────────────
-    if st.button("🔄 Reset Matchup", key="reset"):
+    # ─── Reset Single-Game State Only ────────────────────────────────
+    if st.button("🔄 Reset Matchup", key="btn_reset"):
         for k in list(st.session_state.keys()):
             if k.startswith("game_"):
-                st.session_state.pop(k)
+                del st.session_state[k]
         st.rerun()
 
 if __name__ == "__main__":
