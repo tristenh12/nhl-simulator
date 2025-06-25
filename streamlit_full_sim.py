@@ -253,8 +253,6 @@ def run_full_sim(supabase):
                         new_pts    = max(row["record_pts"],    champ_pts)
                         new_losses = max(row["record_losses"], champ_losses)
 
-                        # … inside your if res.data: block …
-
                         # 1) Perform the update and capture the response
                         resp = supabase.table("users") \
                             .update({
@@ -268,17 +266,16 @@ def run_full_sim(supabase):
                             .eq("email", user_email) \
                             .execute()
 
-                        # 2) Debug-print the response right here
+                        # 2) Debug-print the raw response
                         st.write("🏹 Supabase update response:", resp)
-                        try:
-                            st.write(" • error field:", resp.error)        # will be None if successful
-                        except AttributeError:
-                            st.write(" • no .error attribute, resp object is:", resp)
 
-                        # 3) Also show how many rows matched/updated
-                        if hasattr(resp, "count"):
-                            st.write(" • count:", resp.count)
+                        # 3) If Pydantic-style, also inspect .data
+                        if hasattr(resp, "data"):
+                            st.write(" • resp.data:", resp.data)
 
+                        # 4) Check for error field
+                        if hasattr(resp, "error"):
+                            st.write(" • resp.error:", resp.error)
 
                     st.session_state["stats_updated"] = True
 
