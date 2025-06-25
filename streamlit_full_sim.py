@@ -246,8 +246,7 @@ def run_full_sim(supabase):
                         }).eq("email", user_email).execute()
 
 
-                    st.session_state.active_tab="results"
-                    st.rerun()
+
 
         # inline preview in Tools
         if st.session_state.show_preview:
