@@ -53,9 +53,14 @@ with tabs[0]:
 # --- FULL SIM TAB ---
 with tabs[1]:
     if not user:
-        st.warning("🔐 You must be logged in via Webflow to access Full Sim.")
-        st.markdown("👉 [Login on Webflow](https://www.nhlwhatif.com/login)")
+        st.markdown("""
+        <div style='padding:1rem; margin-top:1rem; background-color:#fff3cd; border-left: 6px solid #ffecb5; border-radius: 6px; font-size: 1rem;'>
+            🔐 <strong>You must be logged in via Webflow to access Full Sim.</strong><br><br>
+            👉 <a href='https://www.nhlwhatif.com/login' target='_blank' style='text-decoration: none; color: #0d6efd; font-weight: 600;'>Login on Webflow</a>
+        </div>
+        """, unsafe_allow_html=True)
         st.stop()
+
     else:
         st.success(
     f"✅ Logged in as {user.email} — [Manage Account](https://www.nhlwhatif.com/account)"
