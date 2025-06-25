@@ -261,7 +261,9 @@ def run_full_sim(supabase):
                             "record_pts":          new_pts,
                             "record_losses":       new_losses
                         }).eq("email", user_email).execute()
-                        st.write("🏹 Supabase update resp:", resp)  # ← dump the full response object
+                        st.write("🏹 Supabase update resp:", resp)
+                        st.write(" • error:", resp.error)
+                        st.write(" • count:", resp.count)
 
                     st.session_state["stats_updated"] = True
 
