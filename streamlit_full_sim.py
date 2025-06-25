@@ -203,16 +203,12 @@ def run_full_sim(supabase):
 
     # ⬇ Load from saved sim (populate slots)
     # ──────────────────────────────────────────────────────────────────
-    # C) Load from Saved Simulation (Dropdown + Button)
+    # NEW LAYOUT: 3 Vertically Stacked Controls (Dropdown + Button Each)
     # ──────────────────────────────────────────────────────────────────
+
+    # Block 1: Load Saved Sim
     st.markdown("#### 🔁 Load Teams from a Saved Simulation")
-
-    user_email = st.session_state["user"].email
-    sims = supabase.table("simulations").select("name, teams").eq("email", user_email).order("timestamp", desc=True).execute().data
-    sim_names = [sim["name"] for sim in sims]
-
-    selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="dropdown_sim_to_load")
-
+    selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="load_saved_sim_dropdown")
     if st.button("📥 Load Selected Simulation into 32 Slots"):
         selected_sim = next((s for s in sims if s["name"] == selected_sim_name), None)
         if selected_sim:
@@ -233,6 +229,32 @@ def run_full_sim(supabase):
 
             except Exception as e:
                 st.error(f"Error loading team config: {e}")
+
+    # Block 2: Fill Full Season
+    st.markdown("#### 📅 Fill Full Season")
+    selected_season = st.selectbox("Select a Season → Fill All 32 Slots", options=available_seasons, index=available_seasons.index(default_season), key="fill_full_season_selector")
+    if st.button("📅 Fill Full Season"):
+        teams_that_year = sorted(season_df[season_df["Season"] == selected_season]["Team"].unique())
+        for i in range(32):
+            if i < len(teams_that_year):
+                st.session_state.team_slots[i] = {"team": teams_that_year[i], "season": selected_season}
+            else:
+                st.session_state.team_slots[i] = {"team": "", "season": ""}
+        st.rerun()
+
+    # Block 3: Fill Each Slot by Year for One Team
+    st.markdown("#### 🗓 Fill Each Slot by Year")
+    selected_team = st.selectbox("Select Team to Fill", options=[""] + all_teams, key="fill_each_slot_team")
+    if st.button("🗓 Fill Each Slot by Year"):
+        if selected_team:
+            years = sorted(season_df[season_df["Team"] == selected_team]["Season"].unique(), reverse=True)
+            for i in range(32):
+                if i < len(years):
+                    st.session_state.team_slots[i] = {"team": selected_team, "season": years[i]}
+                else:
+                    st.session_state.team_slots[i] = {"team": "", "season": ""}
+            st.rerun()
+
 
 
 
@@ -287,39 +309,6 @@ def run_full_sim(supabase):
             st.rerun()
 
 
-    # — Control 2: “Fill Full Season” (button only on this row)
-    with b2:
-        if st.button("📅 Fill Full Season"):
-            # Read the season selected in Row 2, col 2
-            season_to_fill = st.session_state.get("full_season_selector", default_season)
-            teams_that_year = sorted(
-                season_df[season_df["Season"] == season_to_fill]["Team"].unique()
-            )
-            for i in range(32):
-                if i < len(teams_that_year):
-                    st.session_state.team_slots[i] = {
-                        "team":   teams_that_year[i],
-                        "season": season_to_fill
-                    }
-                else:
-                    st.session_state.team_slots[i] = {"team": "", "season": ""}
-            st.rerun()
-
-    # — Control 3: “Same Team by Year” (button only on this row)
-    with b3:
-        if st.button("🗓 Fill Each Slot by Year"):
-            t = st.session_state.get("one_team_selector", "")
-            if t:
-                years = sorted(
-                    season_df[season_df["Team"] == t]["Season"].unique(),
-                    reverse=True
-                )
-                for i in range(32):
-                    if i < len(years):
-                        st.session_state.team_slots[i] = {"team": t, "season": years[i]}
-                    else:
-                        st.session_state.team_slots[i] = {"team": "", "season": ""}
-            st.rerun()
 
     # — Control 4: “Randomize All Slots”
     with b4:
@@ -460,23 +449,15 @@ def run_full_sim(supabase):
         st.write("")  # empty spacer
 
     with d2:
-        st.selectbox(
-            "Select a Season → Fill All 32 Slots",
-            options=available_seasons,
-            index=available_seasons.index(default_season),
-            key="full_season_selector",
-        )
+        st.write("")  # empty spacer
 
     with d3:
         st.write("")  # empty spacer
 
 
     with d4:
-        st.selectbox(
-            "Select Team to Fill",
-            options=[""] + all_teams,
-            key="one_team_selector",
-        )
+        st.write("")  # empty spacer
+    
 
     with d5:
         st.write("")  # empty spacer
