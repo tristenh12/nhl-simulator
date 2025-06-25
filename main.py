@@ -57,7 +57,11 @@ with tabs[1]:
         st.markdown("👉 [Login on Webflow](https://www.nhlwhatif.com/login)")
         st.stop()
     else:
-        st.success(f"✅ Logged in as {user.email}")
+        st.success(
+    f"✅ Logged in as {user.email} — [Manage Account](https://www.nhlwhatif.com/account)",
+    icon="✅"
+)
+
 
         if "is_paid" not in st.session_state:
             try:
