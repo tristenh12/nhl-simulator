@@ -210,6 +210,13 @@ def run_full_sim(supabase):
     sim_names = [sim["name"] for sim in sims]
     selected_sim_name = st.selectbox("Select a Saved Simulation", [""] + sim_names, key="quickload_sim_name")
 
+        # ⬅ Place before selectbox so it resets before widget is created
+    if "load_trigger" not in st.session_state:
+        st.session_state.load_trigger = False
+    elif st.session_state.load_trigger:
+        st.session_state.load_trigger = False
+
+
 
 
     if selected_sim_name and not st.session_state.get("load_trigger", False):
