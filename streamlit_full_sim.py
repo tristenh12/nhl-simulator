@@ -10,6 +10,15 @@ from stats_updater import update_user_stats
 
 
 def run_full_sim(supabase):
+    # If the user just changed their favorite, reset our “already updated” guard
+    current_fav = supabase.table("users") \
+        .select("favorite_team") \
+        .eq("email", st.session_state["user"].email) \
+        .single().execute().data.get("favorite_team")
+    if st.session_state.get("last_fav") != current_fav:
+        st.session_state.pop("stats_updated", None)
+        st.session_state["last_fav"] = current_fav
+   
     # ─────────────────────────────────────────────────────────────────
     # 0) PAGE CONFIG & TITLE
     # ─────────────────────────────────────────────────────────────────
