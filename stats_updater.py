@@ -4,6 +4,26 @@ import streamlit as st
 def update_user_stats(supabase, bracket, standings_df, user_email):
     st.write("[DEBUG] Starting stats update for", user_email)
 
+    # ─── 0) Seed every team with default zeros so no one is missing ─────────────
+    # Strip off the " (YYYY-YY)" suffix to get plain team names
+    all_teams = (
+        standings_df["RawTeam"]
+          .str.replace(r"\s\(\d{4}.\d{2}\)$", "", regex=True)
+          .unique()
+    )
+    for tm in all_teams:
+        supabase.table("team_stats").upsert(
+            {
+              "team": tm,
+              "stanley_cup_wins":    0,
+              "presidents_trophies": 0,
+              "best_wins":           0,
+              "best_pts":            0,
+              "fewest_losses":       999
+            },
+            on_conflict="team"
+        ).execute()
+
     # ─── 1) Per-user updates ────────────────────────────────────────────────────
     user_resp = supabase.table("users") \
         .select("*") \
@@ -11,7 +31,7 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
         .single() \
         .execute()
     user = user_resp.data or {}
-    fav = user.get("favorite_team")
+    fav = user.get("favorite_team", "")
 
     cup_winner = bracket["final"][0]["winner"].split(" (")[0]
     top_team   = standings_df.sort_values(
@@ -24,7 +44,7 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     if fav == top_team:
         updates["presidents_trophies"] = int(user.get("presidents_trophies", 0)) + 1
 
-    # Always update fav-team record if beaten
+    # Always update favorite-team’s personal bests
     fav_row = standings_df[standings_df["RawTeam"].str.startswith(fav)]
     if not fav_row.empty:
         fr = fav_row.iloc[0]
@@ -34,17 +54,21 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
         updates["record_losses"] = min(int(user.get("record_losses", 999)), l)
 
     if updates:
-        supabase.table("users").update(updates).eq("email", user_email).execute()
+        supabase.table("users") \
+            .update(updates) \
+            .eq("email", user_email) \
+            .execute()
         st.write("[DEBUG] Per-user stats updated:", updates)
 
-    # ─── Helper to fetch a single column (or return default 0 / large value) ──
+    # ─── Helpers for per-team stats ─────────────────────────────────────────────
     def fetch_stat(team, col, default=0):
-        resp = supabase.table("team_stats").select(f"team,{col}") \
-            .eq("team", team).execute()
-        rows = resp.data or []
-        if len(rows) == 1 and col in rows[0]:
-            return int(rows[0][col])
-        return default
+        resp = supabase.table("team_stats") \
+            .select(col) \
+            .eq("team", team) \
+            .single() \
+            .execute()
+        row = resp.data or {}
+        return int(row.get(col, default))
 
     def upsert_stat(team, col, new_val):
         supabase.table("team_stats") \
