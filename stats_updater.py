@@ -4,10 +4,8 @@ import streamlit as st
 def update_user_stats(supabase, bracket, standings_df, user_email):
     """
     Updates Supabase "users" table based on simulation results:
-    - championships_won
-    - presidents_trophies
-    - cups_won
-    - record_wins, record_pts, record_losses
+    - Favorite team stats: championships_won, presidents_trophies, cups_won, record_wins, record_pts, record_losses
+    - League-wide records: league_best_wins (+ team), league_best_pts (+ team), league_least_losses (+ team), league_championships, league_presidents
     """
     st.write("[DEBUG] Starting user stats update for", user_email)
     # Fetch current user data
@@ -24,39 +22,72 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     top_team = standings_df.sort_values(["PTS", "Win%"], ascending=[False, False]).iloc[0]["RawTeam"]
     st.write(f"[DEBUG] Cup winner: {cup_winner}, Top team: {top_team}")
 
-    # Prepare updates
+    # Prepare updates for favorite-team stats
     updates = {}
-    # Increment championships_won if user's favorite won the Cup
+    # championships_won
     if user_data.get("favorite_team") == cup_winner:
         updates["championships_won"] = int(user_data.get("championships_won", 0)) + 1
         st.write("[DEBUG] Increment championships_won to", updates["championships_won"])
-    # Increment presidents_trophies if user's favorite won Presidents' Trophy
+    # presidents_trophies
     if user_data.get("favorite_team") == top_team:
         updates["presidents_trophies"] = int(user_data.get("presidents_trophies", 0)) + 1
         st.write("[DEBUG] Increment presidents_trophies to", updates["presidents_trophies"])
-    # Always increment cups_won
+    # cups_won
     updates["cups_won"] = int(user_data.get("cups_won", 0)) + 1
     st.write("[DEBUG] Increment cups_won to", updates["cups_won"])
 
-    # Update record stats: wins, pts, losses
-    # Match champion in standings by 'RawTeam' column
-    # Find rows where RawTeam begins with the team name (ignoring season suffix)
+    # record_wins, record_pts, record_losses for champion
     match_df = standings_df[standings_df["RawTeam"].str.startswith(cup_winner)]
     if match_df.empty:
-        st.error(f"Could not find champion {cup_winner} in standings ('RawTeam') to update record stats. Available raw teams: {standings_df['RawTeam'].tolist()}")
+        st.error(f"Could not find champion {cup_winner} in standings ('RawTeam').")
         return
     champ_record = match_df.iloc[0]
-    # Cast to Python int
     new_wins = int(champ_record["W"])
     new_pts = int(champ_record["PTS"])
     new_losses = int(champ_record["L"])
-    # Take max of existing vs new
-    updates["record_wins"] = max(int(user_data.get("record_wins", 0)), new_wins)
-    updates["record_pts"] = max(int(user_data.get("record_pts", 0)), new_pts)
-    updates["record_losses"] = max(int(user_data.get("record_losses", 0)), new_losses)
-    st.write("[DEBUG] New record stats:", {"wins": updates["record_wins"], "pts": updates["record_pts"], "losses": updates["record_losses"]})
+    updates["record_wins"]   = max(int(user_data.get("record_wins", 0)), new_wins)
+    updates["record_pts"]    = max(int(user_data.get("record_pts", 0)), new_pts)
+    updates["record_losses"] = min(int(user_data.get("record_losses", float('inf'))), new_losses)
+    st.write("[DEBUG] New favorite-team record stats:", {"wins": updates["record_wins"], "pts": updates["record_pts"], "losses": updates["record_losses"]})
 
-    # Push updates to Supabase
+    # Compute league-wide records for this simulation
+    # Best wins
+    league_best_wins       = int(standings_df["W"].max())
+    league_best_wins_team  = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"]
+    # Best points
+    league_best_pts        = int(standings_df["PTS"].max())
+    league_best_pts_team   = standings_df.loc[standings_df["PTS"].idxmax(), "RawTeam"]
+    # Fewest losses
+    league_least_losses    = int(standings_df["L"].min())
+    league_least_losses_team = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"]
+    # Total awarded per sim
+    total_championships = 1
+    total_presidents    = 1
+
+    # Prepare league-wide updates
+    league_updates = {}
+    # league_best_wins
+    if league_best_wins > int(user_data.get("league_best_wins", 0)):
+        league_updates["league_best_wins"]      = league_best_wins
+        league_updates["league_best_wins_team"] = league_best_wins_team
+    # league_best_pts
+    if league_best_pts > int(user_data.get("league_best_pts", 0)):
+        league_updates["league_best_pts"]       = league_best_pts
+        league_updates["league_best_pts_team"]  = league_best_pts_team
+    # league_least_losses
+    current_least = int(user_data.get("league_least_losses", float('inf')))
+    if league_least_losses < current_least:
+        league_updates["league_least_losses"]      = league_least_losses
+        league_updates["league_least_losses_team"] = league_least_losses_team
+    # cumulative championships & presidents
+    league_updates["league_championships"] = int(user_data.get("league_championships", 0)) + total_championships
+    league_updates["league_presidents"]    = int(user_data.get("league_presidents", 0)) + total_presidents
+    st.write("[DEBUG] League-wide updates:", league_updates)
+
+    # Merge favorite-team and league-wide updates
+    updates.update(league_updates)
+
+    # Push all updates
     res = supabase.table("users").update(updates).eq("email", user_email).execute()
     res_data = getattr(res, 'data', None)
     st.write("[DEBUG] Update response data:", res_data)
