@@ -25,9 +25,9 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
         updates["presidents_trophies"] = int(user.get("presidents_trophies", 0)) + 1
     updates["cups_won"] = int(user.get("cups_won", 0)) + 1
 
-    # champion record
+    # Champion record
     match_df = standings_df[standings_df["RawTeam"].str.startswith(cup_winner)]
-    if match_df.any().any():
+    if not match_df.empty:
         champ = match_df.iloc[0]
         updates["record_wins"]   = max(int(user.get("record_wins",0)), int(champ["W"]))
         updates["record_pts"]    = max(int(user.get("record_pts",0)), int(champ["PTS"]))
@@ -37,7 +37,6 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     st.write("[DEBUG] User stats updated.")
 
     # 2) Update league-wide aggregates via RPC
-    # Prepare data
     champ_wins = int(standings_df["W"].max())
     champ_wins_team = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"]
     champ_pts = int(standings_df["PTS"].max())
@@ -45,21 +44,19 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     few_losses = int(standings_df["L"].min())
     few_losses_team = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"]
 
-    # RPC payloads
     payloads = [
-        {"team": cup_winner,           "inc_cups": 1},
-        {"team": top_team,             "inc_presidents": 1},
-        {"team": champ_wins_team,      "best_wins": champ_wins},
-        {"team": champ_pts_team,       "best_pts": champ_pts},
-        {"team": few_losses_team,      "few_losses": few_losses},
+        {"_team": cup_winner,      "inc_cups": 1},
+        {"_team": top_team,        "inc_presidents": 1},
+        {"_team": champ_wins_team, "best_wins": champ_wins},
+        {"_team": champ_pts_team,  "best_pts": champ_pts},
+        {"_team": few_losses_team, "few_losses": few_losses},
     ]
 
     for p in payloads:
-        # call Postgres RPC; supabase.rpc returns a new builder
         res = supabase.rpc("increment_league_aggregate", p).execute()
         if res.error:
-            st.error(f"RPC error for {p['team']}: {res.error.message}")
+            st.error(f"RPC error for {p.get('_team')}: {res.error.message}")
         else:
-            st.write(f"[DEBUG] RPC updated {p['team']}: {res.data}")
+            st.write(f"[DEBUG] RPC updated {p.get('_team')}: {res.data}")
 
     st.success("League aggregates updated.")
