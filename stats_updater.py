@@ -53,10 +53,10 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     ]
 
     for p in payloads:
-        res = supabase.rpc("increment_league_aggregate", p).execute()
-        if res.error:
-            st.error(f"RPC error for {p.get('_team')}: {res.error.message}")
-        else:
+        try:
+            res = supabase.rpc("increment_league_aggregate", p).execute()
             st.write(f"[DEBUG] RPC updated {p.get('_team')}: {res.data}")
+        except Exception as e:
+            st.error(f"RPC error for {p.get('_team')}: {e}")
 
-    st.success("League aggregates updated.")
+    st.success("League aggregates updated.")("League aggregates updated.")
