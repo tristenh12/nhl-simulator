@@ -21,7 +21,7 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     # Determine winners
     cup_winner = bracket["final"][0]["winner"].split(" (")[0]
     # Presidents' Trophy winner (top regular-season team)
-    top_team = standings_df.sort_values(["PTS", "Win%"], ascending=[False, False]).iloc[0]["Team"]
+    top_team = standings_df.sort_values(["PTS", "Win%"], ascending=[False, False]).iloc[0]["RawTeam"]
     st.write(f"[DEBUG] Cup winner: {cup_winner}, Top team: {top_team}")
 
     # Prepare updates
@@ -39,10 +39,10 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     st.write("[DEBUG] Increment cups_won to", updates["cups_won"])
 
     # Update record stats: wins, pts, losses
-    # Match champion in standings by 'Team' column
-    match_df = standings_df[standings_df["Team"] == cup_winner]
+    # Match champion in standings by 'RawTeam' column
+    match_df = standings_df[standings_df["RawTeam"] == cup_winner]
     if match_df.empty:
-        st.error(f"Could not find champion {cup_winner} in standings ('Team') to update record stats. Available teams: {standings_df['Team'].tolist()}")
+        st.error(f"Could not find champion {cup_winner} in standings ('RawTeam') to update record stats. Available raw teams: {standings_df['RawTeam'].tolist()}")
         return
     champ_record = match_df.iloc[0]
     # Cast to Python int
