@@ -3,95 +3,92 @@ import streamlit as st
 
 def update_user_stats(supabase, bracket, standings_df, user_email):
     """
-    Updates Supabase "users" table based on simulation results:
-    - Favorite team stats: championships_won, presidents_trophies, cups_won, record_wins, record_pts, record_losses
-    - League-wide records: league_best_wins (+ team), league_best_pts (+ team), league_least_losses (+ team), league_championships, league_presidents
+    - Updates user-specific stats in `users` table
+    - Maintains league-wide distribution in `league_aggregates` table:
+      cups_won (count), presidents_trophies (count), best_wins, best_pts, least_losses per team
     """
-    st.write("[DEBUG] Starting user stats update for", user_email)
-    # Fetch current user data
+    st.write("[DEBUG] Starting stats update for", user_email)
+    # Fetch user data
     user_resp = supabase.table("users").select("*").eq("email", user_email).single().execute()
-    user_data = user_resp.data
-    st.write("[DEBUG] Fetch user response data:", user_data)
-    if not user_data:
-        st.error("Failed to fetch user stats for update.")
+    user = user_resp.data
+    if not user:
+        st.error("Failed to fetch user data.")
         return
 
     # Determine winners
     cup_winner = bracket["final"][0]["winner"].split(" (")[0]
-    # Presidents' Trophy winner (top regular-season team)
-    top_team = standings_df.sort_values(["PTS", "Win%"], ascending=[False, False]).iloc[0]["RawTeam"]
-    st.write(f"[DEBUG] Cup winner: {cup_winner}, Top team: {top_team}")
+    top_team = standings_df.sort_values(["PTS","Win%"], ascending=[False,False]).iloc[0]["RawTeam"]
 
-    # Prepare updates for favorite-team stats
+    # 1) Update user stats as before
     updates = {}
-    # championships_won
-    if user_data.get("favorite_team") == cup_winner:
-        updates["championships_won"] = int(user_data.get("championships_won", 0)) + 1
-        st.write("[DEBUG] Increment championships_won to", updates["championships_won"])
-    # presidents_trophies
-    if user_data.get("favorite_team") == top_team:
-        updates["presidents_trophies"] = int(user_data.get("presidents_trophies", 0)) + 1
-        st.write("[DEBUG] Increment presidents_trophies to", updates["presidents_trophies"])
-    # cups_won
-    updates["cups_won"] = int(user_data.get("cups_won", 0)) + 1
-    st.write("[DEBUG] Increment cups_won to", updates["cups_won"])
-
-    # record_wins, record_pts, record_losses for champion
+    if user.get("favorite_team") == cup_winner:
+        updates["championships_won"] = int(user.get("championships_won",0)) + 1
+    if user.get("favorite_team") == top_team:
+        updates["presidents_trophies"] = int(user.get("presidents_trophies",0)) + 1
+    updates["cups_won"] = int(user.get("cups_won",0)) + 1
+    # champion record
     match_df = standings_df[standings_df["RawTeam"].str.startswith(cup_winner)]
-    if match_df.empty:
-        st.error(f"Could not find champion {cup_winner} in standings ('RawTeam').")
-        return
-    champ_record = match_df.iloc[0]
-    new_wins = int(champ_record["W"])
-    new_pts = int(champ_record["PTS"])
-    new_losses = int(champ_record["L"])
-    updates["record_wins"]   = max(int(user_data.get("record_wins", 0)), new_wins)
-    updates["record_pts"]    = max(int(user_data.get("record_pts", 0)), new_pts)
-    updates["record_losses"] = min(int(user_data.get("record_losses", float('inf'))), new_losses)
-    st.write("[DEBUG] New favorite-team record stats:", {"wins": updates["record_wins"], "pts": updates["record_pts"], "losses": updates["record_losses"]})
+    if not match_df.empty:
+        champ = match_df.iloc[0]
+        updates["record_wins"]   = max(int(user.get("record_wins",0)), int(champ["W"]))
+        updates["record_pts"]    = max(int(user.get("record_pts",0)), int(champ["PTS"]))
+        updates["record_losses"] = min(int(user.get("record_losses",999)), int(champ["L"]))
+    supabase.table("users").update(updates).eq("email", user_email).execute()
+    st.write("[DEBUG] User stats updated.")
 
-    # Compute league-wide records for this simulation
+    # 2) Update league distribution in league_aggregates table
+    # Compute counts and records for this simulation
+    # Cups and trophies: just 1 per winning team
+    league_updates = []
+    # Cup win
+    league_updates.append({
+        "team": cup_winner,
+        "delta_cups": 1
+    })
+    # Presidents' Trophy
+    league_updates.append({
+        "team": top_team,
+        "delta_trophies": 1
+    })
     # Best wins
-    league_best_wins       = int(standings_df["W"].max())
-    league_best_wins_team  = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"]
+    best_wins = int(standings_df["W"].max())
+    best_wins_team = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"]
+    league_updates.append({
+        "team": best_wins_team,
+        "best_wins": best_wins
+    })
     # Best points
-    league_best_pts        = int(standings_df["PTS"].max())
-    league_best_pts_team   = standings_df.loc[standings_df["PTS"].idxmax(), "RawTeam"]
+    best_pts = int(standings_df["PTS"].max())
+    best_pts_team = standings_df.loc[standings_df["PTS"].idxmax(), "RawTeam"]
+    league_updates.append({
+        "team": best_pts_team,
+        "best_pts": best_pts
+    })
     # Fewest losses
-    league_least_losses    = int(standings_df["L"].min())
-    league_least_losses_team = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"]
-    # Total awarded per sim
-    total_championships = 1
-    total_presidents    = 1
+    few_losses = int(standings_df["L"].min())
+    few_losses_team = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"]
+    league_updates.append({
+        "team": few_losses_team,
+        "few_losses": few_losses
+    })
 
-    # Prepare league-wide updates
-    league_updates = {}
-    # league_best_wins
-    if league_best_wins > int(user_data.get("league_best_wins", 0)):
-        league_updates["league_best_wins"]      = league_best_wins
-        league_updates["league_best_wins_team"] = league_best_wins_team
-    # league_best_pts
-    if league_best_pts > int(user_data.get("league_best_pts", 0)):
-        league_updates["league_best_pts"]       = league_best_pts
-        league_updates["league_best_pts_team"]  = league_best_pts_team
-    # league_least_losses
-    current_least = int(user_data.get("league_least_losses", float('inf')))
-    if league_least_losses < current_least:
-        league_updates["league_least_losses"]      = league_least_losses
-        league_updates["league_least_losses_team"] = league_least_losses_team
-    # cumulative championships & presidents
-    league_updates["league_championships"] = int(user_data.get("league_championships", 0)) + total_championships
-    league_updates["league_presidents"]    = int(user_data.get("league_presidents", 0)) + total_presidents
-    st.write("[DEBUG] League-wide updates:", league_updates)
-
-    # Merge favorite-team and league-wide updates
-    updates.update(league_updates)
-
-    # Push all updates
-    res = supabase.table("users").update(updates).eq("email", user_email).execute()
-    res_data = getattr(res, 'data', None)
-    st.write("[DEBUG] Update response data:", res_data)
-    if res_data:
-        st.success("User stats updated successfully!")
-    else:
-        st.error("No rows were updated. Check permissions or email match.")
+    # Upsert each record into league_aggregates
+    for entry in league_updates:
+        # Build upsert payload
+        payload = {"team": entry["team"]}
+        if entry.get("delta_cups"):
+            payload["cups_won"] = f"cups_won + {entry['delta_cups']}"
+        if entry.get("delta_trophies"):
+            payload["presidents_trophies"] = f"presidents_trophies + {entry['delta_trophies']}"
+        if entry.get("best_wins") is not None:
+            payload["best_wins"] = entry["best_wins"]
+        if entry.get("best_pts") is not None:
+            payload["best_pts"] = entry["best_pts"]
+        if entry.get("few_losses") is not None:
+            payload["few_losses"] = entry["few_losses"]
+        # Perform upsert with SQL raw expressions for increments
+        supabase.postgrest.rpc(
+            "increment_league_aggregate",
+            {"team": entry["team"], "updates": payload}
+        ).execute()
+    st.write("[DEBUG] League aggregates updated.")
