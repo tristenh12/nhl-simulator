@@ -6,6 +6,8 @@ import datetime
 
 from sim_engine import simulate_season, build_dataframe
 from playoff import simulate_playoffs_streamlit, display_bracket_table_v4
+from stats_updater import update_user_stats
+
 
 def run_full_sim(supabase):
     # ─────────────────────────────────────────────────────────────────
