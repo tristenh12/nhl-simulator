@@ -21,8 +21,10 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
 
     # Determine winners
     cup_winner = bracket["final"][0]["winner"].split(" (")[0]
-    # Use the 'RawTeam' column (just the team name) for matching
-    top_team = standings_df.sort_values(["PTS","Win%"], ascending=[False,False]).iloc[0]["RawTeam"]
+        # Determine winners
+    cup_winner = bracket["final"][0]["winner"].split(" (")[0]
+    # Use the 'Team' column for matching both champions and Presidents' Trophy
+    top_team = standings_df.sort_values(["PTS","Win%"], ascending=[False,False]).iloc[0]["Team"]
     st.write(f"[DEBUG] Cup winner: {cup_winner}, Top team: {top_team}")
 
     updates = {}
