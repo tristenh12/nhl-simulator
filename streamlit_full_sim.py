@@ -175,6 +175,8 @@ def run_full_sim(supabase):
                 st.rerun()
         with c4:
             if st.button("✅ Run Full-Season Simulation"):
+                    # Clear stats_updated so stats run on every simulation
+                st.session_state.pop("stats_updated", None)
                 st.session_state.pop("playoff_bracket",None)
                 st.session_state.show_preview=False
 
