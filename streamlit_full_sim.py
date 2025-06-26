@@ -302,8 +302,8 @@ def run_full_sim(supabase):
         else:
             st.write("### Playoff Bracket")
 
-            # Run simulation + stats update behind one spinner, only once
-            if "playoffs_and_stats_done" not in st.session_state:
+            # If we haven’t both simulated & updated stats (or bracket got cleared), do it now:
+            if ("playoff_bracket" not in st.session_state) or ("playoffs_and_stats_done" not in st.session_state):
                 with st.spinner("Simulating playoffs and updating stats…"):
                     # 1) Simulate playoffs
                     ratings_for_playoffs = {row["Team"]: row["Rating"] for _, row in df.iterrows()}
@@ -318,10 +318,11 @@ def run_full_sim(supabase):
                         st.session_state["user"].email
                     )
 
-                st.session_state["playoffs_and_stats_done"] = True
+                # mark complete so we don’t rerun on rerun()
+                st.session_state.playoffs_and_stats_done = True
 
-            # Now that both are done, render the bracket
-            bracket = st.session_state["playoff_bracket"]
+            # Now safe to read and display
+            bracket = st.session_state.playoff_bracket
             display_bracket_table_v4(bracket)
 
             st.markdown("---")
