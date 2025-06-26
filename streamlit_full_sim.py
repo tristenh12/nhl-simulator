@@ -311,12 +311,12 @@ def run_full_sim(supabase):
 
             # —————— UPDATE USER STATS ONCE ——————
 
-                update_user_stats(
-                    supabase,
-                    bracket,
-                    st.session_state["last_df"],
-                    st.session_state["user"].email
-                )
+            update_user_stats(
+                supabase,
+                bracket,
+                st.session_state["last_df"],
+                st.session_state["user"].email
+            )
 
 
             st.markdown("---")
