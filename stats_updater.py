@@ -40,7 +40,8 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
 
     # Update record stats: wins, pts, losses
     # Match champion in standings by 'RawTeam' column
-    match_df = standings_df[standings_df["RawTeam"] == cup_winner]
+    # Find rows where RawTeam begins with the team name (ignoring season suffix)
+    match_df = standings_df[standings_df["RawTeam"].str.startswith(cup_winner)]
     if match_df.empty:
         st.error(f"Could not find champion {cup_winner} in standings ('RawTeam') to update record stats. Available raw teams: {standings_df['RawTeam'].tolist()}")
         return
