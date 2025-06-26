@@ -12,9 +12,8 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     st.write("[DEBUG] Starting user stats update for", user_email)
     # Fetch current user data
     user_resp = supabase.table("users").select("*").eq("email", user_email).single().execute()
-    st.write("[DEBUG] Fetch user response error:", user_resp.error)
     st.write("[DEBUG] Fetch user response data:", user_resp.data)
-    if user_resp.error or not user_resp.data:
+    if not user_resp.data:
         st.error("Failed to fetch user stats for update.")
         return
     user = user_resp.data
@@ -52,8 +51,7 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     res = supabase.table("users").update(updates).eq("email", user_email).execute()
     # Detailed response logging
     st.write("[DEBUG] Update response data:", getattr(res, 'data', None))
-    st.write("[DEBUG] Update response error:", res.error)
-    if res.error:
-        st.error(f"Error updating user stats: {res.error.message}")
-    else:
+    if getattr(res, 'data', None):
         st.success("User stats updated successfully!")
+    else:
+        st.error("No rows were updated. Check permissions or email match.")
