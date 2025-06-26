@@ -2,9 +2,7 @@
 import streamlit as st
 
 def update_user_stats(supabase, bracket, standings_df, user_email):
-    st.write("[DEBUG] Starting stats update for", user_email)
-
-    # ─── 0) Seed every team with defaults ─────────────────────────────────────
+    # 0) Seed every team with defaults
     all_teams = (
         standings_df["RawTeam"]
           .str.replace(r"\s\(\d{4}.\d{2}\)$", "", regex=True)
@@ -23,7 +21,7 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
             on_conflict="team"
         ).execute()
 
-    # ─── 1) Per-user updates ─────────────────────────────────────────────────
+    # 1) Per-user updates
     user_resp = supabase.table("users") \
         .select("*") \
         .eq("email", user_email) \
@@ -59,10 +57,8 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
             .update(updates) \
             .eq("email", user_email) \
             .execute()
-        st.write("[DEBUG] Per-user stats updated:", updates)
 
-    # ─── 2) Per-team stats ────────────────────────────────────────────────────
-
+    # 2) Per-team stats helpers
     def fetch_stat(team, col, default):
         resp = supabase.table("team_stats") \
             .select(col) \
@@ -75,7 +71,6 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
         supabase.table("team_stats") \
             .upsert({"team": team, col: new_val}, on_conflict="team") \
             .execute()
-        st.write(f"[DEBUG] team_stats: set {col} for {team} → {new_val}")
 
     # 2a) Cup winner increment
     old = fetch_stat(cup_winner, "stanley_cup_wins", 0)
