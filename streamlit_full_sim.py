@@ -209,7 +209,18 @@ def run_full_sim(supabase):
                     df["Rating"]=df["RawTeam"].map(ratings).fillna(0).astype(int)
                     st.session_state["last_df"]=df
 
-                    st.session_state.active_tab="results"
+                            # —————— UPDATE USER STATS ——————
+                    update_user_stats(
+                        supabase,
+                        simulate_playoffs_streamlit(
+                            df,
+                            {row["Team"]: row["Rating"] for _, row in df.iterrows()}
+                        ),
+                        df,
+                        st.session_state["user"].email
+                    )
+
+                    st.session_state["active_tab"] = "results"
                     st.rerun()
 
         # inline preview in Tools
