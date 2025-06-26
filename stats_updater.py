@@ -40,12 +40,12 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     st.write("[DEBUG] Increment cups_won to", updates["cups_won"]) 
 
     # Update record stats
-    # Match champion using RawTeam
-    match_df = standings_df[standings_df["RawTeam"] == cup_winner]
+        # Match champion using 'Team' column
+    match_df = standings_df[standings_df["Team"] == cup_winner]
     if match_df.empty:
-        st.error(f"Could not find champion {cup_winner} in standings (RawTeam) to update record stats.")
+        st.error(f"Could not find champion {cup_winner} in standings ('Team') to update record stats.")
         return
-    champ_record = match_df.iloc[0]
+    champ_record = match_df.iloc[0][0]
     # cast numpy ints to Python ints
     new_wins = int(champ_record["W"])
     new_pts = int(champ_record["PTS"])
