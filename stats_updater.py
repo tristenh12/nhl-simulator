@@ -2,48 +2,39 @@
 import streamlit as st
 
 def update_user_stats(supabase, bracket, standings_df, user_email):
-    """
-    1) Update per-user stats in `users` table:
-       - Stanley Cups (championships_won): only if favorite team wins the Cup
-       - Presidents' Trophies: only if favorite team finishes first
-       - record_wins, record_pts, record_losses: always updated if favorite team beats its prior best/worst
-    2) Upsert per-team stats in `team_stats` table:
-       - stanley_cup_wins
-       - presidents_trophies
-       - best_wins, best_pts, fewest_losses (global league records each sim)
-    """
     st.write("[DEBUG] Starting stats update for", user_email)
 
-    # ─── 1) Per-user updates ────────────────────────────────────────────────────
-    resp = supabase.table("users") \
+    # 1) Fetch & update per-user stats
+    user_resp = supabase.table("users") \
         .select("*") \
         .eq("email", user_email) \
         .single() \
         .execute()
-    user = resp.data
-    if not user:
-        st.error("Failed to fetch user data.")
-        return
-
+    user = user_resp.data or {}
     fav = user.get("favorite_team")
+
+    # Determine who won this sim
     cup_winner = bracket["final"][0]["winner"].split(" (")[0]
-    top_team   = standings_df.sort_values(
-                    ["PTS","Win%"], ascending=[False,False]
-                 ).iloc[0]["RawTeam"].split(" (")[0]
+    top_team   = standings_df.sort_values(["PTS","Win%"], ascending=[False,False]) \
+                    .iloc[0]["RawTeam"].split(" (")[0]
 
     updates = {}
+
+    # +1 Stanley Cups (championships_won) only if fav won
     if fav == cup_winner:
         updates["championships_won"] = int(user.get("championships_won", 0)) + 1
         st.write("[DEBUG] +1 Stanley Cups →", updates["championships_won"])
+
+    # +1 Presidents' Trophies only if fav finished first
     if fav == top_team:
         updates["presidents_trophies"] = int(user.get("presidents_trophies", 0)) + 1
-        st.write("[DEBUG] +1 Presidents’ Trophies →", updates["presidents_trophies"])
+        st.write("[DEBUG] +1 Presidents' Trophies →", updates["presidents_trophies"])
 
-    # Always bump fav team’s record stats if beaten
+    # Always update fav team's record stats if beaten
     fav_row = standings_df[standings_df["RawTeam"].str.startswith(fav)]
     if not fav_row.empty:
-        fr = fav_row.iloc[0]
-        w, pts, l = int(fr["W"]), int(fr["PTS"]), int(fr["L"])
+        r = fav_row.iloc[0]
+        w, pts, l = int(r["W"]), int(r["PTS"]), int(r["L"])
         updates["record_wins"]   = max(int(user.get("record_wins", 0)), w)
         updates["record_pts"]    = max(int(user.get("record_pts", 0)), pts)
         updates["record_losses"] = min(int(user.get("record_losses", 999)), l)
@@ -56,46 +47,43 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
             .execute()
         st.write("[DEBUG] Per-user stats updated.")
 
-    # ─── 2) Per-team upserts ───────────────────────────────────────────────────
-    # Compute global league records this sim
-    league_best_wins      = int(standings_df["W"].max())
-    league_best_wins_tm   = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"].split(" (")[0]
-    league_best_pts       = int(standings_df["PTS"].max())
-    league_best_pts_tm    = standings_df.loc[standings_df["PTS"].idxmax(), "RawTeam"].split(" (")[0]
-    league_fewest_losses  = int(standings_df["L"].min())
-    league_fewest_losses_tm = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"].split(" (")[0]
+    # 2) Upsert into team_stats by fetching & computing in Python
 
-    # 2a) Cup wins
-    supabase.table("team_stats").upsert(
-        {"team": cup_winner, "stanley_cup_wins": 1},
-        on_conflict="team",
-        update={"stanley_cup_wins": "team_stats.stanley_cup_wins + EXCLUDED.stanley_cup_wins"}
-    ).execute()
-    st.write(f"[DEBUG] team_stats: +1 cup for {cup_winner}")
+    def fetch_stat(team, col):
+        r = supabase.table("team_stats").select(col).eq("team", team).single().execute().data
+        return int(r.get(col, 0)) if r else 0
 
-    # 2b) Presidents' trophies
-    supabase.table("team_stats").upsert(
-        {"team": top_team, "presidents_trophies": 1},
-        on_conflict="team",
-        update={"presidents_trophies": "team_stats.presidents_trophies + EXCLUDED.presidents_trophies"}
-    ).execute()
-    st.write(f"[DEBUG] team_stats: +1 presidents for {top_team}")
+    def upsert_stat(team, col, new_val):
+        supabase.table("team_stats") \
+            .upsert({"team": team, col: new_val}, on_conflict="team") \
+            .execute()
+        st.write(f"[DEBUG] team_stats: set {col} for {team} → {new_val}")
 
-    # 2c) Global best/worst records
-    supabase.table("team_stats").upsert(
-        {
-          "team": league_best_wins_tm,
-          "best_wins": league_best_wins,
-          "best_pts": league_best_pts,
-          "fewest_losses": league_fewest_losses
-        },
-        on_conflict="team",
-        update={
-          "best_wins":     "GREATEST(team_stats.best_wins, EXCLUDED.best_wins)",
-          "best_pts":      "GREATEST(team_stats.best_pts, EXCLUDED.best_pts)",
-          "fewest_losses": "LEAST(team_stats.fewest_losses, EXCLUDED.fewest_losses)"
-        }
-    ).execute()
-    st.write(f"[DEBUG] team_stats: updated league records for {league_best_wins_tm}")
+    # a) Stanley Cup wins
+    old = fetch_stat(cup_winner, "stanley_cup_wins")
+    upsert_stat(cup_winner, "stanley_cup_wins", old + 1)
+
+    # b) Presidents' trophies
+    old = fetch_stat(top_team, "presidents_trophies")
+    upsert_stat(top_team, "presidents_trophies", old + 1)
+
+    # c) Global league records
+    #    wins
+    best_wins = int(standings_df["W"].max())
+    best_tm   = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"].split(" (")[0]
+    old       = fetch_stat(best_tm, "best_wins")
+    upsert_stat(best_tm, "best_wins", max(old, best_wins))
+
+    #    pts
+    best_pts  = int(standings_df["PTS"].max())
+    bestp_tm  = standings_df.loc[standings_df["PTS"].idxmax(), "RawTeam"].split(" (")[0]
+    old       = fetch_stat(bestp_tm, "best_pts")
+    upsert_stat(bestp_tm, "best_pts", max(old, best_pts))
+
+    #    fewest losses
+    few_l     = int(standings_df["L"].min())
+    few_tm    = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"].split(" (")[0]
+    old       = fetch_stat(few_tm, "fewest_losses")
+    upsert_stat(few_tm, "fewest_losses", min(old, few_l))
 
     st.success("Per-team stats updated successfully!")
