@@ -59,4 +59,4 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
         except Exception as e:
             st.error(f"RPC error for {p.get('_team')}: {e}")
 
-    st.success("League aggregates updated.")("League aggregates updated.")
+    st.success("League aggregates updated.")
