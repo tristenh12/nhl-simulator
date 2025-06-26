@@ -310,14 +310,13 @@ def run_full_sim(supabase):
             display_bracket_table_v4(bracket)
 
             # —————— UPDATE USER STATS ONCE ——————
-            if "stats_updated" not in st.session_state:
+
                 update_user_stats(
                     supabase,
                     bracket,
                     st.session_state["last_df"],
                     st.session_state["user"].email
                 )
-                st.session_state["stats_updated"] = True
 
 
             st.markdown("---")
