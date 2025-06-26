@@ -301,28 +301,32 @@ def run_full_sim(supabase):
         # Playoffs
         else:
             st.write("### Playoff Bracket")
-            if "playoff_bracket" not in st.session_state:
-                with st.spinner("Simulating playoffs…"):
+
+            # Run simulation + stats update behind one spinner, only once
+            if "playoffs_and_stats_done" not in st.session_state:
+                with st.spinner("Simulating playoffs and updating stats…"):
+                    # 1) Simulate playoffs
                     ratings_for_playoffs = {row["Team"]: row["Rating"] for _, row in df.iterrows()}
-                    st.session_state.playoff_bracket = simulate_playoffs_streamlit(df, ratings_for_playoffs)
+                    bracket = simulate_playoffs_streamlit(df, ratings_for_playoffs)
+                    st.session_state.playoff_bracket = bracket
 
-            bracket = st.session_state["playoff_bracket"]
-            display_bracket_table_v4(bracket)
-
-            if "stats_updated" not in st.session_state:
-                with st.spinner("Loading playoff bracket and updating stats…"):
+                    # 2) Update user & league stats
                     update_user_stats(
                         supabase,
                         bracket,
-                        st.session_state["last_df"],
+                        df,
                         st.session_state["user"].email
                     )
-                st.session_state["stats_updated"] = True
 
+                st.session_state["playoffs_and_stats_done"] = True
 
+            # Now that both are done, render the bracket
+            bracket = st.session_state["playoff_bracket"]
+            display_bracket_table_v4(bracket)
 
             st.markdown("---")
             st.subheader("Series Details (click to reveal)")
+
 
             # Eastern Conference
             ec, wc = st.columns(2)
