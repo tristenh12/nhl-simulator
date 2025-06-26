@@ -1,62 +1,109 @@
 # stats_updater.py
 import streamlit as st
 
-
 def update_user_stats(supabase, bracket, standings_df, user_email):
     """
-    - Updates per-user stats in `users` table
-    - Maintains league-wide distribution in `league_aggregates` via a PostgreSQL RPC
+    1) Update per-user stats in `users` table:
+       - Stanley Cups (championships_won): only if favorite team wins the Cup
+       - Presidents' Trophies: only if favorite team finishes first in regular season
+       - record_wins, record_pts, record_losses: always updated if favorite team beats its own prior best/worst
+    2) Upsert per-team stats in `team_stats` table:
+       - stanley_cup_wins: +1 when team wins Cup
+       - presidents_trophies: +1 when team wins Presidents’ Trophy
+       - best_wins, best_pts, fewest_losses: always clamp to global league bests/worsts each sim
     """
     st.write("[DEBUG] Starting stats update for", user_email)
-    # 1) Update per-user stats
-    user_resp = supabase.table("users").select("*").eq("email", user_email).single().execute()
-    user = user_resp.data
+
+    # ─── 1) Fetch & update per-user stats ───────────────────────────────────────
+    resp = supabase.table("users") \
+        .select("*") \
+        .eq("email", user_email) \
+        .single() \
+        .execute()
+    user = resp.data
     if not user:
         st.error("Failed to fetch user data.")
         return
 
+    fav = user.get("favorite_team")
+    # Determine simulation winners
     cup_winner = bracket["final"][0]["winner"].split(" (")[0]
-    top_team = standings_df.sort_values(["PTS","Win%"], ascending=[False,False]).iloc[0]["RawTeam"]
+    top_team   = standings_df.sort_values(
+                    ["PTS", "Win%"], ascending=[False, False]
+                 ).iloc[0]["RawTeam"].split(" (")[0]
 
     updates = {}
-    if user.get("favorite_team") == cup_winner:
+    # Only increment Cup count if favorite actually won
+    if fav == cup_winner:
         updates["championships_won"] = int(user.get("championships_won", 0)) + 1
-    if user.get("favorite_team") == top_team:
+        st.write("[DEBUG] +1 Stanley Cups (fav won) →", updates["championships_won"])
+    # Only increment Presidents' Trophies if favorite actually finished first
+    if fav == top_team:
         updates["presidents_trophies"] = int(user.get("presidents_trophies", 0)) + 1
-    updates["cups_won"] = int(user.get("cups_won", 0)) + 1
+        st.write("[DEBUG] +1 Presidents’ Trophies (fav top) →", updates["presidents_trophies"])
 
-    # Champion record
-    match_df = standings_df[standings_df["RawTeam"].str.startswith(cup_winner)]
-    if not match_df.empty:
-        champ = match_df.iloc[0]
-        updates["record_wins"]   = max(int(user.get("record_wins",0)), int(champ["W"]))
-        updates["record_pts"]    = max(int(user.get("record_pts",0)), int(champ["PTS"]))
-        updates["record_losses"] = min(int(user.get("record_losses",999)), int(champ["L"]))
+    # Always update favorite-team record stats if they beat prior best/worst
+    fav_row = standings_df[standings_df["RawTeam"].str.startswith(fav)]
+    if not fav_row.empty:
+        fr = fav_row.iloc[0]
+        w, pts, l = int(fr["W"]), int(fr["PTS"]), int(fr["L"])
+        updates["record_wins"]   = max(int(user.get("record_wins", 0)), w)
+        updates["record_pts"]    = max(int(user.get("record_pts", 0)), pts)
+        updates["record_losses"] = min(int(user.get("record_losses", 999)), l)
+        st.write(f"[DEBUG] Fav record → W:{updates['record_wins']} PTS:{updates['record_pts']} L:{updates['record_losses']}")
 
-    supabase.table("users").update(updates).eq("email", user_email).execute()
-    st.write("[DEBUG] User stats updated.")
+    # Apply per-user updates
+    if updates:
+        supabase.table("users") \
+            .update(updates) \
+            .eq("email", user_email) \
+            .execute()
+        st.write("[DEBUG] Per-user stats updated.")
 
-    # 2) Update league-wide aggregates via RPC
-    champ_wins = int(standings_df["W"].max())
-    champ_wins_team = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"]
-    champ_pts = int(standings_df["PTS"].max())
-    champ_pts_team = standings_df.loc[standings_df["PTS"].idxmax(), "RawTeam"]
-    few_losses = int(standings_df["L"].min())
-    few_losses_team = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"]
+    # ─── 2) Upsert per-team stats ──────────────────────────────────────────────
+    # League-wide global records for this simulation
+    league_best_wins      = int(standings_df["W"].max())
+    league_best_wins_tm   = standings_df.loc[standings_df["W"].idxmax(), "RawTeam"].split(" (")[0]
+    league_best_pts       = int(standings_df["PTS"].max())
+    league_best_pts_tm    = standings_df.loc[standings_df["PTS"].idxmax(), "RawTeam"].split(" (")[0]
+    league_fewest_losses  = int(standings_df["L"].min())
+    league_fewest_losses_tm = standings_df.loc[standings_df["L"].idxmin(), "RawTeam"].split(" (")[0]
 
-    payloads = [
-        {"_team": cup_winner,      "inc_cups": 1},
-        {"_team": top_team,        "inc_presidents": 1},
-        {"_team": champ_wins_team, "best_wins": champ_wins},
-        {"_team": champ_pts_team,  "best_pts": champ_pts},
-        {"_team": few_losses_team, "few_losses": few_losses},
-    ]
+    # 2a) Cup winners count
+    supabase.table("team_stats") \
+        .upsert(
+          {"team": cup_winner, "stanley_cup_wins": 1},
+          on_conflict="team"
+        ).update({
+          "stanley_cup_wins": "team_stats.stanley_cup_wins + EXCLUDED.stanley_cup_wins"
+        }).execute()
+    st.write(f"[DEBUG] team_stats upserted Cup win for {cup_winner}")
 
-    for p in payloads:
-        try:
-            res = supabase.rpc("increment_league_aggregate", p).execute()
-            st.write(f"[DEBUG] RPC updated {p.get('_team')}: {res.data}")
-        except Exception as e:
-            st.error(f"RPC error for {p.get('_team')}: {e}")
+    # 2b) Presidents' Trophy count
+    supabase.table("team_stats") \
+        .upsert(
+          {"team": top_team, "presidents_trophies": 1},
+          on_conflict="team"
+        ).update({
+          "presidents_trophies": "team_stats.presidents_trophies + EXCLUDED.presidents_trophies"
+        }).execute()
+    st.write(f"[DEBUG] team_stats upserted Presidents’ Trophy for {top_team}")
 
-    st.success("League aggregates updated.")
+    # 2c) League-wide best/worst records
+    supabase.table("team_stats") \
+        .upsert(
+          {
+            "team": league_best_wins_tm,
+            "best_wins": league_best_wins,
+            "best_pts": league_best_pts,
+            "fewest_losses": league_fewest_losses
+          },
+          on_conflict="team"
+        ).update({
+          "best_wins":     "GREATEST(team_stats.best_wins, EXCLUDED.best_wins)",
+          "best_pts":      "GREATEST(team_stats.best_pts, EXCLUDED.best_pts)",
+          "fewest_losses": "LEAST(team_stats.fewest_losses, EXCLUDED.fewest_losses)"
+        }).execute()
+    st.write(f"[DEBUG] team_stats upserted global record season for {league_best_wins_tm}")
+
+    st.success("Per-team stats updated successfully!")
