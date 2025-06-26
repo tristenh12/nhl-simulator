@@ -28,20 +28,24 @@ def update_user_stats(supabase, bracket, standings_df, user_email):
     updates = {}
     # Favorite team trophies
     if user.get("favorite_team") == cup_winner:
-        updates["championships_won"] = user.get("championships_won", 0) + 1
-        st.write("[DEBUG] Increment championships_won to", updates["championships_won"])
+        updates["championships_won"] = int(user.get("championships_won", 0)) + 1
+        st.write("[DEBUG] Increment championships_won to", updates["championships_won"]) 
     if user.get("favorite_team") == top_team:
-        updates["presidents_trophies"] = user.get("presidents_trophies", 0) + 1
-        st.write("[DEBUG] Increment presidents_trophies to", updates["presidents_trophies"])
+        updates["presidents_trophies"] = int(user.get("presidents_trophies", 0)) + 1
+        st.write("[DEBUG] Increment presidents_trophies to", updates["presidents_trophies"]) 
     # Always count cup
-    updates["cups_won"] = user.get("cups_won", 0) + 1
-    st.write("[DEBUG] Increment cups_won to", updates["cups_won"])
+    updates["cups_won"] = int(user.get("cups_won", 0)) + 1
+    st.write("[DEBUG] Increment cups_won to", updates["cups_won"]) 
 
     # Update record stats
     champ_record = standings_df[standings_df["RawTeam"] == cup_winner].iloc[0]
-    updates["record_wins"] = max(user.get("record_wins", 0), champ_record["W"])
-    updates["record_pts"] = max(user.get("record_pts", 0), champ_record["PTS"])
-    updates["record_losses"] = max(user.get("record_losses", 0), champ_record["L"])
+    # cast numpy ints to Python ints
+    new_wins = int(champ_record["W"])
+    new_pts = int(champ_record["PTS"])
+    new_losses = int(champ_record["L"])
+    updates["record_wins"] = max(int(user.get("record_wins", 0)), new_wins)
+    updates["record_pts"] = max(int(user.get("record_pts", 0)), new_pts)
+    updates["record_losses"] = max(int(user.get("record_losses", 0)), new_losses)
     st.write("[DEBUG] New record stats:", {"wins": updates["record_wins"], "pts": updates["record_pts"], "losses": updates["record_losses"]})
 
     # Push updates
