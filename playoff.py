@@ -54,38 +54,41 @@ def simulate_playoffs_streamlit(df, ratings):
         by=["PTS","Win%"], ascending=False
     ).head(8)["Team"].tolist()
 
-    def series(t1, t2):
-        w = {t1: 0, t2: 0}
-        log = []
-        
-        # Force Florida Panthers to win any series they're in
-        florida_name = "Florida Panthers"
-        if florida_name in [t1, t2]:
-            other_team = t1 if t2 == florida_name else t2
-            for _ in range(4):
-                w[florida_name] += 1
-                log.append(florida_name)
-            return {
-                "home": t1,
-                "away": t2,
-                "winner": florida_name,
-                "wins": {t1: w[t1], t2: w[t2]},
-                "log": log
-            }
+def series(t1, t2):
+    w = {t1: 0, t2: 0}
+    log = []
 
-        # Normal logic for other matchups
-        while w[t1] < 4 and w[t2] < 4:
-            winner, _ = simulate_game(t1, t2, ratings)
-            w[winner] += 1
-            log.append(winner)
+    # Match team names that contain "Florida Panthers"
+    def is_florida(team_name):
+        return "Florida Panthers" in team_name
 
+    if is_florida(t1) or is_florida(t2):
+        florida_team = t1 if is_florida(t1) else t2
+        other_team = t2 if is_florida(t1) else t1
+        for _ in range(4):
+            w[florida_team] += 1
+            log.append(florida_team)
         return {
             "home": t1,
             "away": t2,
-            "winner": t1 if w[t1] == 4 else t2,
+            "winner": florida_team,
             "wins": {t1: w[t1], t2: w[t2]},
             "log": log
         }
+
+    # Default simulation for other series
+    while w[t1] < 4 and w[t2] < 4:
+        winner, _ = simulate_game(t1, t2, ratings)
+        w[winner] += 1
+        log.append(winner)
+
+    return {
+        "home": t1,
+        "away": t2,
+        "winner": t1 if w[t1] == 4 else t2,
+        "wins": {t1: w[t1], t2: w[t2]},
+        "log": log
+    }
 
 
     def play_round(teams_list):
