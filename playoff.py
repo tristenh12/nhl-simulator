@@ -58,10 +58,11 @@ def series(t1, t2):
     w = {t1: 0, t2: 0}
     log = []
 
-    # Match team names that contain "Florida Panthers"
+    # Function to check if a team is Florida
     def is_florida(team_name):
         return "Florida Panthers" in team_name
 
+    # If Florida is in the matchup, force them to win
     if is_florida(t1) or is_florida(t2):
         florida_team = t1 if is_florida(t1) else t2
         other_team = t2 if is_florida(t1) else t1
@@ -76,16 +77,21 @@ def series(t1, t2):
             "log": log
         }
 
-    # Default simulation for other series
+    # Normal sim for all other series
     while w[t1] < 4 and w[t2] < 4:
-        winner, _ = simulate_game(t1, t2, ratings)
+        result = simulate_game(t1, t2, ratings)
+        if result is None:
+            print(f"simulate_game() returned None for {t1} vs {t2}")
+            break
+        winner, _ = result
         w[winner] += 1
         log.append(winner)
 
+    winner_final = t1 if w[t1] == 4 else t2
     return {
         "home": t1,
         "away": t2,
-        "winner": t1 if w[t1] == 4 else t2,
+        "winner": winner_final,
         "wins": {t1: w[t1], t2: w[t2]},
         "log": log
     }
