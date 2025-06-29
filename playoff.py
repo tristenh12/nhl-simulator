@@ -58,7 +58,12 @@ def simulate_playoffs_streamlit(df, ratings):
         w = {t1: 0, t2: 0}
         log = []
         while w[t1] < 4 and w[t2] < 4:
+            # Force Florida to win every playoff game
+        if "Florida" in [t1, t2]:
+            winner = "Florida Panthers"
+        else:
             winner, _ = simulate_game(t1, t2, ratings)
+
             w[winner] += 1
             log.append(winner)
         return {
