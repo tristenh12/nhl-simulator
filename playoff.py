@@ -57,15 +57,28 @@ def simulate_playoffs_streamlit(df, ratings):
     def series(t1, t2):
         w = {t1: 0, t2: 0}
         log = []
-        while w[t1] < 4 and w[t2] < 4:
-            # Force Florida to win every playoff game
-        if "Florida" in [t1, t2]:
-            winner = "Florida Panthers"
-        else:
-            winner, _ = simulate_game(t1, t2, ratings)
+        
+        # Force Florida Panthers to win any series they're in
+        florida_name = "Florida Panthers"
+        if florida_name in [t1, t2]:
+            other_team = t1 if t2 == florida_name else t2
+            for _ in range(4):
+                w[florida_name] += 1
+                log.append(florida_name)
+            return {
+                "home": t1,
+                "away": t2,
+                "winner": florida_name,
+                "wins": {t1: w[t1], t2: w[t2]},
+                "log": log
+            }
 
+        # Normal logic for other matchups
+        while w[t1] < 4 and w[t2] < 4:
+            winner, _ = simulate_game(t1, t2, ratings)
             w[winner] += 1
             log.append(winner)
+
         return {
             "home": t1,
             "away": t2,
@@ -73,6 +86,7 @@ def simulate_playoffs_streamlit(df, ratings):
             "wins": {t1: w[t1], t2: w[t2]},
             "log": log
         }
+
 
     def play_round(teams_list):
         return [series(teams_list[i], teams_list[i+1]) for i in range(0, len(teams_list), 2)]
