@@ -54,48 +54,20 @@ def simulate_playoffs_streamlit(df, ratings):
         by=["PTS","Win%"], ascending=False
     ).head(8)["Team"].tolist()
 
-def series(t1, t2):
-    w = {t1: 0, t2: 0}
-    log = []
-
-    # Function to check if a team is Florida
-    def is_florida(team_name):
-        return "Florida Panthers" in team_name
-
-    # If Florida is in the matchup, force them to win
-    if is_florida(t1) or is_florida(t2):
-        florida_team = t1 if is_florida(t1) else t2
-        other_team = t2 if is_florida(t1) else t1
-        for _ in range(4):
-            w[florida_team] += 1
-            log.append(florida_team)
+    def series(t1, t2):
+        w = {t1: 0, t2: 0}
+        log = []
+        while w[t1] < 4 and w[t2] < 4:
+            winner, _ = simulate_game(t1, t2, ratings)
+            w[winner] += 1
+            log.append(winner)
         return {
             "home": t1,
             "away": t2,
-            "winner": florida_team,
+            "winner": t1 if w[t1] == 4 else t2,
             "wins": {t1: w[t1], t2: w[t2]},
             "log": log
         }
-
-    # Normal sim for all other series
-    while w[t1] < 4 and w[t2] < 4:
-        result = simulate_game(t1, t2, ratings)
-        if result is None:
-            print(f"simulate_game() returned None for {t1} vs {t2}")
-            break
-        winner, _ = result
-        w[winner] += 1
-        log.append(winner)
-
-    winner_final = t1 if w[t1] == 4 else t2
-    return {
-        "home": t1,
-        "away": t2,
-        "winner": winner_final,
-        "wins": {t1: w[t1], t2: w[t2]},
-        "log": log
-    }
-
 
     def play_round(teams_list):
         return [series(teams_list[i], teams_list[i+1]) for i in range(0, len(teams_list), 2)]
